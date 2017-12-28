@@ -1,0 +1,35 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+
+{
+  "name": "Group List",
+  "description": "",
+  "renders": [
+    "application/json",
+    "text/html"
+  ],
+  "parses": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "actions": {
+    "POST": {
+      "url": {
+        "type": "field",
+        "required": false,
+        "read_only": true,
+        "label": "Url"
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "read_only": false,
+        "label": "Name",
+        "max_length": 80
+      }
+    }
+  }
+}

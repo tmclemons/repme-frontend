@@ -1,0 +1,90 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+
+{
+  "name": "Vote List",
+  "description": "",
+  "renders": [
+    "application/json",
+    "text/html"
+  ],
+  "parses": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "actions": {
+    "POST": {
+      "id": {
+        "type": "integer",
+        "required": false,
+        "read_only": true,
+        "label": "ID"
+      },
+      "vote": {
+        "type": "integer",
+        "required": true,
+        "read_only": false,
+        "label": "Vote",
+        "min_value": -2147483648,
+        "max_value": 2147483647
+      },
+      "timestamp": {
+        "type": "datetime",
+        "required": false,
+        "read_only": false,
+        "label": "Timestamp"
+      },
+      "zip_code": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Zip code",
+        "max_length": 45
+      },
+      "vote_range": {
+        "type": "string",
+        "required": true,
+        "read_only": false,
+        "label": "Vote range",
+        "max_length": 45
+      },
+      "ballot_number": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Ballot number",
+        "max_length": 45
+      },
+      "state_code": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "State code",
+        "max_length": 45
+      },
+      "opt_in": {
+        "type": "integer",
+        "required": false,
+        "read_only": false,
+        "label": "Opt in",
+        "min_value": -2147483648,
+        "max_value": 2147483647
+      },
+      "user": {
+        "type": "field",
+        "required": true,
+        "read_only": false,
+        "label": "User"
+      },
+      "bill": {
+        "type": "field",
+        "required": true,
+        "read_only": false,
+        "label": "Bill"
+      }
+    }
+  }
+}

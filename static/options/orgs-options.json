@@ -1,0 +1,60 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+
+{
+  "name": "Org List",
+  "description": "",
+  "renders": [
+    "application/json",
+    "text/html"
+  ],
+  "parses": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "actions": {
+    "POST": {
+      "id": {
+        "type": "integer",
+        "required": false,
+        "read_only": true,
+        "label": "ID"
+      },
+      "created_on": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Created on"
+      },
+      "last_modified": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Last modified"
+      },
+      "hash_id": {
+        "type": "field",
+        "required": false,
+        "read_only": true,
+        "label": "Hash id"
+      },
+      "name": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Name",
+        "max_length": 255
+      },
+      "type": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Type",
+        "max_length": 255
+      }
+    }
+  }
+}

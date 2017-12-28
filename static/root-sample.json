@@ -1,0 +1,16 @@
+// HTTP 200 OK
+// Allow: GET, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+
+{
+  "users": "http://54.187.193.156/users/",
+  "groups": "http://54.187.193.156/groups/",
+  "orgs": "http://54.187.193.156/orgs/",
+  "legislators": "http://54.187.193.156/legislators/",
+  "bills": "http://54.187.193.156/bills/",
+  "hot-bills": "http://54.187.193.156/hot-bills/",
+  "rollcall-votes": "http://54.187.193.156/rollcall-votes/",
+  "rollcall": "http://54.187.193.156/rollcall/",
+  "votes": "http://54.187.193.156/votes/"
+}

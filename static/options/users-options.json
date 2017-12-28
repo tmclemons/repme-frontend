@@ -1,0 +1,49 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+{
+  "name": "User List",
+  "description": "",
+  "renders": [
+    "application/json",
+    "text/html"
+  ],
+  "parses": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "actions": {
+    "POST": {
+      "url": {
+        "type": "field",
+        "required": false,
+        "read_only": true,
+        "label": "Url"
+      },
+      "username": {
+        "type": "string",
+        "required": true,
+        "read_only": false,
+        "label": "Username",
+        "help_text": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+        "max_length": 150
+      },
+      "email": {
+        "type": "email",
+        "required": false,
+        "read_only": false,
+        "label": "Email address",
+        "max_length": 254
+      },
+      "groups": {
+        "type": "field",
+        "required": false,
+        "read_only": false,
+        "label": "Groups",
+        "help_text": "The groups this user belongs to. A user will get all permissions granted to each of their groups."
+      }
+    }
+  }
+}

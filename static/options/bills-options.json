@@ -1,0 +1,133 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+{
+  "name": "Bill List",
+  "description": "",
+  "renders": [
+    "application/json",
+    "text/html"
+  ],
+  "parses": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "actions": {
+    "POST": {
+      "id": {
+        "type": "integer",
+        "required": false,
+        "read_only": true,
+        "label": "ID"
+      },
+      "created_on": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Created on"
+      },
+      "last_modified": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Last modified"
+      },
+      "hash_id": {
+        "type": "field",
+        "required": false,
+        "read_only": true,
+        "label": "Hash id"
+      },
+      "number": {
+        "type": "string",
+        "required": true,
+        "read_only": false,
+        "label": "Number",
+        "max_length": 45
+      },
+      "title": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Title"
+      },
+      "description": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Description"
+      },
+      "status": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Status",
+        "max_length": 7
+      },
+      "closing_date": {
+        "type": "datetime",
+        "required": false,
+        "read_only": false,
+        "label": "Closing date"
+      },
+      "bill_created_date": {
+        "type": "datetime",
+        "required": false,
+        "read_only": false,
+        "label": "Bill created date"
+      },
+      "bill_modified_date": {
+        "type": "datetime",
+        "required": false,
+        "read_only": false,
+        "label": "Bill modified date"
+      },
+      "is_default": {
+        "type": "integer",
+        "required": false,
+        "read_only": false,
+        "label": "Is default",
+        "min_value": -2147483648,
+        "max_value": 2147483647
+      },
+      "chamber": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Chamber",
+        "max_length": 25
+      },
+      "introduced_date": {
+        "type": "datetime",
+        "required": false,
+        "read_only": false,
+        "label": "Introduced date"
+      },
+      "bill_result": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Bill result"
+      },
+      "sponser": {
+        "type": "field",
+        "required": false,
+        "read_only": false,
+        "label": "Sponser"
+      },
+      "attached_rollcall": {
+        "type": "field",
+        "required": false,
+        "read_only": false,
+        "label": "Attached rollcall"
+      }
+    }
+  }
+}
+
+// HTML form
+// Raw data
+
+// Number 

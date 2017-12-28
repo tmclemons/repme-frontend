@@ -1,0 +1,93 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+
+{
+  "name": "Roll Call Vote List",
+  "description": "",
+  "renders": [
+    "application/json",
+    "text/html"
+  ],
+  "parses": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "actions": {
+    "POST": {
+      "id": {
+        "type": "integer",
+        "required": false,
+        "read_only": true,
+        "label": "ID"
+      },
+      "created_on": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Created on"
+      },
+      "last_modified": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Last modified"
+      },
+      "hash_id": {
+        "type": "field",
+        "required": false,
+        "read_only": true,
+        "label": "Hash id"
+      },
+      "party": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Party",
+        "max_length": 1
+      },
+      "state": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "State",
+        "max_length": 2
+      },
+      "role": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Role",
+        "max_length": 32
+      },
+      "vote": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Vote",
+        "max_length": 64
+      },
+      "effective_vote": {
+        "type": "string",
+        "required": false,
+        "read_only": false,
+        "label": "Effective vote",
+        "max_length": 1
+      },
+      "legislator": {
+        "type": "field",
+        "required": false,
+        "read_only": false,
+        "label": "Legislator"
+      },
+      "rollcall": {
+        "type": "field",
+        "required": false,
+        "read_only": false,
+        "label": "Rollcall"
+      }
+    }
+  }
+}

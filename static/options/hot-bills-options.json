@@ -1,0 +1,66 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+
+{
+  "name": "Hot Bill List",
+  "description": "",
+  "renders": [
+    "application/json",
+    "text/html"
+  ],
+  "parses": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data"
+  ],
+  "actions": {
+    "POST": {
+      "id": {
+        "type": "integer",
+        "required": false,
+        "read_only": true,
+        "label": "ID"
+      },
+      "created_on": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Created on"
+      },
+      "last_modified": {
+        "type": "datetime",
+        "required": false,
+        "read_only": true,
+        "label": "Last modified"
+      },
+      "hash_id": {
+        "type": "field",
+        "required": false,
+        "read_only": true,
+        "label": "Hash id"
+      },
+      "is_default": {
+        "type": "integer",
+        "required": false,
+        "read_only": false,
+        "label": "Is default",
+        "min_value": -2147483648,
+        "max_value": 2147483647
+      },
+      "bill": {
+        "type": "field",
+        "required": true,
+        "read_only": false,
+        "label": "Bill"
+      },
+      "org": {
+        "type": "field",
+        "required": true,
+        "read_only": false,
+        "label": "Org"
+      }
+    }
+  }
+}

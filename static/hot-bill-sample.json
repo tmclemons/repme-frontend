@@ -1,0 +1,21 @@
+// HTTP 200 OK
+// Allow: GET, POST, HEAD, OPTIONS
+// Content-Type: application/json
+// Vary: Accept
+
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 3,
+      "created_on": "2017-12-20T16:43:22+0000",
+      "last_modified": "2017-12-20T16:43:22+0000",
+      "hash_id": "c29ddcc8-ee5a-4b44-9b3b-7427c68fef1a",
+      "is_default": 1,
+      "bill": 2419,
+      "org": 2
+    }
+  ]
+}
