@@ -4,6 +4,7 @@
   "description": "Front end gui for repme site",
   "main": "index.js",
   "scripts": {
+    "start": "webpack-dev-server --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,7 +22,9 @@
     "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-router": "^4.2.0"
+    "react-router": "^4.2.0",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.9.7"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
