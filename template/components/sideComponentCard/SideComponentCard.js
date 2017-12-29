@@ -19,7 +19,7 @@ class SideComponentCard extends React.Component {
     return (
       <List>
         <ListItem>
-          <Avatar src={this.state.url}/>
+          <Avatar src={this.state.user.url}/>
         </ListItem>
         <ListItem>
           {this.state.user.name}
