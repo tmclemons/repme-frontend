@@ -8,7 +8,6 @@ const UiTemplateHeader = () => (
     <AppBar
       title="Title"
       iconClassNameRight="muidocs-icon-navigation-expand-more"
-      style={{ margin: '0 0 0 300px' }}
     />
   </MuiThemeProvider>
 );
