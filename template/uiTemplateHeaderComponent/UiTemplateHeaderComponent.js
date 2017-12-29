@@ -16,7 +16,7 @@ class UiTemplateHeader extends React.Component {
     return (
       <MuiThemeProvider>
         <AppBar
-          title="Title"
+          title="Bills"
           iconElementLeft={
             <IconButton>
               <NavigationMenu onClick={this.props.callback}/>

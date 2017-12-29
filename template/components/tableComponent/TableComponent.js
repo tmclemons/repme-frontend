@@ -7,6 +7,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
+import DataComponent from '../dataComponent/DataComponent'
 //static data for building ui
 import sampleData from '../../../static/bills-sample'
 
@@ -17,19 +18,23 @@ class TableComponent extends React.Component {
       fields: [
         {
           title: 'Bill Number',
-          key: 'number'
+          key: 'number',
+          type: 'string'
         },
         {
           title: 'Title',
-          key: 'title'
+          key: 'title',
+          type: 'string'
         },
         {
           title: 'Chamber',
-          key: 'chamber'
+          key: 'chamber',
+          type: 'string'
         },
         {
           title: 'Created On',
-          key: 'created_on'
+          key: 'created_on',
+          type: 'date'
         }
       ]
     }
@@ -38,7 +43,6 @@ class TableComponent extends React.Component {
   render() {
     // dummy data placholder
     const results = sampleData.results;
-    console.log(results)
 
     return (
       <Table>
@@ -64,7 +68,10 @@ class TableComponent extends React.Component {
                     this.state.fields.map( (field, subIndex) => {
                       return (
                         <TableRowColumn key={subIndex}>
-                          {result[field.key]}
+                          <DataComponent 
+                            data={result[field.key]}
+                            type={field.type}
+                          />
                         </TableRowColumn>
                       )
                     })
@@ -73,31 +80,6 @@ class TableComponent extends React.Component {
               )
             })
           }
-          {/* <TableRow>
-            <TableRowColumn>1</TableRowColumn>
-            <TableRowColumn>John Smith</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>2</TableRowColumn>
-            <TableRowColumn>Randal White</TableRowColumn>
-            <TableRowColumn>Unemployed</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>3</TableRowColumn>
-            <TableRowColumn>Stephanie Sanders</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>4</TableRowColumn>
-            <TableRowColumn>Steve Brown</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>5</TableRowColumn>
-            <TableRowColumn>Christopher Nolan</TableRowColumn>
-            <TableRowColumn>Unemployed</TableRowColumn>
-          </TableRow> */}
         </TableBody>
       </Table>
     )
