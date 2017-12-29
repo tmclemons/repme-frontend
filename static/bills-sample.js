@@ -1,9 +1,4 @@
-// HTTP 200 OK
-// Allow: GET, POST, HEAD, OPTIONS
-// Content-Type: application/json
-// Vary: Accept
-
-{
+const billSample = {
   "count": 7860,
   "next": "http://54.187.193.156/bills/?page=2",
   "previous": null,
@@ -200,3 +195,5 @@
     }
   ]
 }
+
+export default billSample
