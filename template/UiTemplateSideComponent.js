@@ -7,6 +7,8 @@ import Drawer from 'material-ui/Drawer';
 import SideComponentCard from "./components/sideComponentCard/SideComponentCard";
 import SideComponentNav from "./components/sideComponentNav/SideComponentNav";
 
+
+
 const UiTemplateSide = () => (
   <MuiThemeProvider>
     <Drawer width={300}>
