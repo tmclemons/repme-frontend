@@ -7,16 +7,32 @@ import UiTemplateMain from
   '../uiTemplateMainComponent/UiTemplateMainComponent'
 import Scss from './uiTemplateLayout.scss'
 
-const UiTemplateLayout= () => (
-  <div className="uitemplate__layout">
-    <div className="uitemplate__layout--side">
-      <UiTemplateSide />
-    </div>
-    <div className="uitemplate__layout--main">
-      <UiTemplateHeader />
-      <UiTemplateMain />
-    </div>
-  </div>
-);
+class UiTemplateLayout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: true
+    }
+  }
+
+  handleToggle = () => { 
+    this.setState({ active: !this.state.active })
+  }
+
+  render() {
+    return (
+      <div className="uitemplate__layout">
+        <div className={`uitemplate__layout--side ${this.state.active
+          ? '' : 'closed'}`}>
+          <UiTemplateSide active={this.state.active}/>
+        </div>
+        <div className="uitemplate__layout--main">
+          <UiTemplateHeader active={this.state.active} callback={this.handleToggle}/>
+          <UiTemplateMain />
+        </div>
+      </div>
+    )
+  }
+}
 
 export default UiTemplateLayout;

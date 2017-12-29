@@ -1,5 +1,6 @@
 {
   "plugins": [
-    "dynamic-import-webpack"
+    "dynamic-import-webpack",
+    "transform-class-properties"
   ]
 }

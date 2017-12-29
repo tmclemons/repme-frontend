@@ -8,13 +8,24 @@ import SideComponentCard from
 import SideComponentNav from 
   "../components/sideComponentNav/SideComponentNav";
 
-const UiTemplateSide = () => (
-  <MuiThemeProvider>
-    <Drawer containerClassName="uitemplate__sidecomponent">
-      <SideComponentCard />
-      <SideComponentNav />
-    </Drawer>
-  </MuiThemeProvider>
-);
+
+class UiTemplateSide extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return(
+      <MuiThemeProvider>
+        <Drawer containerClassName="uitemplate__sidecomponent" 
+          open={this.props.active}>
+          <SideComponentCard />
+          <SideComponentNav />
+        </Drawer>
+      </MuiThemeProvider>
+    )
+  }
+
+}
 
 export default UiTemplateSide;
