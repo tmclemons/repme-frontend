@@ -10,24 +10,20 @@ class SideComponentNav extends React.Component {
     this.state = {
       nav: [
         {
-          import: 'ContentInbox',
-          name: 'Inbox',
-          path: 'content/inbox'
+          name: 'Dashboard',
+          path: 'action/dashboard'
         },
         {
-          import: 'ActionGrade',
-          name: 'Starred',
-          path: 'action/grade'
+          name: 'Bills',
+          path: 'av/library-books'
         },
         {
-          import: 'ContentSend',
-          name: 'Sent mail',
-          path: 'content/send'
+          name: 'Organizations',
+          path: 'action/group-work'
         },
         {
-          import: 'ContentDrafts',
-          name: 'Drafts',
-          path: 'content/drafts'
+          name: 'Profile',
+          path: 'action/face'
         },
       ]
     }
