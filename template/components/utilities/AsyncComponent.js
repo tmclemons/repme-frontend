@@ -1,26 +1,31 @@
-import React from 'react';
+import React, { Component } from "react";
 
-class AsyncComponent extends React.Component {
-  constructor(props) {
-    super(props);
+export default function AsyncComponent(importCallback) {
+  class AsyncComponent extends Component {
+    constructor(props) {
+      super(props);
 
-    this.state = {
-      component: null
-    };
+      this.state = {
+        getComponent: null
+      };
+    }
+
+    async componentDidMount() {
+      const { default: getComponent } = await importCallback();
+
+      this.setState({
+        component: getComponent
+      });
+    }
+
+    render() {
+      const CreatedComponent = this.state.component;
+
+      return CreatedComponent 
+        ? <CreatedComponent {...this.props} /> 
+        : null;
+    }
   }
 
-  async componentDidMount() {
-    const { default: component } = await importCallback();
-
-    this.setState({
-      component: component
-    });
-  }
-  
-  render() {
-    const ImportedComponent = this.state.component;
-    return ImportedComponent ? <ImportedComponent {...this.props} /> : null;
-  }
+  return AsyncComponent;
 }
-
-export default function AsyncComponent(importCallback)
