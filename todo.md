@@ -3,8 +3,10 @@
 #Create Admin Routes and Holder 
 
 ## Notes:
---  TODO: security, routing, CORS
---  build admin panel navigation on left,
+--  TODO: security
+--  DONE: Routing
+--  TODO: CORS setup
+--  REVIEW: build admin panel navigation on left,
     field on top, data in the middle
 --  note admin vs public view of each 
     route in admin page based on login / credentials
@@ -12,11 +14,11 @@
 --  create server profile logic (later on)
 --  create cookie login logic (maybe later on, research now) 
 ## components within repme admin panel view
-   - Login Page
-   - Bills
-   - Roll Call
+   - INPROGRESS: Login Page
+   - INPROGRESS: Bills
+   - INPROGRESS: Roll Call
    - Users
-   - Votes 
+   - INPROGRESS: Votes 
    - Organizations admin **** start here
    - Groups
 #Create Admin Scaffolding
