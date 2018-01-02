@@ -33,7 +33,6 @@ class Organizations extends React.Component {
     
     return (
       <UiTemplateLayout data={dummyData} />
-
     )
   }
 }

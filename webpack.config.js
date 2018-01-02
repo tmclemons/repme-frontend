@@ -11,7 +11,10 @@ var config = {
   },
 
   plugins: [],
-
+  devServer: {
+    inline: true,
+    port: 3000
+  },
   module: {
     loaders: [
       {
@@ -37,3 +40,4 @@ var config = {
 };
 
 module.exports = config;
+

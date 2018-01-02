@@ -11,19 +11,23 @@ class SideComponentNav extends React.Component {
       nav: [
         {
           name: 'Dashboard',
-          path: 'action/dashboard'
+          path: 'action/dashboard',
+          goTo: '/' 
         },
         {
           name: 'Bills',
-          path: 'av/library-books'
+          path: 'av/library-books',
+          goTo: '/bills'
         },
         {
           name: 'Organizations',
-          path: 'action/group-work'
+          path: 'action/group-work',
+          goTo: '/organizations'
         },
         {
           name: 'Profile',
-          path: 'action/face'
+          path: 'action/face',
+          goTo: '/profile'
         },
       ]
     }

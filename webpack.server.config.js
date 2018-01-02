@@ -24,11 +24,14 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel-loader',
       query: {
+        plugins: [
+          'transform-class-properties'
+        ],
         presets: ['react', 'es2015']
       }
     }, {
-      test: /\.css$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+      test: /\.scss$/,
+      loaders: ['style-loader', 'css-loader', 'sass-loader']
     }]
   }
 }
