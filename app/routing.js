@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory, Router, Route, IndexRoute } from 'react-router'
+import { Route } from 'react-router'
 import AsyncComponent from 
   '../template/components/utilities/AsyncComponent';
 
@@ -14,19 +14,17 @@ const RollCallList = AsyncComponent(
   () => import( './admin/roll-call-list/rollCallList' )
 )
 
-
-const RoutingInit = () => {
-  return (
-    // <Router history={browserHistory}>
-    //   <Route> 
-    //     <IndexRoute path='/' component={Bills} />
-    //     <Route path="/organizations" component={Organizations} />
-    //     <Route path="/roll-call-list" component={RollCallList} />
-    //   </Route>
-    // </Router> 
-    <Bills />
-  )
+class Routing extends React.Component {
+  render() {
+    return (
+      <div>
+        <Route exact path='/' component={Bills} />
+        <Route path="/organizations" component={Organizations} />
+        <Route path="/roll-call-list" component={RollCallList} />
+      </div>
+    )
+  }
 }
 
 // TODO: need to add params pass through on routes
-export default RoutingInit
+export default Routing;
