@@ -50,25 +50,27 @@ const Header = () => (
   </MuiThemeProvider>
 )
 
+const BannerOverlay = (color) => {
+  var style = {
+    backgroundColor: color,
+    width: '100%',
+    height: '100%',
+  };
+
+  return(
+    <div className="overlay" style={style}></div>
+  )
+}
+
 const Banner = () => (
   <MuiThemeProvider>
     <Card>
       <CardMedia
-        overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-      >
+        overlay={
+
+        }>
         <img src="https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg" alt="" />
       </CardMedia>
-      {/* <CardTitle title="Card title" subtitle="Card subtitle" /> */}
-      {/* <CardText>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-        Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-        Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-      </CardText> */}
-      {/* <CardActions>
-        <FlatButton label="Action1" />
-        <FlatButton label="Action2" />
-      </CardActions> */}
     </Card>
   </MuiThemeProvider>
   

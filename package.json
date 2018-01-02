@@ -25,10 +25,12 @@
     "classnames": "^2.2.5",
     "material-ui": "^0.20.0",
     "moment": "^2.20.1",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "resize-observer-polyfill": "^1.5.0",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7"
   },
