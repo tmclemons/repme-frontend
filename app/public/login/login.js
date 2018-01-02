@@ -5,6 +5,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
 
+import Scss from './login.scss'
+
 class LoginComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +17,7 @@ class LoginComponent extends React.Component {
   }
 
   handleClick(event) {
-    var apiBaseUrl = "http://localhost:3000/api/";
+    var apiBaseUrl = "http://localhost:3000/";
     var self = this;
 
     var payload = {
@@ -25,39 +27,31 @@ class LoginComponent extends React.Component {
 
     axios.post(apiBaseUrl + 'login', payload)
       .then(function (response) {
-        console.log(response);
-
         if (response.data.code == 200) {
           console.log("Login successful");
-          var uploadScreen = [];
-          uploadScreen.push(<UploadScreen appContext={self.props.appContext} />)
-          self.props.appContext.setState({ loginPage: [], uploadScreen: uploadScreen })
         }
 
         else if (response.data.code == 204) {
-          console.log("Username password do not match");
+          console.warn("Username password do not match");
           alert("username password do not match")
         }
-
         else {
-          console.log("Username does not exists");
+          console.warn("Username does not exists");
           alert("Username does not exist");
         }
       })
-      
       .catch(function (error) {
         console.log(error);
       });
   }
+  
 
   render() {
     return (
-      <div>
+      <div className="login">
+        <div className="top-aligner"></div>
         <MuiThemeProvider>
           <div>
-            <AppBar
-              title="Login"
-            />
             <TextField
               hintText="Enter your Username"
               floatingLabelText="Username"
@@ -74,6 +68,7 @@ class LoginComponent extends React.Component {
             <RaisedButton label="Submit" primary={true} onClick={(event) => this.handleClick(event)} />
           </div>
         </MuiThemeProvider>
+        <div className="bottom-aligner"></div>
       </div>
     );
   }
