@@ -21,7 +21,6 @@ class TableComponent extends React.Component {
           <TableRow>
             {
               this.props.data.state.fields.map( (field, index) => {
-                console.log(field, index)
                 return (
                   <TableHeaderColumn key={index}>
                     {field.title}

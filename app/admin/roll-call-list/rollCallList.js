@@ -3,6 +3,7 @@ import UiTemplateLayout from
   '../../../template/uiTemplateLayoutComponent/UiTemplateLayoutComponent';
 //static data for building ui
 import SampleData from '../../../static/roll-call-list-sample'
+import axios from 'axios';
 
 class RollCallList extends React.Component {
   constructor(props) {
@@ -48,17 +49,21 @@ class RollCallList extends React.Component {
     }
   }
 
+  componentDidMount() {
+    axios.get(`http://54.187.193.156/rollcall/`)
+      .then(res => {
+        this.setState({ results: res.data.results });
+      });
+  }
+
   render() {
     const dummyData = {
       state: this.state,
-      routeTitle: 'Roll Call',
-      results: SampleData.results
+      routeTitle: 'Roll Call List',
+      results: this.state.results || []
     }
 
-    return (
-      <UiTemplateLayout data={dummyData} />
-
-    )
+    return (<UiTemplateLayout data={dummyData} />);
   }
 }
 

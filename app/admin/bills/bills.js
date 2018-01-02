@@ -3,6 +3,8 @@ import UiTemplateLayout from
   '../../../template/uiTemplateLayoutComponent/UiTemplateLayoutComponent';
 //static data for building ui
 import SampleData from '../../../static/bills-sample';
+import getData from '../../../template/components/utilities/apiCallComponent'
+import axios from 'axios';
 
 class Bills extends React.Component {
   constructor(props) {
@@ -32,19 +34,22 @@ class Bills extends React.Component {
       ]
     }
   }
+
+  componentDidMount() {
+    axios.get(`http://54.187.193.156/bills/`)
+      .then(res => {
+        this.setState({ results: res.data.results });
+      });
+  }
   
   render() {
-  
     const dummyData = {
       state: this.state,
       routeTitle: 'Bills',
-      results: SampleData.results
+      results: this.state.results || []
     }
 
-    console.log(dummyData)
-    return (
-      <UiTemplateLayout data={dummyData}/>
-    )
+    return( <UiTemplateLayout data={dummyData}/> );
   }
 }
 
