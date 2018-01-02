@@ -19,6 +19,7 @@ class Routing extends React.Component {
     return (
       <div>
         <Route exact path='/' component={Bills} />
+        <Route exact path='/bills' component={Bills} />
         <Route path="/organizations" component={Organizations} />
         <Route path="/roll-call-list" component={RollCallList} />
       </div>

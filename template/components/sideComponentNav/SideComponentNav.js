@@ -25,9 +25,9 @@ class SideComponentNav extends React.Component {
           goTo: '/organizations'
         },
         {
-          name: 'Profile',
+          name: 'Roll Call List',
           path: 'action/face',
-          goTo: '/profile'
+          goTo: '/roll-call-list'
         },
       ]
     }
