@@ -32,10 +32,18 @@ class Bills extends React.Component {
       ]
     }
   }
-
+  
   render() {
+  
+    const dummyData = {
+      state: this.state,
+      routeTitle: 'Bills',
+      results: SampleData.results
+    }
+
+    console.log(dummyData)
     return (
-      <UiTemplateLayout />
+      <UiTemplateLayout data={dummyData}/>
     )
   }
 }

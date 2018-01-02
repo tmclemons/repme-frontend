@@ -27,8 +27,12 @@ class UiTemplateLayout extends React.Component {
           <UiTemplateSide active={this.state.active}/>
         </div>
         <div className="uitemplate__layout--main">
-          <UiTemplateHeader active={this.state.active} callback={this.handleToggle}/>
-          <UiTemplateMain />
+          <UiTemplateHeader 
+            active={this.state.active} 
+            callback={this.handleToggle}
+            title={this.props.data.routeTitle}
+          />
+          <UiTemplateMain data={this.props.data}/>
         </div>
       </div>
     )

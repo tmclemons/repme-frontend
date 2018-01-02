@@ -37,8 +37,3 @@ var config = {
 };
 
 module.exports = config;
-
-  // devServer: {
-  //   inline: true,
-  //   port: 3000
-  // },

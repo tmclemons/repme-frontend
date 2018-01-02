@@ -10,23 +10,38 @@ class RollCallList extends React.Component {
     this.state = {
       fields: [
         {
-          title: 'Bill Number',
-          key: 'number',
+          title: 'Question',
+          key: 'question',
           type: 'string'
         },
         {
-          title: 'Title',
-          key: 'title',
+          title: 'Legislation Number',
+          key: 'legis_num',
           type: 'string'
         },
         {
-          title: 'Chamber',
-          key: 'chamber',
+          title: 'Total Yea',
+          key: 'total_yea',
+          type: 'number'
+        },
+        {
+          title: 'Total Nay',
+          key: 'total_nay',
+          type: 'number'
+        },
+        {
+          title: 'Vote Result',
+          key: 'vote_result',
           type: 'string'
         },
         {
-          title: 'Created On',
-          key: 'created_on',
+          title: 'Vote Type',
+          key: 'vote_type',
+          type: 'string'
+        },
+        {
+          title: 'Vote Time',
+          key: 'vote_timestamp',
           type: 'date'
         }
       ]
@@ -34,8 +49,15 @@ class RollCallList extends React.Component {
   }
 
   render() {
+    const dummyData = {
+      state: this.state,
+      routeTitle: 'Roll Call',
+      results: SampleData.results
+    }
+
     return (
-      <UiTemplateLayout />
+      <UiTemplateLayout data={dummyData} />
+
     )
   }
 }

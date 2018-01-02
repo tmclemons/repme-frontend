@@ -10,32 +10,30 @@ class Organizations extends React.Component {
     this.state = {
       fields: [
         {
-          title: 'Bill Number',
-          key: 'number',
+          title: 'Org Name',
+          key: 'name',
           type: 'string'
         },
         {
-          title: 'Title',
-          key: 'title',
+          title: 'Org Type',
+          key: 'type',
           type: 'string'
-        },
-        {
-          title: 'Chamber',
-          key: 'chamber',
-          type: 'string'
-        },
-        {
-          title: 'Created On',
-          key: 'created_on',
-          type: 'date'
         }
       ]
     }
   }
 
   render() {
+
+    const dummyData = {
+      state: this.state,
+      routeTitle: 'Organizations',
+      results: SampleData.results
+    }
+    
     return (
-      <UiTemplateLayout />
+      <UiTemplateLayout data={dummyData} />
+
     )
   }
 }
