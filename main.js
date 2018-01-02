@@ -1,5 +1,10 @@
 import React from "react";
 import { render } from "react-dom";
-import App from "./app.js";
+import RoutingInit from "./app/routing.js";
 
-render(<App />, document.getElementById('app'));
+const Routing = RoutingInit();
+
+render(
+  Routing,
+  document.getElementById('app')
+);

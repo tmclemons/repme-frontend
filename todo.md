@@ -3,6 +3,7 @@
 #Create Admin Routes and Holder 
 
 ## Notes:
+--  TODO: security, routing, CORS
 --  build admin panel navigation on left,
     field on top, data in the middle
 --  note admin vs public view of each 
