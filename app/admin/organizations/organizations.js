@@ -35,7 +35,10 @@ class Organizations extends React.Component {
 
   render() {
     return (
+      <div>
       <UiTemplateLayout />
+      <div>organizations</div>
+      </div>
     )
   }
 }

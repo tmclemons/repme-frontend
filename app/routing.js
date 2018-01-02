@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory, Router, Route, IndexRoute } from 'react-router'
+import { Route, IndexRoute } from 'react-router'
 import AsyncComponent from 
   '../template/components/utilities/AsyncComponent';
 
@@ -17,14 +17,12 @@ const RollCallList = AsyncComponent(
 
 const RoutingInit = () => {
   return (
-    // <Router history={browserHistory}>
-    //   <Route> 
-    //     <IndexRoute path='/' component={Bills} />
-    //     <Route path="/organizations" component={Organizations} />
-    //     <Route path="/roll-call-list" component={RollCallList} />
-    //   </Route>
-    // </Router> 
-    <Bills />
+    <Route path="/" component={Bills}> 
+      <IndexRoute component={Bills} />
+      <Route path="/organizations" component={Organizations} />
+      <Route path="/roll-call-list" component={RollCallList} />
+    </Route>
+    // <Bills />
   )
 }
 
