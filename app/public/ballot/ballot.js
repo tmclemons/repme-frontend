@@ -13,6 +13,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Slider from 'material-ui/Slider';
 import HorizontalSlider from 
   '../../../template/components/horizontalSlider/HorizontalSlider';
+import Scss from './ballot.scss';
 
 
 //for form input component
@@ -42,6 +43,9 @@ const nearbyIcon = <IconLocationOn />;
 // TODO: Footer component with social media buttons
 // TODO: Social Media buttons
 
+let componentProps = {
+  sliderPos: 0
+}
 
 const Header = () => (
   <MuiThemeProvider>
@@ -64,26 +68,48 @@ const BannerOverlay = (color) => {
   )
 }
 
+//red rgb(237, 46, 27)
+//yellow rgb(255, 206, 52)
+//green rgb(48, 173, 64)
+
+const styleForOverlay = {
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'red'
+}
+
+const styleForOverlayContent = {
+  display: 'none'
+}
+
 const Banner = () => (
   <MuiThemeProvider>
     <Card>
       <CardMedia
         overlay={
-          <BannerOverlay />
-        }>
+          <span></span>
+        }
+        overlayContainerStyle={styleForOverlay}
+        overlayContentStyle={styleForOverlayContent}
+        >
         <img src="https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg" alt="" />
       </CardMedia>
     </Card>
   </MuiThemeProvider>
   
 )
-    // <MuiThemeProvider>
-    //   <Slider step={0.10} value={0.5} />
-    // </MuiThemeProvider>
+
+// capture slider data
+const onValueChange = (data) => {
+  componentProps.sliderPos = data || 0;
+}
 
 const SliderComp = () => (
+  // <MuiThemeProvider>
+  //   <Slider step={0.10} value={0.5} />
+  // </MuiThemeProvider>
   <div>
-    <HorizontalSlider /> 
+    <HorizontalSlider callback={onValueChange}/> 
   </div>
 )
 
@@ -158,11 +184,11 @@ class Ballot extends React.Component {
   render() {
     return(
       <div>
-        {/* <Header /> */}
-        {/* <Banner /> */}
+        <Header />
+        <Banner />
         <SliderComp />
-        {/* <Form /> */}
-        {/* <Footer /> */}
+        <Form />
+        <Footer />
       </div>
     )
   }

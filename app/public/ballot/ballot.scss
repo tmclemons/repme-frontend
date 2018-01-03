@@ -1,0 +1,26 @@
+$step: 20;
+$startColor: rgb(48, 173, 64);
+$middleColor: rgb(255, 206, 52);
+$endColor: rgb(237, 46, 27);
+
+@if $middleColor {
+  $middleStep: $step/2;
+  @for $i from 1 to $middleStep {
+    .slider__color--stop-#{$i} {
+      background-color: mix($startColor, $middleColor, ($i / $middleStep));
+    }
+  }
+  @for $i from ( $middleStep + 1) to ($step + 1) {
+    .slider__color--stop-#{$i} {
+      background-color: mix($middleColor, $endColor, ($i / ( $middleStep + 1)));
+    }
+  }
+}
+
+@else {
+  @for $i from 1 to $step {
+    .slider__color--stop-#{$i} {
+      background-color: mix($startColor, $endColor, ($i / $step));
+    }
+  }
+}
