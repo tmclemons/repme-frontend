@@ -1,0 +1,33 @@
+.vote__form {
+  
+  &--text-input {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    height: 100%;
+    padding-bottom: 20px;
+    > div {
+      margin-right: 10px;
+    }
+  }
+
+  &--subscribe {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    padding: 40px;
+    margin: auto;
+    width: 300px;
+    margin-top: 20px;
+    font-size: 12px;
+  }
+  
+  &--submit {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    padding: 10px;
+    padding-bottom: 20px;
+  }
+
+}

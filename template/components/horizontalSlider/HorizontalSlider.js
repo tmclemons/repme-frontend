@@ -5,8 +5,8 @@ class Horizontal extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      value: 0,
-      step: 5,
+      value: this.props.defaultValue,
+      step: this.props.step,
     }
   }
 
@@ -30,10 +30,10 @@ class Horizontal extends React.Component {
     return (
       <div className='slider'>
         <CustomSlider
-          min={0}
-          max={100}
-          value={value}
-          step={step}
+          min={this.props.min || 0}
+          max={this.props.max || 100}
+          value={this.state.value || 0}
+          step={this.state.step || 1}
           onChangeStart={this.handleChangeStart}
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}
