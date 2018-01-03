@@ -2,6 +2,7 @@ import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import GetMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
+import axios from 'axios';
 
 import VoteForm from '../../../template/components/voteForm/VoteForm';
 
@@ -136,6 +137,17 @@ const Footer = () => (
 class Ballot extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      sampleBallot: null
+    }
+  }
+
+  componentDidMount() {
+    //sample ballout for building out ui
+    axios.get(`http://54.187.193.156/bills/e893950d-373b-4a85-9d4a-95b8962c0082/`)
+      .then(res => {
+        this.setState({ sampleBallot: res.data });
+      });
   }
 
   submitVote(voteData) {
@@ -146,7 +158,7 @@ class Ballot extends React.Component {
     return(
       <div>
         <Header />
-        <Banner />
+        <Banner ballotInfo={this.state.sampleBallot}/>
         {/* <SliderComp /> */}
         <VoteForm callback={this.submitVote}/>
         <Footer />
