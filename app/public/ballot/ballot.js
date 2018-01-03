@@ -5,17 +5,9 @@ import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
 
 import VoteForm from '../../../template/components/voteForm/VoteForm';
-
-// for banner component
-//http://www.material-ui.com/#/components/card
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import Banner from '../../../template/components/bannerComponent/BannerComponent'
 
-// for slider component
-//http://www.material-ui.com/#/components/slider
-import Slider from 'material-ui/Slider';
-import HorizontalSlider from 
-  '../../../template/components/horizontalSlider/HorizontalSlider';
 import classNames from 'classnames';
 import Scss from './ballot.scss';
 
@@ -50,65 +42,6 @@ const Header = () => (
     />
   </MuiThemeProvider>
 )
-
-
-class Banner extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      componentProps: 0,
-      step: 5,
-      max: 100,
-      defaultValue: 0
-    }
-  }
-  
-  styleForOverlay = {
-    width: '100%',
-    height: '100%',
-  }
-
-  // capture slider data
-  onValueChange = (data) => {
-    this.setState({
-      componentProps: (data / (this.state.step)) || 0
-    })
-  }
-
-  render() {
-
-    return (
-      <div>
-        <MuiThemeProvider>
-          <Card>
-            <CardMedia
-              overlay={
-                <div
-                  className={classNames(
-                    `slider__color--stop-${this.state.componentProps}`
-                  )}
-                >
-                </div>
-              }
-              overlayContainerStyle={this.styleForOverlay}
-              overlayContentStyle={this.styleForOverlay}
-              >
-              <img src="https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg" alt="" />
-            </CardMedia>
-          </Card>
-        </MuiThemeProvider>
-        <div className={'slider--horizontal'}>
-          <HorizontalSlider
-          step={this.state.step}
-          max={this.state.max}
-          defaultValue={this.state.defaultValue}
-          callback={this.onValueChange}
-          />
-        </div>
-      </div>
-    )
-  }
-}
 
 const Footer = () => (
   <MuiThemeProvider>
