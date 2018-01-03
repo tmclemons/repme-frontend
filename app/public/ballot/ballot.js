@@ -36,8 +36,8 @@ const nearbyIcon = <IconLocationOn />;
 // DONE: Banner that translates slide color ontop of background image
 // TODO: background image
 // TODO: Pop on hover over slider
-// TODO: inputs for form submission -- form submission
-// TODO: form submission button
+// DONE: inputs for form submission -- form submission
+// DONE: form submission button
 // TODO: Footer component with social media buttons
 // TODO: Social Media buttons
 
@@ -138,13 +138,17 @@ class Ballot extends React.Component {
     super(props)
   }
 
+  submitVote(voteData) {
+    console.log(voteData)
+  }
+
   render() {
     return(
       <div>
         <Header />
         <Banner />
         {/* <SliderComp /> */}
-        <VoteForm />
+        <VoteForm callback={this.submitVote}/>
         <Footer />
       </div>
     )
