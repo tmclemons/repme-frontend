@@ -11,6 +11,8 @@ import FlatButton from 'material-ui/FlatButton';
 // for slider component
 //http://www.material-ui.com/#/components/slider
 import Slider from 'material-ui/Slider';
+import HorizontalSlider from 
+  '../../../template/components/horizontalSlider/HorizontalSlider';
 
 
 //for form input component
@@ -67,7 +69,7 @@ const Banner = () => (
     <Card>
       <CardMedia
         overlay={
-
+          <BannerOverlay />
         }>
         <img src="https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg" alt="" />
       </CardMedia>
@@ -75,11 +77,14 @@ const Banner = () => (
   </MuiThemeProvider>
   
 )
+    // <MuiThemeProvider>
+    //   <Slider step={0.10} value={0.5} />
+    // </MuiThemeProvider>
 
 const SliderComp = () => (
-  <MuiThemeProvider>
-    <Slider step={0.10} value={0.5} />
-  </MuiThemeProvider>
+  <div>
+    <HorizontalSlider /> 
+  </div>
 )
 
 const styles = {
@@ -153,11 +158,11 @@ class Ballot extends React.Component {
   render() {
     return(
       <div>
-        <Header />
-        <Banner />
+        {/* <Header /> */}
+        {/* <Banner /> */}
         <SliderComp />
-        <Form />
-        <Footer />
+        {/* <Form /> */}
+        {/* <Footer /> */}
       </div>
     )
   }

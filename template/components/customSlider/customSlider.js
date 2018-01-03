@@ -2,7 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'resize-observer-polyfill';
-import { capitalize, clamp } from './customSliderUtils'
+import { capitalize, clamp } from './customSliderUtils';
+import Scss from './customslider.scss';
 
 
 /**
@@ -12,13 +13,13 @@ import { capitalize, clamp } from './customSliderUtils'
 
 const constants = {
   axis: {
-    xAxis: {
+    horizontal: {
       dimension: 'width',
       direction: 'left',
       reverse: 'right',
       coordinate: 'x'
     },
-    yAxis: {
+    vertical: {
       dimension: 'height',
       direction: 'top',
       reverse: 'bottom',
@@ -36,7 +37,7 @@ class CustomSlider extends React.Component {
     axis: PropTypes.string,
     tooltip: PropTypes.bool,
     reverse: PropTypes.bool,
-    labels: PropTypes.string,
+    labels: PropTypes.object,
     handleLabel: PropTypes.string,
     format: PropTypes.func,
     onChangeStart: PropTypes.func,
@@ -50,7 +51,7 @@ class CustomSlider extends React.Component {
     step: 1,
     value: 0,
     axis: 'horizontal',
-    tooltip: false,
+    tooltip: true,
     reverse: false,
     labels: {},
     handleLabel: ''
@@ -70,7 +71,6 @@ class CustomSlider extends React.Component {
     this.getHandleUpdate()
     const resizeObserver = new ResizeObserver(this.getHandleUpdate)
     resizeObserver.observe(this.slider)
-
   }
 
   /**
@@ -131,8 +131,8 @@ class CustomSlider extends React.Component {
     const { onChange } = this.props
     const { target: { className, classList, dataset } } = event
     if (!onChange || className === 'customslider__labels') return
-
-    let value = this.position(e)
+    
+    let value = this.getPosition(event)
 
     if (
       classList &&
@@ -206,49 +206,78 @@ class CustomSlider extends React.Component {
 
   /**
    * Translate position of slider to slider value
-   * @param  {number} position - Current position/coordinates of slider
+   * @param  {number} coords - Current position/coordinates of slider
    * @return {number} value - Slider value
    */
   
-  getValueFromHandleCoords = (position) => {
+  getValueFromHandleCoords = (coords) => {
     const { limit } = this.state;
     const { axis, min, max, step } = this.props;
-    const factor = clamp(position, 0, limit);
+    const factor = clamp(coords, 0, limit) / (limit || 1);
     const position = Math.round(factor * limit);
-    const baseValue = step * Math.round(factor * (max, min) / step);
-    const value = axis === "xAxis" ? baseValue + min : max - baseValue; 
+    const baseValue = step * Math.round(factor * (max - min) / step);
+    const value = axis === "horizontal" ? baseValue + min : max - baseValue; 
   
     return clamp(value, min, max)
   }
 
 
   /**
+   * Calculate position of slider based on value
+   * @param  {Object} event - Event object
+   * @return {number} value - Slider value
+   */
+
+  getPosition = (event) => {
+    const { grab } = this.state
+    const { axis, reverse } = this.props
+
+    const node = this.slider
+    const constantsAxis = constants.axis[axis];
+    const coordinateStyle = constantsAxis.coordinate;
+    const directionStyle = reverse
+      ? constantsAxis.reverse
+      : constantsAxis.direction;
+    const clientCoordinateStyle = `client${capitalize(coordinateStyle)}`;
+    const coordinate = !event.touches
+      ? event[clientCoordinateStyle]
+      : event.touches[0][clientCoordinateStyle];
+    const direction = node.getBoundingClientRect()[directionStyle];
+    const position = reverse
+    ? direction - coordinate - grab
+    : coordinate - direction - grab;
+    const value = this.getValueFromHandleCoords(position);
+    return value
+  }
+
+
+  /**
    * Grab coordinates of slider
-   * @param  {Object} position - Position object
+   * @param  {Object} coords - Position object
    * @return {Object} - Slider fill/handle coordinates
    */
-  getHandleCoords = (position) => {
+  getHandleCoords = (coords) => {
     const {limit, grab} = this.state;
     const { axis } = this.props;
-    const value = this.getValueFromHandleCoords(position);
+    const value = this.getValueFromHandleCoords(coords);
     const position = this.getHandleCoordsFromValue(value);
-    const handleCoords = axis === "xAxis" ? position + grab : position;
-    const fillPosition = axis === "xAxis" ? 
-      handlePosition : 
-      limit - handlePosition;
+    const handleCoords = axis === "horizontal" ? position + grab : position;
+    const fillPosition = axis === "horizontal" ? 
+      handleCoords : 
+      limit - handleCoords;
 
     return {
       fill: fillPosition,
-      handle: handlePosition,
-      label: handlePosition
+      handle: handleCoords,
+      label: handleCoords
     };
   }
   
   renderHandleLabels = (labels) => {
     <ul
       ref= { 
-        data => {
-        this.labels = data
+        labelData => {
+        this.labels = labelData
       }}
       className = {
         classNames('customslider__labels')
@@ -302,7 +331,7 @@ class CustomSlider extends React.Component {
             className={classNames('customslider__label-item')}
             data-value={key}
             onMouseDown={this.handleOnDrag}
-            onTouchStart={this.handleOnDrag}
+            onTouchStart={this.handleOnStart}
             onTouchEnd={this.handleOnComplete}
             style={labelStyle}
           >
@@ -331,12 +360,13 @@ class CustomSlider extends React.Component {
         aria-valuemin={min}
         aria-valuemax={max}
         aria-valuenow={value}
-        aria-axis={axis}
+        aria-orientation={axis}
       >
         <div className='customslider__fill' style={fillStyle} />
         <div
-          ref={sh => {
-            this.handle = sh
+          ref={
+            handleData => {
+            this.handle = handleData
           }}
           className='customslider__handle'
           onMouseDown={this.handleOnStart}
@@ -346,11 +376,12 @@ class CustomSlider extends React.Component {
           style={handleStyle}
           tabIndex={0}
         >
-          {showTooltip
+          {
+            showTooltip
             ? <div
               ref={
-                data => {
-                this.tooltip = data
+                toolTipData => {
+                this.tooltip = toolTipData
               }}
               className='customslider__handle-tooltip'
             >
