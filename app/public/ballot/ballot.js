@@ -20,23 +20,36 @@ import Scss from './ballot.scss';
 // DONE: Custom Slider that passes vote data and color style data
 // TODO: Customize slider icon
 // DONE: Banner that translates slide color ontop of background image
-// TODO: background image
+// DONE: background image
 // TODO: Pop on hover over slider
 // DONE: inputs for form submission -- form submission
 // DONE: form submission button
-// TODO: Footer component with social media buttons
-// TODO: Social Media buttons
+// DONE: Footer component with social media buttons
+// DONE: Social Media buttons
+// TODO: refactor styling to a core configuration flow i.e pass one config for all colors
+// like this <Component config={this.props.styleConfig} />
 
 const Header = () => (
   <MuiThemeProvider>
     <AppBar
-      title="Title"
+      title="Represent-Me | by the People 2.0"
       iconElementLeft={<div></div>}
       style={
         {
-          minHeight: '60px'
+          minHeight: '60px',
+          backgroundColor: '#f5f5f5',
+          paddingLeft: '80px',
+          paddingRight: '80px',
         }
       }
+      titleStyle= {
+        {
+          color: 'black'
+        }
+      }
+      iconStyleLeft={{
+        display: 'none'
+      }}
     />
   </MuiThemeProvider>
 )
