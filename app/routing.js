@@ -26,7 +26,9 @@ const Login = AsyncComponent(
 class Routing extends React.Component {
   render() {
     return (
-      <div>
+      <div style={{
+        height: '100vh'
+      }}>
         <Route exact path='/' component={Ballot} />
         <Route path='/vote' component={Ballot} />
         <Route path='/bills' component={Bills} />

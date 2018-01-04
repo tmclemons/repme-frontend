@@ -4,6 +4,15 @@ $startColor: rgba(48, 173, 64, $opacity);
 $middleColor: rgba(255, 206, 52, $opacity);
 $endColor: rgba(237, 46, 27, $opacity);
 
+.ballot__wrapper {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  footer {
+    flex: auto;
+  }
+}
+
 .slider--horizontal{
   max-width: 800px;
   margin-left: auto;

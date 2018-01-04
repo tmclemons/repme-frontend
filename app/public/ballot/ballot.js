@@ -7,21 +7,14 @@ import axios from 'axios';
 import VoteForm from '../../../template/components/voteForm/VoteForm';
 import FlatButton from 'material-ui/FlatButton';
 import Banner from '../../../template/components/bannerComponent/BannerComponent'
+import Footer from '../../../template/components/mainFooter/MainFooter';
 
 import classNames from 'classnames';
 import Scss from './ballot.scss';
 
-
-// for footer component
-import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import FontIcon from 'material-ui/FontIcon';
-import ActionHome from 'material-ui/svg-icons/action/home';
-import IconButton from 'material-ui/IconButton';
-
-const recentsIcon = <ActionHome />;
-const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
-const nearbyIcon = <IconLocationOn />;
+// const recentsIcon = <ActionHome />;
+// const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
+// const nearbyIcon = <IconLocationOn />;
 
 // TODO: Header
 // DONE: Custom Slider that passes vote data and color style data
@@ -43,30 +36,6 @@ const Header = () => (
   </MuiThemeProvider>
 )
 
-const Footer = () => (
-  <MuiThemeProvider>
-    <footer>
-      <BottomNavigation selectedIndex={0}>
-        <BottomNavigationItem
-          label="Recents"
-          icon={recentsIcon}
-          onClick={() => this.select(0)}
-        />
-        {/* <BottomNavigationItem
-          label="Favorites"
-          icon={favoritesIcon}
-          onClick={() => this.select(1)}
-          />
-        <BottomNavigationItem
-          label="Nearby"
-          icon={nearbyIcon}
-          onClick={() => this.select(2)}
-          /> */}
-      </BottomNavigation>
-    </footer>
-  </MuiThemeProvider>
-)
-
 class Ballot extends React.Component {
   constructor(props) {
     super(props)
@@ -82,21 +51,46 @@ class Ballot extends React.Component {
         "bill_created_date": null,
         "bill_modified_date": null,
         "hotbills": []
+      },
+      backgroundImg: {
+        url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
+      },
+      viewCopy: {
+        headerTagLine: `by the people 2.0`,
+        formNotice: `**We will not use any of your information for any 3rd
+          Part. Nor will we send you emails unless you opt-in to receive 
+          them**`,
+        emailInput: `To receive results including final Senate Floor Votes`,
+        zipCodeInput: `his will allow us to include your private ballot in
+         the constituency that we will provide your Senators`,
+        subscribeToHotBill: `To receive other Hot 
+          Congressional Bill Ballots and track results`,
+        subscribeToOtherLegislationInfo: `to receive information 
+          from other Legislators and Bills and Ballot results`,
+        subscribeToHotBillTitle: `Opt-In`,
+        subscribeToOtherLegislationInfoTitle: `Legislator Opt-In`,
+        preSubmitInfo: `This is your private Ballot for 
+          (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
+        sliderHint: `Slide to Cast`,
+        submissionCTA: `Submit my VOTE`
       }
     }
   }
 
   submitVote(voteData) {
+    //hook api post call here
     console.log(voteData)
   }
 
   render() {
     return(
-      <div>
+      <div className={'ballot__wrapper'}>
         <Header />
-        <Banner ballotInfo={this.state.sampleBallot}/>
-        {/* <SliderComp /> */}
-        <VoteForm callback={this.submitVote}/>
+        <Banner 
+          ballotInfo={this.state.sampleBallot} 
+          backgroundImg={this.state.backgroundImg}
+        />
+        <VoteForm callback={this.submitVote} copy={this.state.viewCopy}/>
         <Footer />
       </div>
     )

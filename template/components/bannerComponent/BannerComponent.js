@@ -39,7 +39,6 @@ class Banner extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
     if ( this.props && this.props.ballotInfo) {
       this.setState({
         ballotNumber: this.props.ballotInfo.number,
@@ -56,6 +55,13 @@ class Banner extends React.Component {
         <MuiThemeProvider>
           <Card>
             <CardMedia
+              mediaStyle={
+                {
+                  maxHeight: '500px',
+                  minHeight: '500px',
+                  overflow: 'hidden'
+                }
+              }
               overlay={
                 <div
                   className={classNames(
@@ -88,7 +94,7 @@ class Banner extends React.Component {
               overlayContainerStyle={this.styleForOverlay}
               overlayContentStyle={this.styleForOverlay}
             >
-              <img src="https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg" alt="" />
+              <img src={this.props.backgroundImg.url} alt="" />
             </CardMedia>
           </Card>
         </MuiThemeProvider>

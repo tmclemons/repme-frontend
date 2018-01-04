@@ -67,10 +67,28 @@ class VoteForm extends React.Component {
   render() {
     const styles = {
       checkbox: {
-        marginBottom: 15,
+        marginBottom: 0,
       },
       errorStyle: {
         color: green500
+      },
+      labelStyle: {
+        fontSize: '12px',
+        lineHeight: '18px',
+        fontStyle: 'italic'
+      },
+      iconStyle: {
+        marginRight: '10px'
+      },
+      buttonStyle: {
+        height: '50px',
+      },
+      buttonLabelStyle: {
+        fontSize: '18px',
+        margin: '20px',
+        lineHeight: '50px',
+        textTransform: 'capitalized',
+        fontStyle: 'italic',
       }
     };
 
@@ -79,13 +97,18 @@ class VoteForm extends React.Component {
         <div className={
           'vote__form'
         }>
+          <div className={
+            'vote__form--notice'
+          }> 
+            {this.props.copy.formNotice}
+          </div>
 
           <div className={
             'vote__form--text-input'
           }>
             <TextField
               hintText="Email Address"
-              errorText="To receive results including final Senate Floor Votes"
+              errorText={this.props.copy.emailInput}
               errorStyle={styles.errorStyle}
               onChange={(event, newValue) => {
                 if (formValidation.emailValidation(newValue, this.state.emailLimit)) {
@@ -102,7 +125,7 @@ class VoteForm extends React.Component {
             /><br />
             <TextField
               hintText="Zip Code"
-              errorText="This will allow us to include your private ballot in the constituency that we will provide your Senators"
+              errorText={this.props.copy.zipCodeInput}
               errorStyle={styles.errorStyle}
               onChange={(event, newValue) => {
                 if (formValidation.zipCodeValidation(newValue)) {
@@ -122,9 +145,16 @@ class VoteForm extends React.Component {
           <div className={
             'vote__form--subscribe'
           }>
-            <div>
+            <div className={'vote__form--subscribe--input'}>
+              <div className={'vote__form--subscribe--input-title'}>
+                <span>
+                  {this.props.copy.subscribeToHotBillTitle}
+                </span>
+              </div>
               <Checkbox
-                label="to receive other Hot Congressional Bill Ballots and track results"
+                iconStyle={styles.iconStyle}
+                label={this.props.copy.subscribeToHotBill}
+                labelStyle={styles.labelStyle}
                 style={styles.checkbox}
                 onCheck={(event, checked) => {
                   if (checked) {
@@ -139,9 +169,16 @@ class VoteForm extends React.Component {
                 }}
               />
             </div>
-            <div>
+            <div className={'vote__form--subscribe--input'}>
+              <div className={'vote__form--subscribe--input-title'}>
+                <span>    
+                  {this.props.copy.subscribeToOtherLegislationInfoTitle}
+                </span>
+              </div>
               <Checkbox
-                label="to receive information from other Legislators and Bills and Ballot results"
+                iconStyle={styles.iconStyle}
+                label={this.props.copy.subscribeToOtherLegislationInfo}
+                labelStyle={styles.labelStyle}
                 style={styles.checkbox}
                 onCheck={(event, checked) => {
                   if (checked) {
@@ -161,9 +198,10 @@ class VoteForm extends React.Component {
             'vote__form--submit'
           }>
             <RaisedButton 
-              label="Submit" 
+              label={this.props.copy.submissionCTA} 
               primary={true} 
-              style={null}
+              labelStyle={styles.buttonLabelStyle}
+              style={styles.buttonStyle}
               onClick={this.formOnSubmit} 
             />
           </div>
