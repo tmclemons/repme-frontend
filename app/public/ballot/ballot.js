@@ -32,6 +32,11 @@ const Header = () => (
     <AppBar
       title="Title"
       iconElementLeft={<div></div>}
+      style={
+        {
+          minHeight: '60px'
+        }
+      }
     />
   </MuiThemeProvider>
 )

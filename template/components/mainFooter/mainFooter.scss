@@ -1,0 +1,16 @@
+footer {
+  background-color: #f5f5f5;
+  border-top: 1px solid #c1c2c2;
+  font-family: Roboto, sans-serif;
+  .footer-logo {
+    text-align: center;
+    padding: 20px;
+  }
+  .social-nav {
+    color: #a7a7a7;
+    padding: 0 !important;
+     &--icon {
+       font-size: 18px;
+    }
+  }
+}

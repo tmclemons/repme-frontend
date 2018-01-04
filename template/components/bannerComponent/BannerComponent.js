@@ -59,7 +59,9 @@ class Banner extends React.Component {
                 {
                   maxHeight: '500px',
                   minHeight: '500px',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  backgroundImage: `url(${this.props.backgroundImg.url})`,
+                  backgroundSize: 'cover'
                 }
               }
               overlay={
@@ -94,7 +96,7 @@ class Banner extends React.Component {
               overlayContainerStyle={this.styleForOverlay}
               overlayContentStyle={this.styleForOverlay}
             >
-              <img src={this.props.backgroundImg.url} alt="" />
+            <div></div>
             </CardMedia>
           </Card>
         </MuiThemeProvider>
