@@ -17,8 +17,8 @@ class Banner extends React.Component {
     this.state = {
       componentProps: 0,
       step: 5,
-      max: 100,
-      defaultValue: 0,
+      max: 105,
+      defaultValue: 50,
       ballotNumber: null,
       ballotTitle: null,
       ballotContent: null,

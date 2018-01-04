@@ -1,4 +1,4 @@
-$step: 20;
+$step: 21;
 $opacity: 0.75;
 $startColor: rgba(48, 173, 64, $opacity);
 $middleColor: rgba(255, 206, 52, $opacity);
@@ -26,7 +26,7 @@ $endColor: rgba(237, 46, 27, $opacity);
 }
 
 @if $middleColor {
-  $middleStep: $step/2;
+  $middleStep: round($step/2);
   @for $i from 0 to $middleStep {
     .slider__color--stop-#{$i} {
       @extend .overlay;
