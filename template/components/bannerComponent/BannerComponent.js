@@ -6,6 +6,10 @@ import FlatButton from 'material-ui/FlatButton';
 import classNames from 'classnames';
 import HorizontalSlider from
   '../horizontalSlider/HorizontalSlider';
+import DataComponent from '../dataComponent/DataComponent';
+import StarIcon from 'material-ui/svg-icons/toggle/star';
+import { grey50 } from 'material-ui/styles/colors';
+import Scss from './bannerComponent.scss';
 
 class Banner extends React.Component {
   constructor(props) {
@@ -58,15 +62,26 @@ class Banner extends React.Component {
                     `slider__color--stop-${this.state.componentProps}`
                   )}
                 >
+                <div className={'overlay-content'}>
                   <div className={'main'}>
-                    <span>{this.state.ballotNumber}</span>
-                    <h2>{this.state.balloTitle || null}</h2>
-                    <span>Ballot Closing Date: {this.state.ballotClosingDate || null}</span>
+                    <div className={'icon'}>
+                      <StarIcon color={ grey50 }/>
+                    </div>
+                    <span className={'bill-number'}>{this.state.ballotNumber}</span>
+                    <h1>{this.state.ballotTitle || null}</h1>
+                    <span className={'closing-date'}
+                      >Ballot Closing Date:&emsp; 
+                        <DataComponent
+                          data={this.state.ballotClosingDate || null}
+                          type={'date'}
+                        />
+                    </span>
                   </div>
                   <div className={'divider'}></div>
-                  <div className={'subtitle'}>
-                    <span>{this.state.ballotContent || null}</span>
+                  <div className={'subtitle'} 
+                    dangerouslySetInnerHTML={{ __html: this.state.ballotContent || null }}>
                   </div>
+                </div>
 
                 </div>
               }

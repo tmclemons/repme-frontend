@@ -71,16 +71,19 @@ class Ballot extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      sampleBallot: null
+      sampleBallot: {
+        "hash_id": "e893950d-373b-4a85-9d4a-95b8962c0082",
+        "number": "hconres1-115",
+        "title": "Regarding consent to assemble outside the seat of government.",
+        "description": "<p>(This measure has not been amended since it was introduced. The summary of that version is repeated here.)</p> <p>Authorizes the Speaker of the House and the Majority Leader of the Senate, or their respective designees, to notify the Members of the House and the Senate to assemble at a place outside the District of Columbia whenever, in their opinion, the public interest shall warrant it.</p>",
+        "image": null,
+        "status": null,
+        "closing_date": "2018-12-29T14:06:35+0000",
+        "bill_created_date": null,
+        "bill_modified_date": null,
+        "hotbills": []
+      }
     }
-  }
-
-  componentDidMount() {
-    //sample ballout for building out ui
-    axios.get(`http://54.187.193.156/bills/e893950d-373b-4a85-9d4a-95b8962c0082/`)
-      .then(res => {
-        this.setState({ sampleBallot: res.data });
-      });
   }
 
   submitVote(voteData) {
