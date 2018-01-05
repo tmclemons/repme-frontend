@@ -3,6 +3,10 @@ import VoteForm from '../../../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../../template/components/mainFooter/MainFooter';
+import BarChart from 
+  '../../../../template/components/barChartComponent/BarChartComponent';
+import ChartJS from 'chart.js';
+
 import Scss from './ballotResults.scss';
 
 class BallotResults extends React.Component {
@@ -44,6 +48,27 @@ class BallotResults extends React.Component {
         submissionCTA: `Submit my VOTE`
       }
     }
+    this.chartColors = {
+      red: 'rgb(255, 99, 132)',
+      orange: 'rgb(255, 159, 64)',
+      yellow: 'rgb(255, 205, 86)',
+      green: 'rgb(75, 192, 192)',
+      blue: 'rgb(54, 162, 235)',
+      purple: 'rgb(153, 102, 255)',
+      grey: 'rgb(201, 203, 207)'
+    };
+
+    this.Samples = {
+      // Adapted from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
+      rand: function (min, max) {
+        var seed = 894538923;
+        min = min === undefined ? 0 : min;
+        max = max === undefined ? 1 : max;
+        this._seed = (seed * 9301 + 49297) % 233280;
+        return min + (this._seed / 233280) * (max - min);
+      }
+    };
+
   }
 
   submitVote(voteData) {
@@ -51,7 +76,47 @@ class BallotResults extends React.Component {
     console.log(voteData)
   }
 
+  randomScalingFactor = () => {
+    console.log(this.Samples.rand(-100, 100))
+    return Math.round(this.Samples.rand(-100, 100));
+  };
+
   render() {
+    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const color = ChartJS.helpers.color;
+    const barChartData = {
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datasets: [{
+        label: 'Dataset 1',
+        backgroundColor: color(this.chartColors.red).alpha(0.5).rgbString(),
+        borderColor: this.chartColors.red,
+        borderWidth: 1,
+        data: [
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor()
+        ]
+      }, {
+        label: 'Dataset 2',
+        backgroundColor: color(this.chartColors.blue).alpha(0.5).rgbString(),
+        borderColor: this.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor(),
+          this.randomScalingFactor()
+        ]
+      }]
+    };
+
     return (
       <div className={'ballot__wrapper'}>
         <Header />
@@ -59,7 +124,21 @@ class BallotResults extends React.Component {
           ballotInfo={this.state.sampleBallot}
           backgroundImg={this.state.backgroundImg}
         />
-        <VoteForm callback={this.submitVote} copy={this.state.viewCopy} />
+        <BarChart 
+          data={barChartData}
+          options={{
+            responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Chart.js Bar Chart'
+              }
+            }
+          }
+          />
+        {/* <VoteForm callback={this.submitVote} copy={this.state.viewCopy} /> */}
         <Footer />
       </div>
     )
