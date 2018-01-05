@@ -180,6 +180,9 @@ class VoteForm extends React.Component {
                 label={this.props.copy.subscribeToOtherLegislationInfo}
                 labelStyle={styles.labelStyle}
                 style={styles.checkbox}
+                inputStyle={{
+                  color: 'rgb(0, 76, 135)'
+                }}
                 onCheck={(event, checked) => {
                   if (checked) {
                     this.setState({

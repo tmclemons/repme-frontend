@@ -42,17 +42,6 @@ $toolTipColor: rgb(0, 76, 135);
     color: white;
     left: 50%;
     transform: translate3d(-50%, 0, 0);
-    span {
-      margin-top: 12px;
-      display: inline-block;
-      line-height: 100%;
-    }
-    &:after {
-      content: ' ';
-      position: absolute;
-      width: 0;
-      height: 0;
-    }
   }
   // .step-container {
   //   display: flex;
@@ -120,6 +109,57 @@ $toolTipColor: rgb(0, 76, 135);
   .customslider__handle-tooltip {
     top: -90px;
     // top: -175px;
+    .label {
+      transform: rotate(-90deg);
+      display: flex;
+      flex-flow: column nowrap;
+      margin-top: 20px;
+      min-width: 100%;
+      font-family: Roboto, sans-serif;
+    }
+
+    span:nth-child(2) {
+      font-size: 20px;
+    }
+
+    &.first-time-use {
+      height: 100%;
+      padding: 30px 35px;
+      font-size: 25px;
+      top: -179px;
+      width: 250px;
+      height: 100px;
+      .label {
+        transform: rotate(0deg);
+        display: inherit;
+        height: 100%;
+        margin-top: 5px;
+        .slider-hint {
+          position: absolute;
+          bottom: -190px;
+          left: 70px;
+          display: flex;
+          flex-flow: row nowrap;
+          max-width: 200px;
+          text-transform: uppercase;
+          color: #c1c2c2;
+          font-size: 20px;
+          span {
+            font-size: 10px;
+            margin: 0 10px;
+            padding-top: 5px;
+          }
+        }
+      }
+    }
+
+
+    &:after {
+      content: ' ';
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
     &:after {
       border-left: $toolTipPoint solid transparent;
       border-right: $toolTipPoint solid transparent;

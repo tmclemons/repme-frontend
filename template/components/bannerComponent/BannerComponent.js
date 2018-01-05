@@ -23,6 +23,7 @@ class Banner extends React.Component {
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
+      firstTimeUse: true
     }
   }
 
@@ -49,6 +50,10 @@ class Banner extends React.Component {
     }
   }
 
+  toggleFirstTimeUser = () => {
+    this.setState({firstTimeUse: false});
+  }
+
   render() {
     return (
       <div>
@@ -67,7 +72,7 @@ class Banner extends React.Component {
               overlay={
                 <div
                   className={classNames(
-                    `slider__color--stop-${this.state.componentProps}`
+                    `${this.state.firstTimeUse ? 'overlay first-time-use' : 'slider__color--stop-' + this.state.componentProps}`
                   )}
                 >
                 <div className={'overlay-content'}>
@@ -106,6 +111,12 @@ class Banner extends React.Component {
             max={this.state.max}
             defaultValue={this.state.defaultValue}
             callback={this.onValueChange}
+            toggleFirstTimeUser={
+              {
+                callback: this.toggleFirstTimeUser,
+                state: this.state.firstTimeUse
+              }
+            }
           />
         </div>
       </div>

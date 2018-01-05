@@ -43,6 +43,8 @@ class CustomSlider extends React.Component {
     onChangeStart: PropTypes.func,
     onChange: PropTypes.func,
     onChangeComplete: PropTypes.func,
+    firstUser: PropTypes.bool
+    
   }
 
   static defaultProps = {
@@ -54,7 +56,8 @@ class CustomSlider extends React.Component {
     tooltip: true,
     reverse: false,
     labels: {},
-    handleLabel: ''
+    handleLabel: '',
+    firstUser: false
   }
 
   constructor(props) {
@@ -63,7 +66,8 @@ class CustomSlider extends React.Component {
     this.state = {
       active: false,
       limit: 0,
-      grab: 0
+      grab: 0,
+      firstUser: false,
     }
   }
 
@@ -343,31 +347,27 @@ class CustomSlider extends React.Component {
       }
     }
 
-    // if (stepIcons.length < 1 && steps > 1) {
-    //   for (let index = 0; index < steps; index++) {
-    //     stepIcons.push(
-    //       <div 
-    //         style={{
-    //           width: `${
-    //             this.getHandleCoordsFromValue((index + 1) * step) -
-    //             this.getHandleCoordsFromValue((index) * step)
-    //           }px`,
-    //         }}
-    //         key={index} 
-    //         className={
-    //           `step-icon-wrapper 
-    //           ${ ((index ) % step) === 0  ? 'main-key' : ''}
-    //           `
-    //         }
-    //       >
-    //         <div className={'step-icon'}>
-    //         </div>
-    //       </div>
-    //     );
-    //   }
-    // } else {
-    //   stepIcons = null;
-    // }
+    const GetTooltip = () => {
+      if(this.props.firstTimeUse) {
+        return(
+          <div className={'label'}>
+            <span>Touch or Click the thumbprint &amp; drag it to cast your vote</span>
+            <div className={'slider-hint'}>
+              <i className={'ion-arrow-left-b'}></i>
+              <span>Slide to cast</span>
+              <i className={'ion-arrow-right-b'}></i>
+            </div>
+          </div>
+        )
+      } else {
+        return(
+          <div className={'label'}>
+            <span>My</span>
+            <span>Vote</span>
+          </div>
+        )
+      }
+    }
 
     return (
       <div
@@ -461,9 +461,13 @@ class CustomSlider extends React.Component {
                 toolTipData => {
                 this.tooltip = toolTipData
               }}
-              className='customslider__handle-tooltip'
+                className={
+                  `customslider__handle-tooltip 
+                    ${this.props.firstTimeUse ? 'first-time-use' : ''}`
+                }
             >
-              <span>{this.formatHandle(value)}</span>
+              {/* <span>{this.formatHandle(value)}</span> */}
+              <GetTooltip />
             </div>
             : null}
           <div className='customslider__handle-label'>{handleLabel}</div>

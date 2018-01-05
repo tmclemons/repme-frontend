@@ -6,6 +6,8 @@ import FontIcon from 'material-ui/FontIcon';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import IconButton from 'material-ui/IconButton';
 import Scss from './mainFooter.scss';
+import RepMeLogo from '../../../template/components/utilities/logoComponent';
+
 
 const recentsIcon = <ActionHome />;
 const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
@@ -72,7 +74,18 @@ class MainFooter extends React.Component {
       <MuiThemeProvider>
         <footer>
           <div className={'footer-logo'}>
-            Represent-Me | by the People 2.0
+            <div>
+              <div style={{
+                  maxWidth: '60px',
+                }}
+              >
+                <RepMeLogo />
+              </div>
+              <div
+                className={'rep-me-logo--first-line'}>Represent&mdash;<span>Me</span>
+              </div>
+              <div className={'rep-me-logo--second-line'}> | by the People 2.0</div>
+            </div>
           </div>
           <BottomNavigation
            selectedIndex={0}

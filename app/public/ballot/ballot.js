@@ -8,13 +8,9 @@ import VoteForm from '../../../template/components/voteForm/VoteForm';
 import FlatButton from 'material-ui/FlatButton';
 import Banner from '../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../template/components/mainFooter/MainFooter';
-
+import RepMeLogo from '../../../template/components/utilities/logoComponent';
 import classNames from 'classnames';
 import Scss from './ballot.scss';
-
-// const recentsIcon = <ActionHome />;
-// const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
-// const nearbyIcon = <IconLocationOn />;
 
 // TODO: Header
 // DONE: Custom Slider that passes vote data and color style data
@@ -32,11 +28,19 @@ import Scss from './ballot.scss';
 const Header = () => (
   <MuiThemeProvider>
     <AppBar
-      title="Represent-Me | by the People 2.0"
-      iconElementLeft={<div></div>}
+      className={'rep-me-logo'}
+      title={
+        <div>
+          <div 
+            className={'rep-me-logo--first-line'}>Represent&mdash;<span>Me</span>
+          </div>
+          <div className={'rep-me-logo--second-line'}> | by the People 2.0</div>
+        </div>
+      }
+      iconElementLeft={<RepMeLogo />}
       style={
         {
-          minHeight: '60px',
+          minHeight: '100px',
           backgroundColor: '#f5f5f5',
           paddingLeft: '80px',
           paddingRight: '80px',
@@ -44,11 +48,18 @@ const Header = () => (
       }
       titleStyle= {
         {
-          color: 'black'
+          color: 'black',
+          whiteSpace: 'normal',
+          textOverflow: 'initial',
+          maxWidth: '200px',
+          lineHeight: '30px',
+          fontSize: '20px',
+          marginTop: '20px'
         }
       }
       iconStyleLeft={{
-        display: 'none'
+        display: 'inherit',
+        maxWidth: '80px'
       }}
     />
   </MuiThemeProvider>

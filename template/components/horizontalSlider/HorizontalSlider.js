@@ -19,6 +19,7 @@ class Horizontal extends React.Component {
       value: value
     })
     this.props.callback(value)
+    this.props.toggleFirstTimeUser.callback()
   };
 
   handleChangeComplete = () => {
@@ -37,8 +38,8 @@ class Horizontal extends React.Component {
           onChangeStart={this.handleChangeStart}
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}
+          firstTimeUse={this.props.toggleFirstTimeUser.state}
         />
-        <div className='value'>{value}</div>
       </div>
     )
   }
