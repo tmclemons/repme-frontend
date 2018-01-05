@@ -4,8 +4,11 @@ import AsyncComponent from
   '../template/components/utilities/AsyncComponent';
 
 //front end routes
-const Ballot = AsyncComponent( 
-  () => import( './public/ballot/ballot' )
+const BallotVote = AsyncComponent( 
+  () => import( './public/ballot/ballotVote/BallotVote' )
+)
+const BallotResults = AsyncComponent( 
+  () => import( './public/ballot/ballotResults/BallotResults' )
 )
 
 // admin routes
@@ -29,8 +32,9 @@ class Routing extends React.Component {
       <div style={{
         height: '100vh'
       }}>
-        <Route exact path='/' component={Ballot} />
-        <Route path='/vote' component={Ballot} />
+        <Route exact path='/' component={BallotVote} />
+        <Route path='/vote' component={BallotVote} />
+        <Route path='/results' component={BallotResults} />
         <Route path='/bills' component={Bills} />
         <Route path="/organizations" component={Organizations} />
         <Route path="/roll-call-list" component={RollCallList} />

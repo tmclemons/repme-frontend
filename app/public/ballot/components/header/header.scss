@@ -1,0 +1,21 @@
+$toolTipColor: rgb(0, 76, 135);
+
+header.rep-me-logo {
+  &--first-line {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: $toolTipColor;
+    span {
+      text-transform: lowercase;
+      color: red;
+      font-size: 27px;
+      font-style: italic;
+      margin-left: 5px;
+    }
+  }
+  &--second-line {
+    font-size: 15px;
+    font-style: italic;
+    color: $toolTipColor;
+  }
+}

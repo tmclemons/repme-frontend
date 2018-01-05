@@ -1,5 +1,6 @@
-import React from 'react'
-import CustomSlider from '../customSlider/customSlider'
+import React from 'react';
+import CustomSlider from '../customSlider/customSlider';
+import Scss from './horizontalSlider.scss';
 
 class Horizontal extends React.Component {
   constructor(props, context) {

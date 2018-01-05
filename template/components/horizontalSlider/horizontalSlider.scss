@@ -1,0 +1,50 @@
+$step: 21;
+$opacity: 0.83;
+$startColor: rgba(48, 173, 64, $opacity);
+$middleColor: rgba(255, 206, 52, $opacity);
+$endColor: rgba(237, 46, 27, $opacity);
+$inactiveState: rgba(250, 250, 250, $opacity);
+
+.slider--horizontal {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 85px;
+  padding: 25px 80px;
+  .slider {
+    margin-top: 35px;
+  }
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: $inactiveState;
+  &.first-time-use {
+    .overlay-content {
+      color: black;
+    }
+    .icon svg {
+      fill: red !important;
+    }
+    .closing-date {
+      color: red;
+    }
+  }
+}
+
+@if $middleColor {
+  $middleStep: round($step/2);
+  @for $i from 0 to $middleStep {
+    .slider__color--stop-#{$i} {
+      @extend .overlay;
+      background-color: mix($middleColor, $startColor, ($i / $middleStep) * 100);
+    }
+  }
+  @for $i from $middleStep to ($step + 1) {
+    .slider__color--stop-#{$i} {
+      @extend .overlay;
+      background-color: mix($endColor, $middleColor, ( ($i - $middleStep) / ( $middleStep) * 100));
+    }
+  }
+}
