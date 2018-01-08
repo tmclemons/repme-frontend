@@ -6,6 +6,8 @@ import Footer from '../../../../template/components/mainFooter/MainFooter';
 import BarChart from 
   '../../../../template/components/barChartComponent/BarChartComponent';
 import ChartJS from 'chart.js';
+import BarChartComponent from 
+  '../../../../template/components/highCharts/barChartComponent/BarChartComponent';
 
 import Scss from './ballotResults.scss';
 
@@ -60,8 +62,105 @@ class BallotResults extends React.Component {
 
   }
 
-  getSampleDistrictResultsAraray = () => {
-    let results = [ 
+  getColorStops = () => {
+    let colors = [
+      {
+        prop: 'stop-0',
+        hex: '#30ad40'
+      },
+      {
+        prop: 'stop-1',
+        hex: '#45b03f'
+      },
+      {
+        prop: 'stop-2',
+        hex: '#59b43e'
+      },
+      {
+        prop: 'stop-3',
+        hex: '#6eb73c'
+      },
+      {
+        prop: 'stop-4',
+        hex: '#83ba3b'
+      },
+      {
+        prop: 'stop-5',
+        hex: '#98be3a'
+      },
+      {
+        prop: 'stop-6',
+        hex: '#acc139'
+      },
+      {
+        prop: 'stop-7',
+        hex: '#c1c438'
+      },
+      {
+        prop: 'stop-8',
+        hex: '#d6c736'
+      },
+      {
+        prop: 'stop-9',
+        hex: '#eacb35'
+      },
+      {
+        prop: 'stop-10',
+        hex: '#7f7f7f'
+      },
+      {
+        prop: 'stop-11',
+        hex: '#fdbe32'
+      },
+      {
+        prop: 'stop-12',
+        hex: '#fbae2f'
+      },
+      {
+        prop: 'stop-13',
+        hex: '#fa9e2d'
+      },
+      {
+        prop: 'stop-14',
+        hex: '#f88e2a'
+      },
+      {
+        prop: 'stop-15',
+        hex: '#f67e28'
+      },
+      {
+        prop: 'stop-16',
+        hex: '#f46e25'
+      },
+      {
+        prop: 'stop-17',
+        hex: '#f25e23'
+      },
+      {
+        prop: 'stop-18',
+        hex: '#f14e20'
+      },
+      {
+        prop: 'stop-19',
+        hex: '#ef3e1e'
+      },
+      {
+        prop: 'stop-20',
+        hex: '#ed2e1b'
+      }
+    ];
+    
+    let colorStops = [];
+
+    colors.forEach((stop) => {
+      colorStops.push(stop.hex)
+    });
+
+    return colorStops.length ? colorStops : null;
+  }
+
+  getFormattedData = () => {
+    let data = [ 
       78,
       21,
       33,
@@ -69,22 +168,114 @@ class BallotResults extends React.Component {
       14,
       90,
       45,
-            72,
+      72,
       12,
       9,
       93,
       57,
       35,
       57,
-            17,
+      17,
       91,
       4,
       59,
       12,
       90,
       41
-     ];
-     return results;
+    ];
+    let dataLabels = [
+      'Strongly Agree',
+      "",
+      "",
+      "",
+      "",
+      'Agree',
+      "",
+      "",
+      "",
+      "",
+      'Neutral',
+      "",
+      "",
+      "",
+      "",
+      'Disagree',
+      "",
+      "",
+      "",
+      "",
+      'Strongly Disagree',
+    ];
+
+    let formattedData = [];
+
+    data.forEach((dataItem, index) => {
+      formattedData.push(
+        {
+          y: dataItem,
+          color: this.getColorStops()[index],
+        }
+      )
+    });
+
+    return {
+      data: formattedData,
+      dataLabels: dataLabels
+    };
+  }
+
+  getSampleDistrictResultsArray = () => {
+    let results = {
+      title: null,
+      chart: {
+        type: 'column',
+      },
+      plotOptions: {
+        series: {
+          pointPadding: 0,
+          colorsByPoint: true,
+        },
+      },
+      colors: this.getColorStops(),
+      series:[{
+        data: this.getFormattedData().data,
+        dataLabels: {
+          enabled: true,
+          rotation: 0,
+          color: '#FFFFFF',
+          align: 'center',
+          format: '{point.y:1f}', // no decimal
+          y: -30, // 10 pixels down from the top
+          style: {
+            fontSize: '16px',
+            fontFamily: 'Roboto, sans-serif'
+          }
+        }
+      }],
+      legend: {
+        enabled: false
+      },
+      yAxis: {
+        title: {
+          text: null
+        },
+        reversed: true,
+        labels: {
+          enabled: false
+        },
+        gridLineWidth: 0,
+        tickAmount: 0,
+      },
+      xAxis: {
+        lineWidth: 0,
+        tickAmount: 0,
+        tickWidth: 0,
+        gridLineWidth: 0,
+        opposite: true,
+        categories: this.getFormattedData().dataLabels
+      }
+    }
+    return results;
   }
 
   submitVote(voteData) {
@@ -101,39 +292,16 @@ class BallotResults extends React.Component {
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const color = ChartJS.helpers.color;
     const barChartData = {
-      labels: [
-        'Strongly Agree',
-        "",
-        "",
-        "",
-        "",
-        'Agree',
-        "",
-        "",
-        "",
-        "",
-        'Neutral',
-        "",
-        "",
-        "",
-        "",
-        'Disagree',
-        "",
-        "",
-        "",
-        "",
-        'Strongly Disagree',
-      ],
+      labels: this.getSampleDistrictResultsArray().xAxis.categories,
       datasets: [{
         label: 'Dataset 1',
         backgroundColor: color(this.chartColors.red).alpha(0.5).rgbString(),
         borderColor: this.chartColors.red,
         borderWidth: 1,
-        data: this.getSampleDistrictResultsAraray()
+        data: this.getSampleDistrictResultsArray().series[0].data
       }]
     };
 
-    console.log(barChartData)
     return (
       <div className={'ballot__wrapper'}>
         <Header />
@@ -141,7 +309,7 @@ class BallotResults extends React.Component {
           ballotInfo={this.state.sampleBallot}
           backgroundImg={this.state.backgroundImg}
         />
-        <BarChart 
+        {/* <BarChart 
           data={barChartData}
           options={{
             responsive: true,
@@ -169,7 +337,10 @@ class BallotResults extends React.Component {
               },
             }
           }
-          />
+          /> */}
+        <div className={'ballot__results--barchart'}>
+          <BarChartComponent { ...this.getSampleDistrictResultsArray()}/>
+        </div>
         {/* <VoteForm callback={this.submitVote} copy={this.state.viewCopy} /> */}
         <Footer />
       </div>

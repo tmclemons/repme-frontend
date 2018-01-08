@@ -1,6 +1,14 @@
 
-.ballot__wrapper {
-  height: 100%;
-  display: flex;
-  flex-flow: column nowrap;
+.ballot{
+  &__wrapper {
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+  &__results {
+    &--barchart{
+      padding: 25px 80px;
+    }
+  }
+
 }
