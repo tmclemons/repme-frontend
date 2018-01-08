@@ -1,3 +1,4 @@
+$baseGrey: #c1c2c2;
 
 .ballot{
   &__wrapper {
@@ -8,6 +9,35 @@
   &__results {
     &--barchart{
       padding: 25px 80px;
+      .highcharts-root {
+        padding-top: 0px;
+      }
+      .highcharts-axis-labels.highcharts-xaxis-labels{
+          background: #efefef;
+          height: 62px;
+          width: 100%;
+          padding: 0 30px;
+          border-top: 3px solid rgba($baseGrey, 0.6);
+          span {
+            white-space: normal !important;
+            text-overflow: unset !important;
+            display: flex !important;
+            top: 0 !important;
+            text-align: center;
+            height: 100%;
+            flex-flow: column nowrap;
+            justify-content: center;
+            // transform: none !important;
+          }
+          .hc-label{
+            font-style: italic;
+            font-size: 18px;
+            font-family: Roboto, sans-serif;
+          }
+          // .hc-marker{
+            //TODO: return here to add circular markers ontop of columns
+          // }
+      }
     }
   }
 

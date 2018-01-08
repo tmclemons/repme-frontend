@@ -48,6 +48,7 @@ class BallotVote extends React.Component {
 
   submitVote(voteData) {
     //hook api post call here
+    //TODO: preset data object to zero before data input
     console.log(voteData)
   }
 

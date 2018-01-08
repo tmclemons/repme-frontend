@@ -232,6 +232,7 @@ class BallotResults extends React.Component {
       },
       plotOptions: {
         series: {
+          groupPadding: 0,
           pointPadding: 0,
           colorsByPoint: true,
         },
@@ -255,6 +256,9 @@ class BallotResults extends React.Component {
       legend: {
         enabled: false
       },
+      credits: {
+        enabled: false
+      },
       yAxis: {
         title: {
           text: null
@@ -272,6 +276,14 @@ class BallotResults extends React.Component {
         tickWidth: 0,
         gridLineWidth: 0,
         opposite: true,
+        labels: {
+          autoRotation: [0],
+          useHTML: true,
+          formatter: function () {
+            console.log(this)
+            return `<div class="hc-label">${this.value}</div>`;
+          }
+        },
         categories: this.getFormattedData().dataLabels
       }
     }
