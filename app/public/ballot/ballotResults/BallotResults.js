@@ -58,17 +58,33 @@ class BallotResults extends React.Component {
       grey: 'rgb(201, 203, 207)'
     };
 
-    this.Samples = {
-      // Adapted from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
-      rand: function (min, max) {
-        var seed = 894538923;
-        min = min === undefined ? 0 : min;
-        max = max === undefined ? 1 : max;
-        this._seed = (seed * 9301 + 49297) % 233280;
-        return min + (this._seed / 233280) * (max - min);
-      }
-    };
+  }
 
+  getSampleDistrictResultsAraray = () => {
+    let results = [ 
+      78,
+      21,
+      33,
+      94,
+      14,
+      90,
+      45,
+            72,
+      12,
+      9,
+      93,
+      57,
+      35,
+      57,
+            17,
+      91,
+      4,
+      59,
+      12,
+      90,
+      41
+     ];
+     return results;
   }
 
   submitVote(voteData) {
@@ -77,46 +93,47 @@ class BallotResults extends React.Component {
   }
 
   randomScalingFactor = () => {
-    console.log(this.Samples.rand(-100, 100))
-    return Math.round(this.Samples.rand(-100, 100));
+    return Math.round(this.Samples.rand(-100,
+      100));
   };
 
   render() {
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const color = ChartJS.helpers.color;
     const barChartData = {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      labels: [
+        'Strongly Agree',
+        "",
+        "",
+        "",
+        "",
+        'Agree',
+        "",
+        "",
+        "",
+        "",
+        'Neutral',
+        "",
+        "",
+        "",
+        "",
+        'Disagree',
+        "",
+        "",
+        "",
+        "",
+        'Strongly Disagree',
+      ],
       datasets: [{
         label: 'Dataset 1',
         backgroundColor: color(this.chartColors.red).alpha(0.5).rgbString(),
         borderColor: this.chartColors.red,
         borderWidth: 1,
-        data: [
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor()
-        ]
-      }, {
-        label: 'Dataset 2',
-        backgroundColor: color(this.chartColors.blue).alpha(0.5).rgbString(),
-        borderColor: this.chartColors.blue,
-        borderWidth: 1,
-        data: [
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor(),
-          this.randomScalingFactor()
-        ]
+        data: this.getSampleDistrictResultsAraray()
       }]
     };
 
+    console.log(barChartData)
     return (
       <div className={'ballot__wrapper'}>
         <Header />
@@ -129,12 +146,27 @@ class BallotResults extends React.Component {
           options={{
             responsive: true,
               legend: {
-                position: 'top',
+                display: false
               },
               title: {
-                display: true,
-                text: 'Chart.js Bar Chart'
-              }
+                display: false,
+              },
+              scales: {
+                xAxes: [{
+                  gridLines: {
+                    display: false
+                  }
+                }],
+                yAxes: [{
+                  display: false,
+                  ticks: {
+                    reverse: true,
+                  },
+                  gridLines: {
+                    display: false
+                  }
+                }]
+              },
             }
           }
           />
