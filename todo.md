@@ -3,7 +3,7 @@
 #Create RepMe Front End UI
 -- DONE: Header
 -- DONE: Custom Slider that passes vote data and color style data
--- TODO: Customize slider icon
+-- DONE: Customize slider icon
 -- DONE: Banner that translates slide color ontop of background image
 -- DONE: background image
 -- DONE: Pop on hover over slider
@@ -13,6 +13,8 @@
 -- DONE: Social Media buttons
 -- TODO: refactor styling to a core configuration flow i.e pass one config for all colors
     like this <Component config={this.props.styleConfig} />
+
+-- TODO: make sure to update routing and submission forms for recasting, check invision
 
 
 #Create Admin Routes and Holder 

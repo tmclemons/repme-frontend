@@ -1,5 +1,43 @@
 $baseGrey: #c1c2c2;
 
+
+.rep__card{
+  $imgSize: 200px;
+  display: flex;
+  flex-flow: row nowrap;
+  max-width: 600px;
+  background: beige;
+  margin: 20px;
+  &--profile {
+    flex: 1 1 65%;
+    display: flex;
+    flex-flow: column nowrap;
+    font-family: Roboto, sans-serif;
+    &-position{
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    &-title {
+      span {
+        font-size: 30px;
+      }
+    }
+    &-profile-img {
+      max-width: $imgSize;
+      height: $imgSize;
+      border-radius: $imgSize;
+      overflow: hidden;
+      border: 15px solid $baseGrey;
+      img{
+        width: 100%;
+      }
+    }
+  }
+  &--voted{
+    flex: 1 1 35%;
+  }
+}
+
 //refactor out
 .chart-title{
   width: 100%;

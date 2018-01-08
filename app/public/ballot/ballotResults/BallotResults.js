@@ -36,6 +36,61 @@ class ChartLabelComponent extends React.Component{
 }
 
 
+class RepresentativeCard extends React.Component{
+  constructor(props){
+    super(props)
+  }
+
+  toCapitalize = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  render(){
+    return(
+      <div className={'rep__card'}>
+        <div className={'rep__card--profile'}>
+          <div className="rep__card--profile-title">
+            <span className={'rep__card--profile-position'}>
+              {this.props.position}
+            </span>
+            <span>{this.props.firstName}</span>
+            <span>{this.props.lastName}</span>
+          </div>
+          <div className="rep__card--profile-profile-img">
+            <img src={this.props.profileImg} 
+              alt={
+                `${this.props.firstName} ${this.props.firstName} headshot`
+            }/>
+          </div>
+          <div className="rep__card--profile-profile-description">
+            <div className={'rep__card--profile-party-icon'}>
+              <img src="" alt={`${this.props.party} party icon`}/>
+            </div>
+            <span>{`${this.toCapitalize(this.props.party)} Party`}</span>
+            <span>-</span>
+            <span>
+              {
+                `Member of the U.S. ${this.toCapitalize(this.props.body)} 
+                from ${this.toCapitalize(this.props.state)}'s
+                 ${this.props.district}th District`
+              }
+            </span>
+          </div>
+        </div>
+        <div className={'rep__card--vote-data'}>
+          <div className={'rep__card--voted'}>
+            <i className={`${this.props.voted ? 'ion-checkmark' : 'ion-close'}`}></i>
+          </div>
+          <div className={'rep__card--voting-parity'}>
+            {`In the Past: Voted ${((this.props.votingParity / 1) * 100 || 0 )}%
+              of the times on the same siade as you!`}
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
 class ChartTitleBarComponent extends React.Component{
   constructor(props){
     super(props);
@@ -90,7 +145,33 @@ class BallotResults extends React.Component {
           (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
         sliderHint: `Slide to Cast`,
         submissionCTA: `Submit my VOTE`
-      }
+      },
+      repVotes: [
+        {
+          firstName: 'Mark',
+          lastName: 'Kirk',
+          position: 'senator',
+          profileImg: 'https://i.pinimg.com/736x/a5/56/b8/a556b885cbb54b6495ae2083c0846642--mark-kirk-running-for-president.jpg',
+          party: 'republican',
+          district: 10,
+          votingParity: 1,
+          voted: true,
+          state: 'illinois',
+          body: 'house of representatives'
+        },
+        {
+          firstName: 'Richard',
+          lastName: 'Durbin',
+          position: 'senator',
+          profileImg: 'https://nrf.com/sites/default/files/styles/dynamic_body_side_caption_480x300/public/Images/Who%20We%20Are/Dick-Durbin_wide-1000px.jpg?itok=W0wJtyrM&c=5cab1ece9d195e79bf7351eec4880e36',
+          party: 'democratic',
+          district: 20,
+          votingParity: .5,
+          voted: false,
+          state: 'illinois',
+          body: 'house of representatives'
+        }
+      ]
     }
   }
 
@@ -364,7 +445,15 @@ class BallotResults extends React.Component {
           ballotInfo={this.state.sampleBallot}
           backgroundImg={this.state.backgroundImg}
         />
-
+        <div className={'representative-votes'}>
+        {
+          this.state.repVotes.map((repVote, index)=>{
+            return(
+              <RepresentativeCard key={index} { ...repVote} />
+            )
+          })
+        }
+        </div>
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
           <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
