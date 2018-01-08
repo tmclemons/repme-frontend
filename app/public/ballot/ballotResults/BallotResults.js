@@ -11,6 +11,48 @@ import BarChartComponent from
 
 import Scss from './ballotResults.scss';
 
+class ChartLabelComponent extends React.Component{
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    let labels = [];
+    let keys = Object.keys(this.props);
+    if (typeof this.props === 'object') {
+      for (let key in this.props) {
+        if (this.props.hasOwnProperty(key)) {
+          let prop = this.props[key];
+          if(prop.length > 0) {
+            labels.push(
+              <div key={key}><span>{prop}</span></div>
+            )
+          }
+        }
+      }
+    }
+    return <div className={'vote-labels'}>{labels}</div>;
+  }
+}
+
+
+class ChartTitleBarComponent extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return(
+      <div className={'chart-title'}>
+        <div className={'divider'}></div>
+        <div className={'content'}>
+          <div>{this.props.superTitle || null}</div>
+          <h2 className={`${this.props.superTitle ? 'with-super' : ''}`}>{this.props.title || null}</h2>
+        </div>
+        <div className={'divider'}></div>
+      </div>
+    )
+  }
+}
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
@@ -50,16 +92,6 @@ class BallotResults extends React.Component {
         submissionCTA: `Submit my VOTE`
       }
     }
-    this.chartColors = {
-      red: 'rgb(255, 99, 132)',
-      orange: 'rgb(255, 159, 64)',
-      yellow: 'rgb(255, 205, 86)',
-      green: 'rgb(75, 192, 192)',
-      blue: 'rgb(54, 162, 235)',
-      purple: 'rgb(153, 102, 255)',
-      grey: 'rgb(201, 203, 207)'
-    };
-
   }
 
   getColorStops = () => {
@@ -159,8 +191,8 @@ class BallotResults extends React.Component {
     return colorStops.length ? colorStops : null;
   }
 
-  getFormattedData = () => {
-    let data = [ 
+  getFormattedData = (resultType) => {
+    let constituentData = [ 
       78,
       21,
       33,
@@ -182,6 +214,29 @@ class BallotResults extends React.Component {
       12,
       90,
       41
+    ];
+    let countryData = [ 
+      15,
+      4,
+      10,
+      11,
+      13,
+      18,
+      0,
+      7,
+      4,
+      3,
+      10,
+      4,
+      7,
+      4,
+      4,
+      1,
+      1,
+      2,
+      3,
+      0,
+      5
     ];
     let dataLabels = [
       'Strongly Agree',
@@ -207,9 +262,10 @@ class BallotResults extends React.Component {
       'Strongly Disagree',
     ];
 
+    let dataChoice = resultType === 'usa' ? countryData : constituentData;
     let formattedData = [];
 
-    data.forEach((dataItem, index) => {
+    dataChoice.forEach((dataItem, index) => {
       formattedData.push(
         {
           y: dataItem,
@@ -224,11 +280,12 @@ class BallotResults extends React.Component {
     };
   }
 
-  getSampleDistrictResultsArray = () => {
+  getSampleDistrictResultsArray = (resultType) => {
     let results = {
       title: null,
       chart: {
         type: 'column',
+        spacing: [0,35,0,35]
       },
       plotOptions: {
         series: {
@@ -239,7 +296,7 @@ class BallotResults extends React.Component {
       },
       colors: this.getColorStops(),
       series:[{
-        data: this.getFormattedData().data,
+        data: this.getFormattedData(resultType).data,
         dataLabels: {
           enabled: true,
           rotation: 0,
@@ -277,14 +334,9 @@ class BallotResults extends React.Component {
         gridLineWidth: 0,
         opposite: true,
         labels: {
-          autoRotation: [0],
-          useHTML: true,
-          formatter: function () {
-            console.log(this)
-            return `<div class="hc-label">${this.value}</div>`;
-          }
+          enabled: false
         },
-        categories: this.getFormattedData().dataLabels
+        categories: this.getFormattedData(resultType).dataLabels
       }
     }
     return results;
@@ -295,65 +347,34 @@ class BallotResults extends React.Component {
     console.log(voteData)
   }
 
-  randomScalingFactor = () => {
-    return Math.round(this.Samples.rand(-100,
-      100));
-  };
-
   render() {
-    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const color = ChartJS.helpers.color;
     const barChartData = {
       labels: this.getSampleDistrictResultsArray().xAxis.categories,
       datasets: [{
         label: 'Dataset 1',
-        backgroundColor: color(this.chartColors.red).alpha(0.5).rgbString(),
-        borderColor: this.chartColors.red,
         borderWidth: 1,
         data: this.getSampleDistrictResultsArray().series[0].data
       }]
     };
 
     return (
-      <div className={'ballot__wrapper'}>
+      <div className={'ballot__wrapper'}> 
         <Header />
         <Banner
           ballotInfo={this.state.sampleBallot}
           backgroundImg={this.state.backgroundImg}
         />
-        {/* <BarChart 
-          data={barChartData}
-          options={{
-            responsive: true,
-              legend: {
-                display: false
-              },
-              title: {
-                display: false,
-              },
-              scales: {
-                xAxes: [{
-                  gridLines: {
-                    display: false
-                  }
-                }],
-                yAxes: [{
-                  display: false,
-                  ticks: {
-                    reverse: true,
-                  },
-                  gridLines: {
-                    display: false
-                  }
-                }]
-              },
-            }
-          }
-          /> */}
+
         <div className={'ballot__results--barchart'}>
+          <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
+          <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
           <BarChartComponent { ...this.getSampleDistrictResultsArray()}/>
         </div>
-        {/* <VoteForm callback={this.submitVote} copy={this.state.viewCopy} /> */}
+        <div className={'ballot__results--barchart'}>
+          <ChartTitleBarComponent {...{superTitle: 'votes', title: 'United State Results'}}/>
+          <ChartLabelComponent { ...this.getFormattedData('usa').dataLabels}/>
+          <BarChartComponent { ...this.getSampleDistrictResultsArray('usa')}/>
+        </div>
         <Footer />
       </div>
     )

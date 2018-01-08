@@ -1,5 +1,34 @@
 $baseGrey: #c1c2c2;
 
+//refactor out
+.chart-title{
+  width: 100%;
+  padding: 25px 20px;
+  font-family: Roboto, sans-serif;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  .divider {
+    flex: auto;
+    height: 3px;
+    background: $baseGrey;
+    opacity: .6;
+  }
+  .content{
+    flex: auto;
+    max-width: 400px;
+    text-align: center;
+    div{
+      font-size: 20px;
+      text-transform: uppercase;
+      color: $baseGrey;
+    }
+    h2.with-super{
+      margin-top: 0;
+    }
+  }
+}
+
 .ballot{
   &__wrapper {
     height: 100%;
@@ -8,35 +37,46 @@ $baseGrey: #c1c2c2;
   }
   &__results {
     &--barchart{
+      margin-top: 30px;
       padding: 25px 80px;
-      .highcharts-root {
-        padding-top: 0px;
-      }
-      .highcharts-axis-labels.highcharts-xaxis-labels{
-          background: #efefef;
-          height: 62px;
-          width: 100%;
-          padding: 0 30px;
-          border-top: 3px solid rgba($baseGrey, 0.6);
+      .vote-labels{
+        display: flex;
+        flex-flow: row nowrap;
+        display: flex;
+        flex-flow: row nowrap;
+        background: #efefef;
+        padding: 20px 15px;
+        border-top: 3px solid rgba($baseGrey, 0.6);
+        div {
+          flex: 1 1 20%;
+          justify-content: center;
+          display: flex;
+          min-height: 100%;
+          align-items: center;
           span {
-            white-space: normal !important;
-            text-overflow: unset !important;
-            display: flex !important;
-            top: 0 !important;
-            text-align: center;
-            height: 100%;
-            flex-flow: column nowrap;
-            justify-content: center;
-            // transform: none !important;
-          }
-          .hc-label{
-            font-style: italic;
-            font-size: 18px;
+            max-width: 90px;
             font-family: Roboto, sans-serif;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
           }
-          // .hc-marker{
-            //TODO: return here to add circular markers ontop of columns
-          // }
+
+          &:first-child{
+            justify-content: flex-start;
+          }
+          &:nth-child(2){
+            flex: 1 1 14%;
+          }
+          &:nth-child(3){
+            flex: 1 1 32%;
+          }
+          &:nth-child(4){
+            flex: 1 1 14%;
+          }
+          &:last-child{
+            justify-content: flex-end;
+          }
+        }
       }
     }
   }
