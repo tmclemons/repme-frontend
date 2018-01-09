@@ -561,6 +561,7 @@ class BallotResults extends React.Component {
         <Banner
           ballotInfo={this.state.sampleBallot}
           backgroundImg={this.state.backgroundImg}
+          showSlider={false}
         />
         <div className={'representative-votes'}>
           <div className="wrapper">

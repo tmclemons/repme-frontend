@@ -3,7 +3,7 @@ import VoteForm from '../../../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../../template/components/mainFooter/MainFooter';
-import Scss from './ballotVote.scss';
+import Scss from './ballotReSubmit.scss';
 
 class BallotVote extends React.Component {
   constructor(props) {
@@ -61,7 +61,7 @@ class BallotVote extends React.Component {
           backgroundImg={this.state.backgroundImg}
           showSlider={true}
         />
-        <VoteForm firstSubmission={true} callback={this.submitVote} copy={this.state.viewCopy} />
+        <VoteForm firstSubmission={false} callback={this.submitVote} copy={this.state.viewCopy} />
         <Footer />
       </div>
     )

@@ -105,20 +105,25 @@ class Banner extends React.Component {
             </CardMedia>
           </Card>
         </MuiThemeProvider>
-        <div className={'slider--horizontal'}>
-          <HorizontalSlider
-            step={this.state.step}
-            max={this.state.max}
-            defaultValue={this.state.defaultValue}
-            callback={this.onValueChange}
-            toggleFirstTimeUser={
-              {
-                callback: this.toggleFirstTimeUser,
-                state: this.state.firstTimeUse
-              }
+          <div>
+            {
+              this.props.showSlider ?   
+                <div className={'slider--horizontal'}>
+                <HorizontalSlider
+                  step={this.state.step}
+                  max={this.state.max}
+                  defaultValue={this.state.defaultValue}
+                  callback={this.onValueChange}
+                  toggleFirstTimeUser={
+                    {
+                      callback: this.toggleFirstTimeUser,
+                      state: this.state.firstTimeUse
+                    }
+                  }
+                />  
+                </div>: null
             }
-          />
-        </div>
+          </div>
       </div>
     )
   }
