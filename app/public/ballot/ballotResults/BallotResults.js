@@ -13,6 +13,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
 import DemocraticLogo from '../../../../template/components/utilities/DemocraticLogo';
 import RepublicanLogo from '../../../../template/components/utilities/RepublicanLogo';
+import StateIllinois from '../../../../template/components/utilities/SampleStateComponent';
 
 import Scss from './ballotResults.scss';
 
@@ -168,6 +169,11 @@ class RepresentativeCard extends React.Component{
               <div>
                 {`of the times on the same side as you!`}
               </div>
+            </div>
+            <div className="rep__card--voting-state">
+                <div className="rep__card--voting-state-wrapper">
+                  <StateIllinois />
+                </div>
             </div>
           </div>
         </Paper>

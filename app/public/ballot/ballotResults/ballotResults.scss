@@ -25,12 +25,14 @@ $white: white;
 }
 
 .rep__card{
+  flex: 0;
   $imgSize: 200px;
   flex: auto;
   display: flex;
   flex-flow: row nowrap;
   max-width: 550px;
   min-height: 660px;
+  max-height: 660px;
   background: beige;
   margin: 20px;
   font-family: Roboto, sans-serif;
@@ -111,12 +113,23 @@ $white: white;
     display: flex;
     flex-flow: column nowrap;
     text-align: center;
-    padding: 40px;
+    padding: 40px 50px 20px 50px;
     background: $white;
     &-amount{
       color: $voteGreen;
       font-size: 30px;
       font-weight: 700;
+    }
+  }
+  // sample state
+  &--voting-state {
+    background: $white;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    padding: 0px 0 20px 0;
+    &-wrapper{
+      width: 270px;
     }
   }
 }
