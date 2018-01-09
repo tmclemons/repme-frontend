@@ -5,7 +5,7 @@ import Banner from '../../../../template/components/bannerComponent/BannerCompon
 import Footer from '../../../../template/components/mainFooter/MainFooter';
 import Scss from './ballotReSubmit.scss';
 
-class BallotVote extends React.Component {
+class BallotResubmit extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,7 +41,7 @@ class BallotVote extends React.Component {
         preSubmitInfo: `This is your private Ballot for 
           (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
         sliderHint: `Slide to Cast`,
-        submissionCTA: `Submit my VOTE`
+        submissionCTA: `Re-cast my VOTE`
       }
     }
   }
@@ -68,4 +68,4 @@ class BallotVote extends React.Component {
   }
 }
 
-export default BallotVote;
+export default BallotResubmit;

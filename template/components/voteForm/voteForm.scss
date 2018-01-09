@@ -38,6 +38,18 @@ $baseGrey: #c1c2c2;
       color: $baseGrey;
     }
 
+    &.resubmit{
+      flex-flow: row wrap;
+      width: auto;
+      align-items: flex-start;
+      justify-content: center;
+      .vote__form--subscribe--input{
+        margin: 0 20px;
+      }
+      label {
+        max-width: 300px;
+      }
+    }
     &--input {
       display: flex;
       flex-flow: row nowrap;

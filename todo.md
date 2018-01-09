@@ -11,10 +11,15 @@
 -- DONE: form submission button
 -- DONE: Footer component with social media buttons
 -- DONE: Social Media buttons
+-- TODO: Setup cookies for  vote --> submit --> resubmit
+-- TODO: Refactor dummy data so api data will get passed through better, also check api routing logic
+-- TODO: setup dummy api based on routes
 -- TODO: refactor styling to a core configuration flow i.e pass one config for all colors
     like this <Component config={this.props.styleConfig} />
 
 -- TODO: make sure to update routing and submission forms for recasting, check invision
+
+--TODO: GET--DONE: -- ASAP submit, resubmit, results, slider, results email
 
 
 #Create Admin Routes and Holder 

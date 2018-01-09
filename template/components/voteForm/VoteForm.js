@@ -97,53 +97,61 @@ class VoteForm extends React.Component {
         <div className={
           'vote__form'
         }>
-          <div className={
-            'vote__form--notice'
-          }> 
-            {this.props.copy.formNotice}
-          </div>
 
-          <div className={
-            'vote__form--text-input'
-          }>
-            <TextField
-              hintText="Email Address"
-              errorText={this.props.copy.emailInput}
-              errorStyle={styles.errorStyle}
-              onChange={(event, newValue) => {
-                if (formValidation.emailValidation(newValue, this.state.emailLimit)) {
-                  this.setState({ 
-                    email_isValid: true,
-                    userEmail: newValue
-                  })} else {
-                  this.setState({
-                    email_isValid: false
-                  })
+        { this.props.firstSubmission ? 
+          <div>
+            <div className={
+              'vote__form--notice'
+            }> 
+              {this.props.copy.formNotice}
+            </div>
+              <div className={
+                'vote__form--text-input'
+              }>
+                <TextField
+                  hintText="Email Address"
+                  errorText={this.props.copy.emailInput}
+                  errorStyle={styles.errorStyle}
+                  onChange={(event, newValue) => {
+                    if (formValidation.emailValidation(newValue, this.state.emailLimit)) {
+                      this.setState({ 
+                        email_isValid: true,
+                        userEmail: newValue
+                      })} else {
+                      this.setState({
+                        email_isValid: false
+                      })
+                      }
+                    }
                   }
-                }
-              }
-            /><br />
-            <TextField
-              hintText="Zip Code"
-              errorText={this.props.copy.zipCodeInput}
-              errorStyle={styles.errorStyle}
-              onChange={(event, newValue) => {
-                if (formValidation.zipCodeValidation(newValue)) {
-                  this.setState({
-                    zip_isValid: true,
-                    zipCode: newValue
-                  })} else {
-                    this.setState({
-                      zip_isValid: false
-                    })
+                /><br />
+                <TextField
+                  hintText="Zip Code"
+                  errorText={this.props.copy.zipCodeInput}
+                  errorStyle={styles.errorStyle}
+                  onChange={(event, newValue) => {
+                    if (formValidation.zipCodeValidation(newValue)) {
+                      this.setState({
+                        zip_isValid: true,
+                        zipCode: newValue
+                      })} else {
+                        this.setState({
+                          zip_isValid: false
+                        })
+                      }
+                    }
                   }
-                }
-              }
-            /><br />
-          </div>
+                /><br />
+              </div>
+            </div> : null 
+          }
           
           <div className={
-            'vote__form--subscribe'
+            `vote__form--subscribe ${this.props.firstSubmission ?
+              '' :
+              'resubmit'
+            }
+            `
           }>
             <div className={'vote__form--subscribe--input'}>
               <div className={'vote__form--subscribe--input-title'}>

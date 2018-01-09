@@ -7,6 +7,11 @@ import AsyncComponent from
 const BallotVote = AsyncComponent( 
   () => import( './public/ballot/ballotVote/BallotVote' )
 )
+
+const BallotResubmit = AsyncComponent(
+  () => import('./public/ballot/ballotResubmit/BallotResubmit')
+)
+
 const BallotResults = AsyncComponent( 
   () => import( './public/ballot/ballotResults/BallotResults' )
 )
@@ -33,6 +38,7 @@ class Routing extends React.Component {
         height: '100vh'
       }}>
         <Route exact path='/' component={BallotVote} />
+        <Route path='/resubmit' component={BallotResubmit} />
         <Route path='/vote' component={BallotVote} />
         <Route path='/results' component={BallotResults} />
         <Route path='/bills' component={Bills} />

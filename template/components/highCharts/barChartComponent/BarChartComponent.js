@@ -11,7 +11,6 @@ class BarChartComponent extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
     //update chart data after render
   }
   
