@@ -13,6 +13,7 @@
 -- DONE: Social Media buttons
 -- TODO: Setup cookies for  vote --> submit --> resubmit
 -- TODO: Refactor dummy data so api data will get passed through better, also check api routing logic
+-- TODO: update font assets, implement states assets
 -- TODO: setup dummy api based on routes
 -- TODO: refactor styling to a core configuration flow i.e pass one config for all colors
     like this <Component config={this.props.styleConfig} />
