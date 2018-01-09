@@ -9,6 +9,9 @@ import ChartJS from 'chart.js';
 import BarChartComponent from 
   '../../../../template/components/highCharts/barChartComponent/BarChartComponent';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Paper from 'material-ui/Paper';
+
 import Scss from './ballotResults.scss';
 
 class ChartLabelComponent extends React.Component{
@@ -47,46 +50,59 @@ class RepresentativeCard extends React.Component{
 
   render(){
     return(
-      <div className={'rep__card'}>
-        <div className={'rep__card--profile'}>
-          <div className="rep__card--profile-title">
-            <span className={'rep__card--profile-position'}>
-              {this.props.position}
-            </span>
-            <span>{this.props.firstName}</span>
-            <span>{this.props.lastName}</span>
-          </div>
-          <div className="rep__card--profile-profile-img">
-            <img src={this.props.profileImg} 
-              alt={
-                `${this.props.firstName} ${this.props.firstName} headshot`
-            }/>
-          </div>
-          <div className="rep__card--profile-profile-description">
-            <div className={'rep__card--profile-party-icon'}>
-              <img src="" alt={`${this.props.party} party icon`}/>
+      <MuiThemeProvider>
+        <Paper className={'rep__card'} 
+          style={{ boxSizing: 'unset', backgroundColor: 'blue' } }
+          zDepth={2}>
+          <div className={'rep__card--profile'}>
+            <div className="rep__card--profile-title">
+              <span className={'rep__card--profile-position'}>
+                {this.props.position}
+              </span>
+              <span>{this.props.firstName}</span>
+              <span>{this.props.lastName}</span>
             </div>
-            <span>{`${this.toCapitalize(this.props.party)} Party`}</span>
-            <span>-</span>
-            <span>
-              {
-                `Member of the U.S. ${this.toCapitalize(this.props.body)} 
-                from ${this.toCapitalize(this.props.state)}'s
-                 ${this.props.district}th District`
-              }
-            </span>
+            <div 
+              className="rep__card--profile-profile-img"
+              style={{ backgroundImage: `url(${this.props.profileImg})`}}  
+            >
+            </div>
+            <div className="rep__card--profile-profile-description">
+              <div className={'rep__card--profile-party-icon'}>
+                <img src="" alt={`${this.props.party} party icon`}/>
+              </div>
+              <span>{`${this.toCapitalize(this.props.party)} Party`}</span>
+              <span>-</span>
+              <span>
+                {
+                  `Member of the U.S. ${this.toCapitalize(this.props.body)} 
+                  from ${this.toCapitalize(this.props.state)}'s
+                  ${this.props.district}th District`
+                }
+              </span>
+            </div>
           </div>
-        </div>
-        <div className={'rep__card--vote-data'}>
-          <div className={'rep__card--voted'}>
-            <i className={`${this.props.voted ? 'ion-checkmark' : 'ion-close'}`}></i>
+          <div className={'rep__card--vote-data'}>
+            <div className={'rep__card--voted'}>
+              <div>voted for this bill</div>
+              <i className={`${this.props.voted ? 'ion-checkmark' : 'ion-close'}`}></i>
+            </div>
+            <div className={'rep__card--voting-divider'}></div>
+            <div className={'rep__card--voting-parity'}>
+              <div>
+                {`In the Past: Voted`}
+              </div>
+              <div className={'rep__card--voting-parity-amount'}>
+                {`${((this.props.votingParity / 1) * 100 || 0 )}%`}
+              </div>
+              <div>
+                {`of the times on the same side as you!`}
+              </div>
+            </div>
           </div>
-          <div className={'rep__card--voting-parity'}>
-            {`In the Past: Voted ${((this.props.votingParity / 1) * 100 || 0 )}%
-              of the times on the same siade as you!`}
-          </div>
-        </div>
-      </div>
+        </Paper>
+      </MuiThemeProvider>
+      
     )
   }
 }

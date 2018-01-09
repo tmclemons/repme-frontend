@@ -1,40 +1,105 @@
 $baseGrey: #c1c2c2;
+$voteGreen: green;
+$white: white;
 
+.representative-votes {
+  display: flex;
+  flex-flow: row wrap;
+  min-height: 660px;
+  //TODO: fix breaking flex-box
+  padding: 40px 0;
+  justify-content: center;
+}
 
 .rep__card{
   $imgSize: 200px;
+  flex: auto;
   display: flex;
   flex-flow: row nowrap;
-  max-width: 600px;
+  max-width: 550px;
+  min-height: 660px;
   background: beige;
   margin: 20px;
+  font-family: Roboto, sans-serif;
+  padding: 20px;
   &--profile {
-    flex: 1 1 65%;
+    flex: 1 1 60%;
     display: flex;
     flex-flow: column nowrap;
-    font-family: Roboto, sans-serif;
-    &-position{
-      font-size: 12px;
-      text-transform: uppercase;
-    }
+    background: $white;
+    padding: 30px;
     &-title {
+      display: flex;
+      flex-flow: column nowrap;
       span {
-        font-size: 30px;
+        font-size: 48px;
+        font-weight: 700;
+      }
+      .rep__card--profile-position{
+        font-size: 18px;
+        font-weight: 600;
+        color: $baseGrey;
+        text-transform: uppercase;
       }
     }
     &-profile-img {
-      max-width: $imgSize;
+      margin: 25px 0;
+      width: $imgSize;
       height: $imgSize;
       border-radius: $imgSize;
       overflow: hidden;
       border: 15px solid $baseGrey;
-      img{
-        width: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+    &-profile-description {
+      display: flex;
+      flex-flow: column nowrap;
+      font-size: 18px;
+      div, span{
+        line-height: 25px;
       }
     }
   }
+  &--vote-data{
+    flex: 1 1 40%;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+  &--voting-divider {
+    height: 0;
+    border-left: 120px solid transparent;
+    border-right: 120px solid transparent;
+    border-bottom: 35px solid $white;
+  }
   &--voted{
-    flex: 1 1 35%;
+    flex: 1 1 25%;
+    text-align: center;
+    padding: 30px 30px 20px 30px;
+    color: $white;
+    div {
+      text-transform: uppercase;
+      max-width: 100px;
+      font-size: 16px;
+      text-align: left;
+    }
+    i {
+      font-size: 120px;
+    }
+  }
+  &--voting-parity{
+    flex: 1 1 75%;
+    font-size: 22px;
+    display: flex;
+    flex-flow: column nowrap;
+    text-align: center;
+    padding: 40px;
+    background: $white;
+    &-amount{
+      color: $voteGreen;
+      font-size: 30px;
+      font-weight: 700;
+    }
   }
 }
 
