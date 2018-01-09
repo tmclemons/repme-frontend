@@ -40,6 +40,48 @@ class ChartLabelComponent extends React.Component{
   }
 }
 
+class GenderDemographic extends React.Component{
+  constructor(props) {
+    super(props)
+    this.demographics = this.props.repDemographics;
+  }
+
+  calculateSpread = () => {
+    if (this.props.maleVotes > this.props.femaleVotes ) {
+      return (this.props.maleVotes / this.props.femaleVotes);
+    } else {
+      return (this.props.femaleVotes / this.props.maleVotes);
+    }
+  }
+
+  render() {
+    return(
+      <div className={'demographic'}>
+        <div className={'demographics__male'}>
+          <div className="layout">
+            <div className={'gender'}>male Votes</div>
+            <div className={'vote-count'}>{this.props.maleVotes}</div>
+            <div className={'spread'}>{`+${this.calculateSpread()}%`}</div>
+          </div>
+          <div className="layout">
+            <i className="ion-ios-body"></i>
+          </div>
+        </div>
+        <div className={'demographics__female'}>
+          <div className="layout">
+            <div className={'gender'}>female Votes</div>
+            <div className={'vote-count'}>{this.props.maleVotes}</div>
+            <div className={'spread'}>{`+${this.calculateSpread()}%`}</div>
+          </div>
+        </div>
+        <div className="layout">
+          <i className="ion-ios-body"></i>
+        </div>
+      </div>
+    )
+  }
+}
+
 class StateDemographic extends React.Component{
   constructor(props) {
     super(props)
@@ -47,19 +89,7 @@ class StateDemographic extends React.Component{
 
   render() {
     return(
-      
-    )
-  }
-}
-
-class GenderDemographic extends React.Component{
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    return(
-      
+      <div>State</div>
     )
   }
 }
@@ -508,20 +538,21 @@ class BallotResults extends React.Component {
           backgroundImg={this.state.backgroundImg}
         />
         <div className={'representative-votes'}>
-        {
-          this.state.repVotes.map((repVote, index)=>{
-            return(
-              <RepresentativeCard key={index} { ...repVote} />
-            )
-          })
-        }
+          <div className="wrapper">
+            {
+              this.state.repVotes.map((repVote, index)=>{
+                return(
+                  <RepresentativeCard key={index} { ...repVote} />
+                )
+              })
+            }
+          </div>
         </div>
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
-          <div className={'ballot__results--demographics'}>
-            <StateDemographic { ...this.repDemographics}/>
-            <GenderDemographic { ......this.repDemographics}/>
-          </div>
+          {/* <div className={'ballot__results--demographics'}>
+            <StateDemographic { ...this.state.repDemographics}/>
+          </div> */}
           <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
           <BarChartComponent { ...this.getSampleDistrictResultsArray()}/>
         </div>

@@ -2,13 +2,26 @@ $baseGrey: #c1c2c2;
 $voteGreen: green;
 $white: white;
 
-.representative-votes {
+.wrapper {
   display: flex;
   flex-flow: row wrap;
   min-height: 660px;
-  //TODO: fix breaking flex-box
   padding: 40px 0;
   justify-content: center;
+}
+
+@media (max-width: 1220px){
+  .wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    min-height: 660px;
+    padding: 40px 0;
+    justify-content: center;
+    align-items: center;
+    .rep-card {
+      flex: 1;
+    }
+  }
 }
 
 .rep__card{
