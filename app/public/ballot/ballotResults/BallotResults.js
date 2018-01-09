@@ -11,6 +11,8 @@ import BarChartComponent from
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
+import DemocraticLogo from '../../../../template/components/utilities/DemocraticLogo';
+import RepublicanLogo from '../../../../template/components/utilities/RepublicanLogo';
 
 import Scss from './ballotResults.scss';
 
@@ -38,6 +40,30 @@ class ChartLabelComponent extends React.Component{
   }
 }
 
+class StateDemographic extends React.Component{
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return(
+      
+    )
+  }
+}
+
+class GenderDemographic extends React.Component{
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return(
+      
+    )
+  }
+}
+
 
 class RepresentativeCard extends React.Component{
   constructor(props){
@@ -48,11 +74,25 @@ class RepresentativeCard extends React.Component{
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  getPartyLogo = () => {
+    if(this.props.party === 'democratic') {
+      return(
+        <DemocraticLogo />
+      )
+    }
+    if(this.props.party === 'republican') {
+      return(
+        <RepublicanLogo />
+      )
+    }
+  }
+
   render(){
     return(
       <MuiThemeProvider>
         <Paper className={'rep__card'} 
-          style={{ boxSizing: 'unset', backgroundColor: 'blue' } }
+          style={{ boxSizing: 'unset', 
+            backgroundColor: `${this.props.voted ? 'green' : 'red'}` } }
           zDepth={2}>
           <div className={'rep__card--profile'}>
             <div className="rep__card--profile-title">
@@ -69,7 +109,7 @@ class RepresentativeCard extends React.Component{
             </div>
             <div className="rep__card--profile-profile-description">
               <div className={'rep__card--profile-party-icon'}>
-                <img src="" alt={`${this.props.party} party icon`}/>
+                {this.getPartyLogo()}
               </div>
               <span>{`${this.toCapitalize(this.props.party)} Party`}</span>
               <span>-</span>
@@ -161,6 +201,12 @@ class BallotResults extends React.Component {
           (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
         sliderHint: `Slide to Cast`,
         submissionCTA: `Submit my VOTE`
+      },
+      repDemographics: {
+        state: 'illinois',
+        districtCity: 'chicago',
+        maleVotes: 345,
+        femaleVotes: 279,
       },
       repVotes: [
         {
@@ -472,6 +518,10 @@ class BallotResults extends React.Component {
         </div>
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
+          <div className={'ballot__results--demographics'}>
+            <StateDemographic { ...this.repDemographics}/>
+            <GenderDemographic { ......this.repDemographics}/>
+          </div>
           <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
           <BarChartComponent { ...this.getSampleDistrictResultsArray()}/>
         </div>
