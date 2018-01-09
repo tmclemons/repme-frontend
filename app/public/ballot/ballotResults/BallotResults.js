@@ -88,9 +88,28 @@ class StateDemographic extends React.Component{
     super(props)
   }
 
+
   render() {
+    const Component = this.props.component;
+    console.log(this.props)
     return(
-      <div>State</div>
+      <div>
+        <div className="state__demo">
+          <div className="state__demo--data">
+            <div className='state__demo--data-point'>
+              <span>State:</span>
+              <div>{this.props.state}</div>
+            </div>
+            <div className='state__demo--data-point'>
+              <span>your District:</span>
+              <div>{this.props.districtCity}</div>
+            </div>
+          </div>
+          <div className="state__demo--icon">
+          <Component />
+          </div>
+        </div>
+      </div>
     )
   }
 }
@@ -556,9 +575,7 @@ class BallotResults extends React.Component {
         </div>
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
-          {/* <div className={'ballot__results--demographics'}>
-            <StateDemographic { ...this.state.repDemographics}/>
-          </div> */}
+          <StateDemographic component={StateIllinois} { ...this.state.repDemographics}/>
           <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
           <BarChartComponent { ...this.getSampleDistrictResultsArray()}/>
         </div>
