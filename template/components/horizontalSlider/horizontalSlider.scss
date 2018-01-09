@@ -9,7 +9,7 @@ $inactiveState: rgba(250, 250, 250, $opacity);
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
-  height: 85px;
+  min-height: 85px;
   padding: 25px 80px;
   .slider {
     margin-top: 35px;

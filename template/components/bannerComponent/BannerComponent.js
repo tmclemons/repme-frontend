@@ -7,7 +7,9 @@ import classNames from 'classnames';
 import HorizontalSlider from
   '../horizontalSlider/HorizontalSlider';
 import DataComponent from '../dataComponent/DataComponent';
+import ChartLabelComponent from '../chartLabelComponent/ChartLabelComponent';
 import StarIcon from 'material-ui/svg-icons/toggle/star';
+
 import { grey50 } from 'material-ui/styles/colors';
 import Scss from './bannerComponent.scss';
 
@@ -52,6 +54,36 @@ class Banner extends React.Component {
 
   toggleFirstTimeUser = () => {
     this.setState({firstTimeUse: false});
+  }
+
+  getFormattedData = () => {
+    let dataLabels = [
+      'Strongly Agree',
+      "",
+      "",
+      "",
+      "",
+      'Agree',
+      "",
+      "",
+      "",
+      "",
+      'Neutral',
+      "",
+      "",
+      "",
+      "",
+      'Disagree',
+      "",
+      "",
+      "",
+      "",
+      'Strongly Disagree',
+    ];
+
+    return {
+      dataLabels: dataLabels
+    };
   }
 
   render() {
@@ -121,6 +153,12 @@ class Banner extends React.Component {
                     }
                   }
                 />  
+                <ChartLabelComponent style={{
+                  background: 'transparent',
+                  borderTop: 'none'
+                }} 
+                { ...this.getFormattedData().dataLabels } 
+                />
                 </div>: null
             }
           </div>

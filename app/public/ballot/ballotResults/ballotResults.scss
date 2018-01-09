@@ -41,45 +41,6 @@ $white: white;
     &--barchart{
       margin-top: 30px;
       padding: 25px 80px;
-      .vote-labels{
-        display: flex;
-        flex-flow: row nowrap;
-        display: flex;
-        flex-flow: row nowrap;
-        background: #efefef;
-        padding: 20px 15px;
-        border-top: 3px solid rgba($baseGrey, 0.6);
-        div {
-          flex: 1 1 20%;
-          justify-content: center;
-          display: flex;
-          min-height: 100%;
-          align-items: center;
-          span {
-            max-width: 90px;
-            font-family: Roboto, sans-serif;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-          }
-
-          &:first-child{
-            justify-content: flex-start;
-          }
-          &:nth-child(2){
-            flex: 1 1 14%;
-          }
-          &:nth-child(3){
-            flex: 1 1 32%;
-          }
-          &:nth-child(4){
-            flex: 1 1 14%;
-          }
-          &:last-child{
-            justify-content: flex-end;
-          }
-        }
-      }
     }
   }
 

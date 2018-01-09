@@ -1,4 +1,5 @@
 import React from 'react'
+import Scss from './chartLabelComponent.scss'
 
 class ChartLabelComponent extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class ChartLabelComponent extends React.Component {
         }
       }
     }
-    return <div className={'vote-labels'}>{labels}</div>;
+    return <div style={this.props.style} className={'vote-labels'}>{labels}</div>;
   }
 }
 
