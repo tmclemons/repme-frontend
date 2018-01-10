@@ -107,7 +107,7 @@ $toolTipColor: rgb(0, 76, 135);
     // }
   }
   .customslider__handle-tooltip {
-    top: -90px;
+    top: -100px;
     // top: -175px;
     .label {
       transform: rotate(-90deg);
@@ -126,7 +126,7 @@ $toolTipColor: rgb(0, 76, 135);
       height: 100%;
       padding: 30px 35px;
       font-size: 25px;
-      top: -179px;
+      top: -189px;
       width: 250px;
       height: 100px;
       .label {
@@ -136,7 +136,7 @@ $toolTipColor: rgb(0, 76, 135);
         margin-top: 5px;
         .slider-hint {
           position: absolute;
-          bottom: -190px;
+          bottom: -210px;
           left: 70px;
           display: flex;
           flex-flow: row nowrap;

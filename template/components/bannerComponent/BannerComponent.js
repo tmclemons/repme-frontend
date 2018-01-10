@@ -19,7 +19,7 @@ class Banner extends React.Component {
     this.state = {
       componentProps: 0,
       step: 5,
-      max: 105,
+      max: 100,
       defaultValue: 50,
       ballotNumber: null,
       ballotTitle: null,
@@ -155,7 +155,9 @@ class Banner extends React.Component {
                 />  
                 <ChartLabelComponent style={{
                   background: 'transparent',
-                  borderTop: 'none'
+                  borderTop: 'none',
+                  paddingLeft: '0',
+                  paddingRight: '0'
                 }} 
                 { ...this.getFormattedData().dataLabels } 
                 />

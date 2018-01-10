@@ -21,6 +21,8 @@
 -- TODO: make sure to update routing and submission forms for recasting, check invision
 
 --TODO: GET--DONE: -- ASAP submit, resubmit, results, slider, results email
+--TODO: GET--DONE: Need to verify congress/ senate results in element, if not made create - RESULT OF ROLL
+--TODO: Create README
 
 
 #Create Admin Routes and Holder 

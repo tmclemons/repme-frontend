@@ -101,16 +101,10 @@ class CustomSlider extends React.Component {
     const dimension = capitalize(constants.axis[axis].dimension)
     const sliderPos = this.slider[`offset${dimension}`]
     const handlePos = this.handle[`offset${dimension}`]
-    // need to come back here to truly fix the broken offset
-    console.log('handle', this.handle)
-    console.log('grab: ' + (handlePos / 2))
-    console.log('limit: ' + (sliderPos - handlePos))
-    console.log('sliderPos: ' + (sliderPos))
-    console.log('handlePos: ' + (handlePos))
-    
+
     this.setState({
-      limit: sliderPos - (handlePos - (handlePos * .429)),
-      grab: handlePos / 2 
+      limit: sliderPos - (handlePos),
+      grab: (handlePos / 2)
     })
   }
 
@@ -209,7 +203,8 @@ class CustomSlider extends React.Component {
     const differenceMaxMin = max - min;
     const differenceValMin = value - min;
     const factor = differenceValMin / differenceMaxMin;
-    const position = Math.floor(factor * limit);
+    const position = Math.round(factor * limit);
+
     return position
   }
 
@@ -226,7 +221,7 @@ class CustomSlider extends React.Component {
     const position = Math.round(factor * limit);
     const baseValue = step * Math.round(factor * (max - min) / step);
     const value = axis === "horizontal" ? baseValue + min : max - baseValue; 
-    // need to fix this here
+
     return clamp(value, min, max)
   }
 
@@ -275,7 +270,6 @@ class CustomSlider extends React.Component {
       handleCoords : 
       limit - handleCoords;
 
-    //handle position tweaks
     return {
       fill: fillPosition,
       handle: handleCoords,
