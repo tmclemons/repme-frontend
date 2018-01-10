@@ -1,9 +1,9 @@
 $step: 21;
 $opacity: 0.83;
-$startColor: rgba(118, 196, 71, $opacity);
-$middleColor: rgba(253, 211, 62, $opacity);
-$endColor: rgba(241, 71, 36, $opacity);
-$inactiveState: rgba(250, 250, 250, $opacity);
+$startColor: rgb(118, 196, 71);
+$middleColor: rgb(253, 211, 62);
+$endColor: rgb(241, 71, 36);
+$inactiveState: rgb(250, 250, 250);
 
 .slider--horizontal {
   max-width: 100%;
@@ -38,13 +38,24 @@ $inactiveState: rgba(250, 250, 250, $opacity);
   @for $i from 0 to $middleStep {
     .slider__color--stop-#{$i} {
       @extend .overlay;
+      background-color: mix(rgba($middleColor, $opacity), rgba($startColor, $opacity), ($i / $middleStep) * 100);
+    }
+    .step-icon-stop-#{$i}{
       background-color: mix($middleColor, $startColor, ($i / $middleStep) * 100);
     }
   }
   @for $i from $middleStep to ($step + 1) {
     .slider__color--stop-#{$i} {
       @extend .overlay;
+      background-color: mix(rgba($endColor, $opacity), rgba($middleColor, $opacity), ( ($i - $middleStep) / ( $middleStep) * 100));
+    }
+    .step-icon-stop-#{$i}{
       background-color: mix($endColor, $middleColor, ( ($i - $middleStep) / ( $middleStep) * 100));
     }
   }
+}
+
+.customslider{
+  background: rgba($startColor, $opacity);
+  background: linear-gradient(to right, $startColor 0%, $middleColor 50%, $endColor 100%);
 }

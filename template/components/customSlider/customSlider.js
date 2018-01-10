@@ -69,6 +69,8 @@ class CustomSlider extends React.Component {
       limit: 0,
       grab: 0,
       firstUser: false,
+      sliderSize: null,
+      step: 1
     }
   }
 
@@ -89,6 +91,35 @@ class CustomSlider extends React.Component {
   }
 
   /**
+   * Update steps for slider state on change
+   * @return {void}
+   */
+
+   getStepUpdates = (size) => {
+     if (size > 1280) {
+       return 5;
+     }
+
+     if (size <= 1279 && size > 1128) {
+       return 8.33333;
+     }
+
+     if (size <= 1128 && size > 960) {
+       return 12.5;
+     }
+
+     if (size <= 960 && size > 800) {
+       return 20;
+     }
+     if (size <= 800) {
+       return 33.33333;
+     }
+
+     return 5;
+   }
+
+
+   /**
    * Update slider state on change
    * @return {void}
    */
@@ -101,10 +132,13 @@ class CustomSlider extends React.Component {
     const dimension = capitalize(constants.axis[axis].dimension)
     const sliderPos = this.slider[`offset${dimension}`]
     const handlePos = this.handle[`offset${dimension}`]
+    let updatedStep = this.getStepUpdates(sliderPos);
 
     this.setState({
       limit: sliderPos - (handlePos),
-      grab: (handlePos / 2)
+      grab: (handlePos / 2),
+      sliderSize: sliderPos,
+      step: updatedStep
     })
   }
 
@@ -291,6 +325,39 @@ class CustomSlider extends React.Component {
     </ul>
   }
 
+  getMarkerPositions = () => {
+
+    const { step, min, max } = this.props;
+    const { limit, sliderSize } = this.state;
+    
+    const steps = (max - min) / this.state.step;
+    let stepIcons = [];
+
+    //create markers
+    if (stepIcons.length < 1 && steps > 1) {
+      for (let index = 0; index < (steps + 1); index++) {
+        stepIcons.push(
+          <div
+            style={{
+              width: `${
+                this.getHandleCoordsFromValue((index + 1) * this.state.step) -
+              this.getHandleCoordsFromValue((index) * this.state.step)
+                }px`,
+            }}
+            key={index}
+            className={ 'step-icon-wrapper' }>
+            <div className={`step-icon step-icon-stop-${index}`}>
+            </div>
+          </div>
+        );
+      }
+    } else {
+      stepIcons = null;
+    }
+
+    return stepIcons;
+  }
+
   render() {
     const {
       axis,
@@ -302,10 +369,9 @@ class CustomSlider extends React.Component {
       reverse,
       tooltip,
       step,
-      value
+      value,
     } = this.props;
-    const { active } = this.state
-    const steps = (max - min) / step;
+    const { active, grab } = this.state
     const getAxisProps = constants.axis[axis];
     const dimension = getAxisProps.dimension;
     const direction = reverse ? 
@@ -318,7 +384,6 @@ class CustomSlider extends React.Component {
     let showTooltip = tooltip;
     let labelItems = [];
     let labelKeys = Object.keys(labels);
-    // let stepIcons = [];
     if (labelKeys.length > 0) {
       
       labelKeys = labelKeys.sort(
@@ -346,6 +411,7 @@ class CustomSlider extends React.Component {
         )
       }
     }
+
 
     const GetTooltip = () => {
       if(this.props.firstTimeUse) {
@@ -390,16 +456,16 @@ class CustomSlider extends React.Component {
         aria-valuenow={value}
         aria-orientation={axis}
       > 
-        {/* {
+        {
           <div className={'step-container'}>
             {          
-              stepIcons.map((icon) => {
+              this.getMarkerPositions().map((icon, index) => {
                 return(icon)
               })
             }
           </div>
-        } */}
-        <div className='customslider__fill' style={fillStyle} />
+        }
+        {/* <div className='customslider__fill' style={fillStyle} /> */}
         <div
           ref={
             handleData => {

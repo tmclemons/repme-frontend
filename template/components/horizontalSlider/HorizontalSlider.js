@@ -7,7 +7,6 @@ class Horizontal extends React.Component {
     super(props, context)
     this.state = {
       value: this.props.defaultValue,
-      step: this.props.step,
     }
   }
 
@@ -35,7 +34,6 @@ class Horizontal extends React.Component {
           min={this.props.min || 0}
           max={this.props.max || 100}
           value={this.state.value || 0}
-          step={this.state.step || 1}
           onChangeStart={this.handleChangeStart}
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}

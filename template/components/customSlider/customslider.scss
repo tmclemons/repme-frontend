@@ -43,30 +43,80 @@ $toolTipColor: rgb(0, 76, 135);
     left: 50%;
     transform: translate3d(-50%, 0, 0);
   }
-  // .step-container {
-  //   display: flex;
-  //   flex-flow: row nowrap;
-  //   width: 100%;
-  //   .step-icon-wrapper {
-  //     width: 20px;
-  //     height: 20px;
-  //     background: red;
-  //     flex: auto;
-  //     &.main-key{
-  //       background: blue;
-  //     }
-  //     .step-icon{
-  //       width: 20px;
-  //       height: 20px;
-  //       background: black;
-  //       border-radius: 20px;
-  //       position: absolute;
-  //       z-index: 1;
-  //       top: 0;
-  //       left: -10px;
-  //     }
-  //   }
-  // }
+  .step-container {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    .step-icon-wrapper {
+      width: 20px;
+      height: 20px;
+      flex: auto;
+      display: flex;
+      justify-content: center;
+      .step-icon{
+        width: 20px;
+        height: 20px;
+        border: 5px solid white;
+        border-radius: 25px;
+        position: relative;
+        display: block;
+        top: -9px;
+      }
+      &:nth-child(5n+1){
+        .step-icon{
+          width: 40px;
+          height: 40px;
+          top: -20px;
+        }
+      }
+      &:last-child{
+        .step-icon:after{
+          content: '';
+          height: 20px;
+          width: 50px;
+          background: white;
+          position: absolute;
+          top: 10px;
+          left: 43px;
+        }
+      }
+      &:first-child{
+        .step-icon:before{
+          content: '';
+          height: 20px;
+          width: 50px;
+          background: white;
+          position: absolute;
+          top: 10px;
+          right: 43px;
+        }
+      }
+    }
+    // @media screen and (max-width: 1220px) {
+    //   .step-icon-wrapper {
+    //     justify-content: flex-end;
+    //     .step-icon {
+    //       left: -50px;
+    //     }
+        
+    //     // &:nth-child(n),
+    //     &:nth-child(2n) {
+    //       display: none;
+    //       // .step-icon {
+    //       //   display: none;
+    //       // }
+    //     }
+    //     &
+    //     &:nth-child(5n+1) {
+    //       justify-content: center;
+    //       .step-icon {
+    //         display: block;
+    //         left: 0;
+    //       }
+    //     }
+    //   }
+    // }
+  }
 }
 
 
@@ -75,8 +125,17 @@ $toolTipColor: rgb(0, 76, 135);
 */
 
 .customslider-horizontal {
-  height: 12px;
-  border-radius: 10px;
+    height: 8px;
+    border-radius: 10px;
+    position: relative;
+  .step-container {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    position: relative;
+    top: -2px;
+    left: 12px;
+  }
   .customslider__fill {
     height: 100%;
     background-color: #7cb342;
@@ -86,29 +145,15 @@ $toolTipColor: rgb(0, 76, 135);
   .customslider__handle {
     width: 175px;
     height: 90px;
-    // width: 30px;
-    // height: 30px;
-    // border-radius: 30px;
     top: 50%;
     position: relative;
     z-index: 3;
-    transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -63%, 0);
     outline: none;
-    // &:after {
-    //   content: ' ';
-    //   position: absolute;
-    //   width: 16px;
-    //   height: 16px;
-    //   top: 6px;
-    //   left: 6px;
-    //   border-radius: 50%;
-    //   background-color: #dadada;
-    //   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) inset, 0 -1px 3px rgba(0, 0, 0, 0.4) inset;
-    // }
+
   }
   .customslider__handle-tooltip {
     top: -100px;
-    // top: -175px;
     .label {
       transform: rotate(-90deg);
       display: flex;
@@ -165,7 +210,7 @@ $toolTipColor: rgb(0, 76, 135);
       border-right: $toolTipPoint solid transparent;
       border-top: $toolTipPoint solid $toolTipColor;
       left: 50%;
-      bottom: -$toolTipPoint;
+      bottom: -$toolTipPoint + 1px;
       transform: translate3d(-50%, 0, 0);
     }
   }

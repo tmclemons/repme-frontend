@@ -18,7 +18,6 @@ class Banner extends React.Component {
     super(props);
     this.state = {
       componentProps: 0,
-      step: 5,
       max: 100,
       defaultValue: 50,
       ballotNumber: null,
@@ -142,7 +141,6 @@ class Banner extends React.Component {
               this.props.showSlider ?   
                 <div className={'slider--horizontal'}>
                 <HorizontalSlider
-                  step={this.state.step}
                   max={this.state.max}
                   defaultValue={this.state.defaultValue}
                   callback={this.onValueChange}
