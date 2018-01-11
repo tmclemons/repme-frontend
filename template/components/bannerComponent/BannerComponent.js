@@ -23,7 +23,8 @@ class Banner extends React.Component {
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
-      firstTimeUse: true
+      firstTimeUse: true,
+      step: 5
     }
   }
 
@@ -34,8 +35,9 @@ class Banner extends React.Component {
 
   // capture slider data
   onValueChange = (data) => {
+    console.log(data)
     this.setState({
-      componentProps: (data / (this.state.step)) || 0
+      componentProps: (data / (this.state.step || 5)) || 0
     })
   }
 
