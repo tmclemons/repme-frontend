@@ -14,7 +14,7 @@ npm install
 ```
 ### Getting Started
 
-To locally test use the following command
+To locally test use the following npm command
 
 ```
   npm run dev  
