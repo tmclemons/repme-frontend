@@ -12,3 +12,10 @@ In order to run this application Node and NPM are required
 git clone <Repo>
 npm install
 ```
+### Getting Started
+
+To locally test use the following command
+
+```
+  npm run dev  
+```
