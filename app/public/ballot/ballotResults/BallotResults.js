@@ -19,6 +19,7 @@ import Scss from './ballotResults.scss';
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
       sampleBallot: {
         "hash_id": "e893950d-373b-4a85-9d4a-95b8962c0082",
@@ -32,6 +33,7 @@ class BallotResults extends React.Component {
         "bill_modified_date": null,
         "hotbills": []
       },
+      yourState: 'Il',
       backgroundImg: {
         url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
       },
@@ -341,6 +343,7 @@ class BallotResults extends React.Component {
     //hook api post call here
     console.log(voteData)
   }
+  
 
   render() {
     const barChartData = {
@@ -355,11 +358,6 @@ class BallotResults extends React.Component {
     return (
       <div className={'ballot__wrapper'}> 
         <Header />
-        <Banner
-          ballotInfo={this.state.sampleBallot}
-          backgroundImg={this.state.backgroundImg}
-          showSlider={false}
-        />
         <div className={'representative-votes'}>
           <RepresentativeCard component={StateIllinois} votes={this.state.repVotes}/>
         </div>

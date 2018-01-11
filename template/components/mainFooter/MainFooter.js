@@ -6,7 +6,7 @@ import FontIcon from 'material-ui/FontIcon';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import IconButton from 'material-ui/IconButton';
 import Scss from './mainFooter.scss';
-import RepMeLogo from '../../../template/components/utilities/logoComponent';
+import RepMeLogoFooter from '../../../template/components/utilities/logoComponentFooter';
 
 
 const recentsIcon = <ActionHome />;
@@ -77,14 +77,11 @@ class MainFooter extends React.Component {
             <div>
               <div style={{
                   maxWidth: '60px',
+                  minWidth: '450px'
                 }}
               >
-                <RepMeLogo />
+                <RepMeLogoFooter />
               </div>
-              <div
-                className={'rep-me-logo--first-line'}>Represent&mdash;<span>Me</span>
-              </div>
-              <div className={'rep-me-logo--second-line'}> | by the People 2.0</div>
             </div>
           </div>
           <BottomNavigation

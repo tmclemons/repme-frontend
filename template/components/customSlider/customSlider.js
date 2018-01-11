@@ -39,7 +39,7 @@ class CustomSlider extends React.Component {
     axis: PropTypes.string,
     tooltip: PropTypes.bool,
     reverse: PropTypes.bool,
-    labels: PropTypes.object,
+    labels: PropTypes.array,
     handleLabel: PropTypes.string,
     format: PropTypes.func,
     onChangeStart: PropTypes.func,

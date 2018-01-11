@@ -1,4 +1,5 @@
 import React from 'react';
+import Scss from './titleBarComponent.scss';
 
 class ChartTitleBarComponent extends React.Component {
   constructor(props) {

@@ -3,6 +3,7 @@
 */
 $toolTipPoint: 25px;
 $toolTipColor: rgb(0, 76, 135);
+$fontFamily: 'Playfair Display', serif;
 
 .customslider {
   margin: 20px 0;
@@ -60,7 +61,7 @@ $toolTipColor: rgb(0, 76, 135);
       flex-flow: row nowrap;
       width: 100%;
       top: -2px;
-      font-family: 'Playfair Display', serif;
+      font-family: $fontFamily;
       text-align: center;
       font-size: 18px;
       font-weight: 700;
@@ -179,7 +180,7 @@ $toolTipColor: rgb(0, 76, 135);
       flex-flow: column nowrap;
       margin-top: 20px;
       min-width: 100%;
-      font-family: Roboto, sans-serif;
+      font-family: $fontFamily;
     }
 
     span:nth-child(2) {

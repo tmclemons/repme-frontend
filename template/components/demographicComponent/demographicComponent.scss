@@ -1,5 +1,7 @@
+$fontFamily: 'Playfair Display', serif;
+
 .demo_data {
-  font-family: Roboto, sans-serif;
+  font-family: $fontFamily;
   display: flex;
   flex-flow: row nowrap;
   margin: auto;
@@ -11,7 +13,7 @@
     &-point {
       padding-bottom: 10px;
       span {
-        font-size: 12px;
+        font-size: 14px;
       }
       div {
         text-transform: capitalize;
@@ -22,5 +24,6 @@
   }
   &--icon {
     max-width: 200px;
+    padding: 20px;
   }
 }

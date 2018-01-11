@@ -1,7 +1,8 @@
       $baseGrey: #c1c2c2;
       $voteGreen: green;
       $white: white;
-      
+      $fontFamily: 'Playfair Display', serif;
+
       .vote-labels {
         display: flex;
         flex-flow: row nowrap;
@@ -11,7 +12,7 @@
         padding: 20px 15px;
         border-top: 3px solid rgba($baseGrey, 0.6);
         div {
-          flex: auto;
+          flex: 1 1 20%;
           justify-content: center;
           display: flex;
           min-height: 100%;
@@ -19,23 +20,21 @@
           position: relative;
           span {
             max-width: 90px;
-            font-family: Roboto, sans-serif;
+            font-family: $fontFamily;
             text-align: center;
             font-size: 18px;
             font-weight: 600;
           }
+          &:nth-child(2),
+          &:nth-child(4) {
+            margin: 0 15%;
+            @media screen and (max-width: 768px) {
+              margin: 0;
+            }
+          }
           &:first-child {
             justify-content: flex-start;
           }
-          // &:nth-child(2) {
-          //   flex: 1 1 14%;
-          // }
-          // &:nth-child(3) {
-          //   flex: 1 1 32%;
-          // }
-          // &:nth-child(4) {
-          //   flex: 1 1 14%;
-          // }
           &:last-child {
             justify-content: flex-end;
           }

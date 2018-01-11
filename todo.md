@@ -13,18 +13,18 @@
 -- DONE: Social Media buttons
 -- TODO: Setup cookies for  vote --> submit --> resubmit
 -- TODO: Refactor dummy data so api data will get passed through better, also check api routing logic
--- TODO: update font assets, implement states assets
+-- DONE: update font assets, implement states assets
 -- TODO: setup dummy api based on routes
+-- TODO: change checkbox colors
+
+-- DONE: make sure to update routing and submission forms for recasting, check invision
+-- TODO: GET--DONE: -- ASAP Xsubmit, Xresubmit, results, Xslider, results email
+-- TODO: GET--DONE: Need to verify congress/ senate results in element, if not made create - RESULT OF ROLL
+-- TODO: Create README
+
+
 -- TODO: refactor styling to a core configuration flow i.e pass one config for all colors
     like this <Component config={this.props.styleConfig} />
-
--- TODO: make sure to update routing and submission forms for recasting, check invision
-
---TODO: GET--DONE: -- ASAP submit, resubmit, results, slider, results email
---TODO: GET--DONE: Need to verify congress/ senate results in element, if not made create - RESULT OF ROLL
---TODO: Create README
-
-
 #Create Admin Routes and Holder 
 
 ## Notes:

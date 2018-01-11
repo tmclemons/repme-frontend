@@ -8,6 +8,8 @@ import Scss from './ballotVote.scss';
 class BallotVote extends React.Component {
   constructor(props) {
     super(props)
+    //delete
+    console.log(props.match.params)
     this.state = {
       sampleBallot: {
         "hash_id": "e893950d-373b-4a85-9d4a-95b8962c0082",

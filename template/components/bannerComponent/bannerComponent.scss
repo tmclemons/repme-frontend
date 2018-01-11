@@ -1,9 +1,13 @@
+$fontFamily: 'Playfair Display', serif;
+$fontFamilySmall: 'Lato', sans-serif;
+
 .overlay-content {
   display: flex;
   flex-flow: column nowrap;
   color: white;
   padding: 40px 80px;
   overflow: hidden;
+  font-family: $fontFamily;
   .main {
     padding-bottom: 70px;
     .icon {
@@ -14,8 +18,10 @@
     }
     .bill-number{
       text-transform: uppercase;
+      font-family: $fontFamilySmall;
     }
     .closing-date {
+      font-family: $fontFamilySmall;
       font-size: 12px;
     }
   }

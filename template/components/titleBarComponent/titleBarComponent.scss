@@ -1,0 +1,33 @@
+$fontFamily: 'Playfair Display', serif;
+$fontFamilySmall: 'Lato', sans-serif;
+$baseGrey: #c1c2c2;
+
+
+.chart-title {
+  width: 100%;
+  padding: 25px 20px;
+  font-family: $fontFamily;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  .divider {
+    flex: auto;
+    height: 3px;
+    background: $baseGrey;
+    opacity: .6;
+  }
+  .content {
+    flex: auto;
+    max-width: 400px;
+    text-align: center;
+    div {
+      font-size: 20px;
+      text-transform: uppercase;
+      color: $baseGrey;
+      font-family: $fontFamilySmall;
+    }
+    h2.with-super {
+      margin-top: 0;
+    }
+  }
+}

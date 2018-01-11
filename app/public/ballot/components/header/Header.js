@@ -16,14 +16,6 @@ class Header extends React.Component {
       <MuiThemeProvider>
         <AppBar
           className={'header rep-me-logo'}
-          title={
-            <div>
-              <div
-                className={'rep-me-logo--first-line'}>Represent&mdash;<span>Me</span>
-              </div>
-              <div className={'rep-me-logo--second-line'}> | by the People 2.0</div>
-            </div>
-          }
           iconElementLeft={<RepMeLogo />}
           style={
             {
@@ -41,12 +33,13 @@ class Header extends React.Component {
               maxWidth: '200px',
               lineHeight: '30px',
               fontSize: '20px',
-              marginTop: '20px'
+              marginTop: '20px',
             }
           }
           iconStyleLeft={{
             display: 'inherit',
-            maxWidth: '80px'
+            maxWidth: '80px',
+            minWidth: '300px',
           }}
         />
       </MuiThemeProvider>
