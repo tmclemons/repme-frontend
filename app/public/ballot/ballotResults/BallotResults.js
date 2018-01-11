@@ -21,18 +21,6 @@ class BallotResults extends React.Component {
     super(props)
     console.log(props)
     this.state = {
-      sampleBallot: {
-        "hash_id": "e893950d-373b-4a85-9d4a-95b8962c0082",
-        "number": "hconres1-115",
-        "title": "Regarding consent to assemble outside the seat of government.",
-        "description": "<p>(This measure has not been amended since it was introduced. The summary of that version is repeated here.)</p> <p>Authorizes the Speaker of the House and the Majority Leader of the Senate, or their respective designees, to notify the Members of the House and the Senate to assemble at a place outside the District of Columbia whenever, in their opinion, the public interest shall warrant it.</p>",
-        "image": null,
-        "status": null,
-        "closing_date": "2018-12-29T14:06:35+0000",
-        "bill_created_date": null,
-        "bill_modified_date": null,
-        "hotbills": []
-      },
       yourState: 'Il',
       backgroundImg: {
         url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
@@ -188,53 +176,7 @@ class BallotResults extends React.Component {
     return colorStops.length ? colorStops : null;
   }
 
-  getFormattedData = (resultType) => {
-    let constituentData = [ 
-      78,
-      21,
-      33,
-      94,
-      14,
-      90,
-      45,
-      72,
-      12,
-      9,
-      93,
-      57,
-      35,
-      57,
-      17,
-      91,
-      4,
-      59,
-      12,
-      90,
-      41
-    ];
-    let countryData = [ 
-      15,
-      4,
-      10,
-      11,
-      13,
-      18,
-      0,
-      7,
-      4,
-      3,
-      10,
-      4,
-      7,
-      4,
-      4,
-      1,
-      1,
-      2,
-      3,
-      0,
-      5
-    ];
+  getFormattedData = () => {
     let dataLabels = [
       'Strongly Agree',
       "",
@@ -259,10 +201,33 @@ class BallotResults extends React.Component {
       'Strongly Disagree',
     ];
 
-    let dataChoice = resultType === 'usa' ? countryData : constituentData;
     let formattedData = [];
+    let formattedDataBuffer = [];
+    let param = this.props.bill.data;
 
-    dataChoice.forEach((dataItem, index) => {
+    // this.props.bill.data
+    let sortBuffer = [];
+    for (var prop in param) {
+      if (param.hasOwnProperty(prop)) {
+        sortBuffer.push(
+          {
+            order: Number(prop.split('-')[0]),
+            label: prop,
+            value: param[prop]
+          }
+        )
+      }
+    }
+    
+    sortBuffer.sort(function (a, b) {
+      return b.order - a.order;
+    });
+
+    sortBuffer.forEach((buffer) => {
+      formattedDataBuffer.push(buffer.value)
+    });
+
+    formattedDataBuffer.forEach((dataItem, index) => {
       formattedData.push(
         {
           y: dataItem,
@@ -356,23 +321,21 @@ class BallotResults extends React.Component {
     };
 
     return (
-      <div className={'ballot__wrapper'}> 
-        <Header />
-        <div className={'representative-votes'}>
+      <div> 
+        {/* <div className={'representative-votes'}>
           <RepresentativeCard component={StateIllinois} votes={this.state.repVotes}/>
-        </div>
+        </div> */}
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
           <StateDemographic component={StateIllinois} { ...this.state.repDemographics}/>
           <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
-          <BarChartComponent { ...this.getSampleDistrictResultsArray()}/>
+          <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
         </div>
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: 'votes', title: 'United State Results'}}/>
           <ChartLabelComponent { ...this.getFormattedData('usa').dataLabels}/>
-          <BarChartComponent { ...this.getSampleDistrictResultsArray('usa')}/>
+          <BarChartComponent {  ...this.getSampleDistrictResultsArray('usa')}/>
         </div>
-        <Footer />
       </div>
     )
   }

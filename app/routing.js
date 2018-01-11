@@ -31,8 +31,6 @@ class Routing extends React.Component {
       }}>
         <Route exact path='/' component={Ballot} />
         <Route path='/resubmit' component={BallotResubmit} />
-        <Route path='/vote' component={BallotVote} />
-        <Route path='/results' component={BallotResults} />
       </div>
     )
   }

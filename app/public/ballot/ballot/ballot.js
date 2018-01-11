@@ -3,6 +3,7 @@ import VoteForm from '../../../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../../template/components/mainFooter/MainFooter';
+import Results from '../ballotResults/BallotResults';
 import axios from 'axios';
 
 import Scss from './ballot.scss';
@@ -11,8 +12,10 @@ class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
-
+    this.states = ['vote', 'results', 'results-revote'],
     this.state = {
+      activeState: 'vote',
+      voteResults: null,
       firstTimeUse: true,
       defaultValue: 50,
       voteValue: 50,
@@ -44,13 +47,6 @@ class Ballot extends React.Component {
     }
   }
   //TODO: Post TO
-  //   {
-  //   "vote": 11,
-  //   "email": "jay+3@dopeswagyolo.com",
-  //   "zip_code": "48154",
-  //   "opt_in": 1,
-  //   "bill_id": 7782
-  // }
 
   // capture slider data
   onValueChange = (data) => {
@@ -80,7 +76,10 @@ class Ballot extends React.Component {
 
       axios.post(`http://54.187.193.156/api/vote`, data)
         .then(res => {
-          console.log(res)
+          this.setState({
+            activeState: this.states[1],
+            voteResults: res.data
+          })
         })
         .catch(function (error) {
           console.log(error);
@@ -93,7 +92,8 @@ class Ballot extends React.Component {
     axios.post(`http://54.187.193.156/api/profile`)
       .then(res => {
         this.setState({
-          params: Object.assign(this.state.params, res.data.results)
+          params: Object.assign(this.state.params, res.data.results),
+          activeState: this.states[0]
         })
       })
       .catch(function (error) {
@@ -102,6 +102,7 @@ class Ballot extends React.Component {
   }
 
   render() {
+    if (this.state.activeState === 'vote') {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
@@ -125,6 +126,35 @@ class Ballot extends React.Component {
           <div className={'ballot__wrapper'} />
         )
       }
+    } 
+
+    if (this.state.activeState === 'results') {
+      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+        return(
+          <div className={'ballot__wrapper'}>
+            <Header org={this.state.params.org} />
+            <Banner
+              ballotInfo={this.state.params.bill}
+              backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
+              callback={this.submitVote}
+              firstTimeUse={this.state.firstTimeUse}
+              defaultValue={this.state.defaultValue}
+              bannerProps={this.state.bannerProps}
+              callback={this.onValueChange}
+              showSlider={false}
+            />
+            <Results { ...this.state.voteResults}/>
+            <Footer />
+          </div>
+        )
+      } else {
+        return (<div className={'ballot__wrapper'} /> )
+      }
+    } else {
+      return (
+        <div> Something went wrong</div>
+      )
+    }
   }
 }
 
