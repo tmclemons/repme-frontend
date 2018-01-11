@@ -72,6 +72,39 @@ $toolTipColor: rgb(0, 76, 135);
         top: -10px;
         &.slider__in-between {
           flex: 1 1 100%;
+          display: flex;
+          flex-flow: row wrap;
+          div{
+            display: flex;
+            flex-flow: row wrap;
+            width: 100%;
+            .minor-step {
+              width: 20px;
+              height: 20px;
+              border-radius: 20px;
+              border: 5px solid white;
+              margin: 0 auto;
+              display: block;
+            }
+            @media screen and (max-width: 1023px) and (min-width: 960px) {
+              .minor-step.step-hide-tablet {
+                display: none;
+              }
+              .minor-step.step-hide-mobile {
+                display: block;
+              }
+            }
+
+            @media screen and (max-width: 959px) {
+              .minor-step.step-hide-tablet {
+                display: none;
+              }
+              .minor-step.step-hide-mobile {
+                display: none;
+              }
+            }
+          }
+
         }
         &--label-wrapper{
           position: absolute;

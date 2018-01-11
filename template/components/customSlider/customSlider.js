@@ -350,6 +350,27 @@ class CustomSlider extends React.Component {
     const { limit, sliderSize } = this.state;
     const steps = (max - min) / step;
     let stepIcons = [];
+    let inBetweenClassScale = -1;
+
+    const inBetweensCreateClasses = (index) => {
+      let createdClasses = 
+        <div>
+          <div className={`minor-step step-hide-tablet step-icon-stop-${
+            (index * 2) + (inBetweenClassScale)
+          }`} />
+          <div className={`minor-step step-hide-mobile step-icon-stop-${
+            (index * 2) + (inBetweenClassScale) + 1
+          }`} />
+          <div className={`minor-step step-hide-mobile step-icon-stop-${
+            (index * 2) + (inBetweenClassScale) + 2
+          }`} />
+          <div className={`minor-step step-hide-tablet step-icon-stop-${
+            (index * 2) + (inBetweenClassScale) + 3
+          }`} />
+        </div>;
+      inBetweenClassScale = inBetweenClassScale + 1;
+      return (createdClasses);
+    }
 
     const sliderSpacer = (index) => {
       if( (index % 2) < 1) {
@@ -370,7 +391,9 @@ class CustomSlider extends React.Component {
       } else {
         return(
           <div key={index} className="slider__marker slider__in-between">
-    
+            {
+              inBetweensCreateClasses(index)
+            }
           </div>
         )
       }
