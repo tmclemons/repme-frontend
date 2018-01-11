@@ -60,6 +60,12 @@ $toolTipColor: rgb(0, 76, 135);
       flex-flow: row nowrap;
       width: 100%;
       top: -2px;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      font-style: italic;
+      text-transform: uppercase;
       .slider__marker {
         flex: 1 1 60px;
         position: relative;
@@ -69,8 +75,8 @@ $toolTipColor: rgb(0, 76, 135);
         }
         &--label-wrapper{
           position: absolute;
-          top: 70px;
-          left: 10px;
+          top: 80px;
+          left: -3px;
         }
         .step-icon-wrapper {
           width: 60px;
@@ -90,7 +96,12 @@ $toolTipColor: rgb(0, 76, 135);
         }
         &:nth-child(n+5) {
           .slider__marker--label-wrapper {
-            left: 5px;
+            left: -12px;
+          }
+        }
+        &:nth-child(5) {
+          .slider__marker--label-wrapper {
+            left: -12px;
           }
         }
         &:first-child{
@@ -98,7 +109,7 @@ $toolTipColor: rgb(0, 76, 135);
             justify-content: flex-start;
           }
           .slider__marker--label-wrapper{
-            left: 0px;
+            left: -25px;
           }
         }
         &:last-child{
@@ -106,7 +117,7 @@ $toolTipColor: rgb(0, 76, 135);
             justify-content: flex-end;
           }
           .slider__marker--label-wrapper{
-            left: 10px;
+            left: -15px;
           }
         }
       }
@@ -156,7 +167,7 @@ $toolTipColor: rgb(0, 76, 135);
         margin-top: 5px;
         .slider-hint {
           position: absolute;
-          bottom: -210px;
+          bottom: -255px;
           left: 70px;
           display: flex;
           flex-flow: row nowrap;

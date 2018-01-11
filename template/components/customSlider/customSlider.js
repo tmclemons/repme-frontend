@@ -358,7 +358,7 @@ class CustomSlider extends React.Component {
             <div
               key={index}
               className={'step-icon-wrapper'}>
-              <div className={`step-icon step-icon-stop-${index}`} />
+              <div className={`step-icon step-icon-stop-${(index / 2) * 5}`} />
             </div>
             <div className="slider__marker--label-wrapper">
               <div className="slider__marker--label-content">
@@ -375,19 +375,7 @@ class CustomSlider extends React.Component {
         )
       }
     };
-
-          // <div
-          //   // style={{
-          //   //   width: `${
-          //   //     this.getHandleCoordsFromValue((index + 1) * step) -
-          //   //   this.getHandleCoordsFromValue((index) * step)
-          //   //     }px`,
-          //   // }}
-          //   key={index}
-          //   className={ 'step-icon-wrapper' }>
-            // <div className={`step-icon step-icon-stop-${index}`}>
-            // </div>
-
+    
     //create markers
     if (stepIcons.length < 1 && steps > 1) {
       for (let index = 0; index < 9; index++) {
