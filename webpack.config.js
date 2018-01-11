@@ -2,17 +2,19 @@ const webpack = require('webpack');
 const path = require('path');
 
 var config = {
-  entry: path.resolve(__dirname, 'main.js'),
+  entry: path.resolve(__dirname, 'index.js'),
 
   output: {
-    filename: 'index.js'
+    path: __dirname + '/public',
+    filename: 'bundle.js',
+    publicPath: '/'
   },
 
+  plugins: [],
   devServer: {
     inline: true,
     port: 3000
   },
-
   module: {
     loaders: [
       {
@@ -38,3 +40,4 @@ var config = {
 };
 
 module.exports = config;
+

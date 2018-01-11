@@ -1,4 +1,4 @@
-const billSample = {
+const BillSample = {
   "count": 7860,
   "next": "http://54.187.193.156/bills/?page=2",
   "previous": null,
@@ -196,4 +196,4 @@ const billSample = {
   ]
 }
 
-export default billSample
+export default BillSample

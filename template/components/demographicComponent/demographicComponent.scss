@@ -1,0 +1,29 @@
+$fontFamily: 'Playfair Display', serif;
+
+.demo_data {
+  font-family: $fontFamily;
+  display: flex;
+  flex-flow: row nowrap;
+  margin: auto;
+  padding: 0 30px 40px 30px;
+  justify-content: center;
+  &--data {
+    display: flex;
+    flex-flow: column nowrap;
+    &-point {
+      padding-bottom: 10px;
+      span {
+        font-size: 14px;
+      }
+      div {
+        text-transform: capitalize;
+        font-size: 28px;
+        font-weight: 600;
+      }
+    }
+  }
+  &--icon {
+    max-width: 200px;
+    padding: 20px;
+  }
+}

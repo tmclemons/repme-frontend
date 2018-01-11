@@ -1,0 +1,63 @@
+$toolTipColor: rgb(0, 76, 135);
+
+.rep-me-logo {
+  &--first-line {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: $toolTipColor;
+    span {
+      text-transform: lowercase;
+      color: red;
+      font-size: 27px;
+      font-style: italic;
+      margin-left: 5px;
+    }
+  }
+  &--second-line {
+    font-size: 15px;
+    font-style: italic;
+    color: $toolTipColor;
+  }
+}
+
+footer .footer-logo div {
+  display: flex;
+  flex-flow: row nowrap;
+  line-height: 20px;
+  justify-content: center;
+  .rep-me-logo {
+    &--first-line {
+      margin-right: 10px;
+      font-size: 22px;
+      line-height: 26px;
+      margin-top: 12px;
+      margin-left: 5px span {
+        line-height: 21px;
+      }
+    }
+    &--second-line {
+      margin-top: 14px;
+      font-size: 20px;
+    }
+  }
+}
+
+footer {
+  background-color: #f5f5f5;
+  border-top: 1px solid #c1c2c2;
+  font-family: Roboto, sans-serif;
+  flex: auto;
+  .footer-logo {
+    text-align: center;
+    padding: 20px;
+    padding-top: 40px;
+    padding-bottom: 0;
+  }
+  .social-nav {
+    color: #a7a7a7;
+    padding: 0 !important;
+     &--icon {
+       font-size: 18px;
+    }
+  }
+}

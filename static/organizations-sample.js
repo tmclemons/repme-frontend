@@ -1,9 +1,5 @@
-// HTTP 200 OK
-// Allow: GET, POST, HEAD, OPTIONS
-// Content-Type: application/json
-// Vary: Accept
 
-{
+const OrganizationsSample = {
   "count": 4,
   "next": null,
   "previous": null,
@@ -42,3 +38,5 @@
     }
   ]
 }
+
+export default OrganizationsSample

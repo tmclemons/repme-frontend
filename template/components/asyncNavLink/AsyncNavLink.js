@@ -1,6 +1,7 @@
 import React from "react";
 import AsyncComponent from "../utilities/AsyncComponent"
 import { ListItem } from 'material-ui/List';
+import { Link } from 'react-router-dom';
 
 class AsyncNavLink extends React.Component {
   constructor(props) {
@@ -15,10 +16,14 @@ class AsyncNavLink extends React.Component {
       ));
 
     return ( 
-      AsyncNavLinkItem ? <ListItem 
-      primaryText={this.props.navLinkParameters.name}
-      leftIcon={<AsyncNavLinkItem />} 
-     /> : null
+      AsyncNavLinkItem ? 
+      <Link to={this.props.navLinkParameters.goTo}>
+        <ListItem 
+        primaryText={this.props.navLinkParameters.name}
+        leftIcon={<AsyncNavLinkItem />} 
+        />
+      </Link>
+     : null
     )
   }
 }
