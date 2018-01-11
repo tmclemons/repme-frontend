@@ -12,10 +12,10 @@ class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
-    this.states = ['vote', 'results', 'results-revote'],
+    this.states = ['vote', 'results', 'revote'],
     this.state = {
-      activeState: 'vote',
       voteResults: null,
+      activeState: 'vote',
       firstTimeUse: true,
       defaultValue: 50,
       voteValue: 50,
@@ -72,13 +72,12 @@ class Ballot extends React.Component {
         "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
         "bill_id": params.params.bill['id'] || null,
       }
-      console.log(data)
 
       axios.post(`http://54.187.193.156/api/vote`, data)
         .then(res => {
           this.setState({
             activeState: this.states[1],
-            voteResults: res.data
+            voteResults: res.data.results
           })
         })
         .catch(function (error) {
@@ -101,7 +100,24 @@ class Ballot extends React.Component {
       });
   }
 
+  /// TODO: clean this data logic up
+  showSampleReVoteView = () => {
+    axios.post(`http://54.187.193.156/api/profile`)
+      .then(res => {
+        this.setState({
+          activeState: this.states[2],
+          voteResults: res.data.results
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  //TODO: ASAP: GET IT DONE: create better error handling for view changes
+
   render() {
+    //vote view
     if (this.state.activeState === 'vote') {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
@@ -127,11 +143,14 @@ class Ballot extends React.Component {
         )
       }
     } 
-
+    //results view
     if (this.state.activeState === 'results') {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+      if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return(
           <div className={'ballot__wrapper'}>
+            <div style={{ background: 'black' }}>
+              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
+            </div>
             <Header org={this.state.params.org} />
             <Banner
               ballotInfo={this.state.params.bill}
@@ -149,6 +168,31 @@ class Ballot extends React.Component {
         )
       } else {
         return (<div className={'ballot__wrapper'} /> )
+      }
+    }
+    //results resubmit view
+    if (this.state.activeState === 'revote') {
+      if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
+        return (
+          <div className={'ballot__wrapper'}>
+            <Header org={this.state.params.org} />
+            <Banner
+              ballotInfo={this.state.params.bill}
+              backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
+              callback={this.submitVote}
+              firstTimeUse={this.state.firstTimeUse}
+              defaultValue={this.state.defaultValue}
+              bannerProps={this.state.bannerProps}
+              callback={this.onValueChange}
+              showSlider={true}
+            />
+            <VoteForm firstSubmission={false} callback={this.submitVote} copy={this.state.viewCopy} />
+            <Results { ...this.state.voteResults} />
+            <Footer />
+          </div>
+        )
+      } else {
+        return (<div className={'ballot__wrapper'} />)
       }
     } else {
       return (

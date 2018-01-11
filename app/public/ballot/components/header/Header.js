@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import GetMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
@@ -15,17 +14,12 @@ class Header extends React.Component {
   render() {
     return(
       <div>
-        <div style={{background: 'black'}}>
-          <Link style={{margin: '0 20px', color: 'white'}} to="/vote">Votes</Link>
-          <Link style={{margin: '0 20px', color: 'white'}} to="/resubmit">Resubmit</Link>
-          <Link style={{margin: '0 20px', color: 'white'}} to="/results">Results</Link>
-        </div>
         <MuiThemeProvider>
           <AppBar
             className={'header rep-me-logo'}
             iconElementLeft={<RepMeLogo />}
             iconElementRight={
-              <img style={{width: '100%'}} src={this.props.org.image} alt={`${this.props.org.name} Logo`}/>
+              <img style={{width: '100%'}} src={this.props.org.image || ''} alt={`${this.props.org.name} Logo`}/>
             }
             style={
               {
