@@ -11,11 +11,12 @@
         padding: 20px 15px;
         border-top: 3px solid rgba($baseGrey, 0.6);
         div {
-          flex: 1 1 20%;
+          flex: auto;
           justify-content: center;
           display: flex;
           min-height: 100%;
           align-items: center;
+          position: relative;
           span {
             max-width: 90px;
             font-family: Roboto, sans-serif;
@@ -26,15 +27,15 @@
           &:first-child {
             justify-content: flex-start;
           }
-          &:nth-child(2) {
-            flex: 1 1 14%;
-          }
-          &:nth-child(3) {
-            flex: 1 1 32%;
-          }
-          &:nth-child(4) {
-            flex: 1 1 14%;
-          }
+          // &:nth-child(2) {
+          //   flex: 1 1 14%;
+          // }
+          // &:nth-child(3) {
+          //   flex: 1 1 32%;
+          // }
+          // &:nth-child(4) {
+          //   flex: 1 1 14%;
+          // }
           &:last-child {
             justify-content: flex-end;
           }

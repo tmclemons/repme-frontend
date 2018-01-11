@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import HorizontalSlider from
   '../horizontalSlider/HorizontalSlider';
 import DataComponent from '../dataComponent/DataComponent';
-import ChartLabelComponent from '../chartLabelComponent/ChartLabelComponent';
 import StarIcon from 'material-ui/svg-icons/toggle/star';
 
 import { grey50 } from 'material-ui/styles/colors';
@@ -57,27 +56,95 @@ class Banner extends React.Component {
 
   getFormattedData = () => {
     let dataLabels = [
-      'Strongly Agree',
-      "",
-      "",
-      "",
-      "",
-      'Agree',
-      "",
-      "",
-      "",
-      "",
-      'Neutral',
-      "",
-      "",
-      "",
-      "",
-      'Disagree',
-      "",
-      "",
-      "",
-      "",
-      'Strongly Disagree',
+      {
+        major: true,
+        styles: {},
+        copy: 'Strongly Agree',
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        major: true,
+        styles: {},
+        copy: 'Agree',
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        major: true,
+        styles: {},
+        copy: 'Neutral',
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        major: true,
+        styles: {},
+        copy: 'Disagree',
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        styles: {},
+        copy: "",
+      },
+      {
+        major: true,
+        styles: {},
+        copy: 'Strongly Disagree',
+      }
     ];
 
     return {
@@ -150,15 +217,8 @@ class Banner extends React.Component {
                       state: this.state.firstTimeUse
                     }
                   }
+                  labels={this.getFormattedData().dataLabels }
                 />  
-                <ChartLabelComponent style={{
-                  background: 'transparent',
-                  borderTop: 'none',
-                  paddingLeft: '0',
-                  paddingRight: '0'
-                }} 
-                { ...this.getFormattedData().dataLabels } 
-                />
                 </div>: null
             }
           </div>

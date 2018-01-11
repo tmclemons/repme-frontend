@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ResizeObserver from 'resize-observer-polyfill';
 import { capitalize, clamp } from './customSliderUtils';
 import SliderIconComponent from '../utilities/SliderIconComponent';
+import ChartLabelComponent from '../chartLabelComponent/ChartLabelComponent';
 import Scss from './customslider.scss';
 
 
@@ -51,7 +52,7 @@ class CustomSlider extends React.Component {
   static defaultProps = {
     min: 0,
     max: 100,
-    step: 1,
+    step: 5,
     value: 0,
     axis: 'horizontal',
     tooltip: true,
@@ -70,7 +71,6 @@ class CustomSlider extends React.Component {
       grab: 0,
       firstUser: false,
       sliderSize: null,
-      step: 1
     }
   }
 
@@ -94,29 +94,29 @@ class CustomSlider extends React.Component {
    * Update steps for slider state on change
    * @return {void}
    */
+// remove
+  //  getStepUpdates = (size) => {
+  //    if (size > 1280) {
+  //      return 5;
+  //    }
 
-   getStepUpdates = (size) => {
-     if (size > 1280) {
-       return 5;
-     }
+  //    if (size > 1128 && size <= 1279) {
+  //      return 9.09;
+  //     }
+      
+  //    if (size > 981 && size <= 1127){
+  //      console.log('12.5')
+  //      return 12.5;
+  //     }
+      
+  //    if (size <= 980 ) {
+  //       console.log('20')
+  //      return 25;
+  //    }
 
-     if (size <= 1279 && size > 1128) {
-       return 8.33333;
-     }
 
-     if (size <= 1128 && size > 960) {
-       return 12.5;
-     }
-
-     if (size <= 960 && size > 800) {
-       return 20;
-     }
-     if (size <= 800) {
-       return 33.33333;
-     }
-
-     return 5;
-   }
+  //    return 5;
+  //  }
 
 
    /**
@@ -132,13 +132,12 @@ class CustomSlider extends React.Component {
     const dimension = capitalize(constants.axis[axis].dimension)
     const sliderPos = this.slider[`offset${dimension}`]
     const handlePos = this.handle[`offset${dimension}`]
-    let updatedStep = this.getStepUpdates(sliderPos);
-
+    // let updatedStep = this.getStepUpdates(sliderPos);
     this.setState({
       limit: sliderPos - (handlePos),
       grab: (handlePos / 2),
       sliderSize: sliderPos,
-      step: updatedStep
+      // step: updatedStep
     })
   }
 
@@ -325,14 +324,33 @@ class CustomSlider extends React.Component {
     </ul>
   }
 
+  positionLabels = () => {
+
+    const { min, max, step } = this.props;
+    const { limit, sliderSize, grab } = this.state;
+    const steps = (max - min) / step;
+    let updateLabels = [];
+    if (updateLabels.length < 1 && steps > 1) {
+      for (let index = 0; index < (steps + 1); index++) {
+        this.props.labels[index].styles = {
+            left: `${
+              this.getHandleCoords(this.getHandleCoordsFromValue((index) * step)).handle - grab
+              }px`,
+          }
+        updateLabels.push(this.props.labels[index]);
+      }
+    } else {
+      updateLabels = null;
+    }
+    return updateLabels;
+  }
+  
   getMarkerPositions = () => {
 
-    const { step, min, max } = this.props;
+    const { min, max, step } = this.props;
     const { limit, sliderSize } = this.state;
-    
-    const steps = (max - min) / this.state.step;
+    const steps = (max - min) / step;
     let stepIcons = [];
-
     //create markers
     if (stepIcons.length < 1 && steps > 1) {
       for (let index = 0; index < (steps + 1); index++) {
@@ -340,8 +358,8 @@ class CustomSlider extends React.Component {
           <div
             style={{
               width: `${
-                this.getHandleCoordsFromValue((index + 1) * this.state.step) -
-              this.getHandleCoordsFromValue((index) * this.state.step)
+                this.getHandleCoordsFromValue((index + 1) * step) -
+              this.getHandleCoordsFromValue((index) * step)
                 }px`,
             }}
             key={index}
@@ -384,6 +402,7 @@ class CustomSlider extends React.Component {
     let showTooltip = tooltip;
     let labelItems = [];
     let labelKeys = Object.keys(labels);
+
     if (labelKeys.length > 0) {
       
       labelKeys = labelKeys.sort(
@@ -436,71 +455,82 @@ class CustomSlider extends React.Component {
     }
 
     return (
-      <div
-        ref={data => {
-          this.slider = data
-        }}
-        className={
-          classNames(
-          'customslider',
-          `customslider-${axis}`,
-          { 'customslider-reverse': reverse },
-          className
-        )}
-        onMouseDown={this.handleOnDrag}
-        onMouseUp={this.handleOnComplete}
-        onTouchStart={this.handleOnStart}
-        onTouchEnd={this.handleOnComplete}
-        aria-valuemin={min}
-        aria-valuemax={max}
-        aria-valuenow={value}
-        aria-orientation={axis}
-      > 
-        {
-          <div className={'step-container'}>
-            {          
-              this.getMarkerPositions().map((icon, index) => {
-                return(icon)
-              })
-            }
-          </div>
-        }
-        {/* <div className='customslider__fill' style={fillStyle} /> */}
+      <div>
+
         <div
-          ref={
-            handleData => {
-            this.handle = handleData
+          ref={data => {
+            this.slider = data
           }}
-          className='customslider__handle'
-          onMouseDown={this.handleOnStart}
-          onTouchMove={this.handleOnDrag}
+          className={
+            classNames(
+            'customslider',
+            `customslider-${axis}`,
+            { 'customslider-reverse': reverse },
+            className
+          )}
+          onMouseDown={this.handleOnDrag}
+          onMouseUp={this.handleOnComplete}
+          onTouchStart={this.handleOnStart}
           onTouchEnd={this.handleOnComplete}
-          onKeyDown={this.handleKeyPress}
-          style={handleStyle}
-          tabIndex={0}
-        >
-        <div className={'thumb-button'}>
-          <SliderIconComponent />
-        </div>
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={value}
+          aria-orientation={axis}
+        > 
           {
-            showTooltip
-            ? <div
-              ref={
-                toolTipData => {
-                this.tooltip = toolTipData
-              }}
-                className={
-                  `customslider__handle-tooltip 
-                    ${this.props.firstTimeUse ? 'first-time-use' : ''}`
-                }
-            >
-              {/* <span>{this.formatHandle(value)}</span> */}
-              <GetTooltip />
+            <div className={'step-container'}>
+              {          
+                this.getMarkerPositions().map((icon, index) => {
+                  return(icon)
+                })
+              }
             </div>
-            : null}
-          <div className='customslider__handle-label'>{handleLabel}</div>
+          }
+          {/* <div className='customslider__fill' style={fillStyle} /> */}
+          <div
+            ref={
+              handleData => {
+              this.handle = handleData
+            }}
+            className='customslider__handle'
+            onMouseDown={this.handleOnStart}
+            onTouchMove={this.handleOnDrag}
+            onTouchEnd={this.handleOnComplete}
+            onKeyDown={this.handleKeyPress}
+            style={handleStyle}
+            tabIndex={0}
+          >
+          <div className={'thumb-button'}>
+            <SliderIconComponent />
+          </div>
+            {
+              showTooltip
+              ? <div
+                ref={
+                  toolTipData => {
+                  this.tooltip = toolTipData
+                }}
+                  className={
+                    `customslider__handle-tooltip 
+                      ${this.props.firstTimeUse ? 'first-time-use' : ''}`
+                  }
+              >
+                {/* <span>{this.formatHandle(value)}</span> */}
+                <GetTooltip />
+              </div>
+              : null}
+            <div className='customslider__handle-label'>{handleLabel}</div>
+          </div>
+          {labels ? this.renderHandleLabels(labelItems) : null}
         </div>
-        {labels ? this.renderHandleLabels(labelItems) : null}
+        <ChartLabelComponent style={{
+          background: 'transparent',
+          borderTop: 'none',
+          paddingLeft: '0',
+          paddingRight: '0'
+        }}
+         labels={this.positionLabels()}
+        />
       </div>
     )
   }

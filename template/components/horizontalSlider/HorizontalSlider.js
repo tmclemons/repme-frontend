@@ -38,6 +38,7 @@ class Horizontal extends React.Component {
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}
           firstTimeUse={this.props.toggleFirstTimeUser.state}
+          labels={this.props.labels}
         />
       </div>
     )
