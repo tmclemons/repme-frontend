@@ -17,28 +17,13 @@ const BallotResults = AsyncComponent(
 )
 
 const Ballot = AsyncComponent( 
-  () => import( './public/ballot/ballot/ballot' )
-)
-
-// admin routes
-const Bills = AsyncComponent( 
-  () => import( './admin/bills/bills' )
-)
-const Organizations = AsyncComponent( 
-  () => import( './admin/organizations/organizations' )
-)
-const RollCallList = AsyncComponent( 
-  () => import( './admin/roll-call-list/rollCallList' )
-)
-// authentication
-const Login = AsyncComponent( 
-  () => import( './public/login/login' )
-)
-
-/// sample api routing 
-///<Route path='/:id' component={BallotVote} />
+  () => import( './public/ballot/ballot/ballot' ) )
 
 class Routing extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <div style={{

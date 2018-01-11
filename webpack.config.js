@@ -12,6 +12,11 @@ var config = {
 
   plugins: [],
   devServer: {
+    // proxy: {
+    //   '/api/profile': {
+    //     target: 'http://54.187.193.156/api/profile',
+    //   }
+    // },
     inline: true,
     port: 3000
   },

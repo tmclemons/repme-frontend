@@ -24,6 +24,9 @@ class Header extends React.Component {
           <AppBar
             className={'header rep-me-logo'}
             iconElementLeft={<RepMeLogo />}
+            iconElementRight={
+              <img style={{width: '100%'}} src={this.props.org.image} alt={`${this.props.org.name} Logo`}/>
+            }
             style={
               {
                 minHeight: '100px',
@@ -47,6 +50,9 @@ class Header extends React.Component {
               display: 'inherit',
               maxWidth: '80px',
               minWidth: '300px',
+            }}
+            iconStyleRight={{
+              maxWidth: '200px',
             }}
           />
         </MuiThemeProvider>
