@@ -19,7 +19,7 @@ $inactiveState: rgb(250, 250, 250);
 .overlay {
   width: 100%;
   height: 100%;
-  background-color: $inactiveState;
+  background-color: rgba($inactiveState, $opacity);
   &.first-time-use {
     .overlay-content {
       color: black;

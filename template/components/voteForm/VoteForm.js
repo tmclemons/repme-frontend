@@ -20,7 +20,10 @@ class VoteForm extends React.Component {
     hotBillSubscribe: PropTypes.bool,
     zip_isValid: PropTypes.bool,
     email_isValid: PropTypes.bool,
-    emailLimit: PropTypes.number
+    emailLimit: PropTypes.number,
+    vote_isValid: PropTypes.bool,
+    firstTimeUse: PropTypes.bool,
+    defaultValue: PropTypes.number
   }
 
   static defaultProps = {
@@ -28,9 +31,12 @@ class VoteForm extends React.Component {
     zipCode: '',
     otherLegislationSubscribe: false,
     hotBillSubscribe: false,
-    email_isValid: false,
-    zip_isValid: false,
-    emailLimit: 64
+    email_isValid: true,
+    zip_isValid: true,
+    emailLimit: 64,
+    vote_isValid: false,
+    firstTimeUse: true,
+    defaultValue: 50,
   }
 
 
@@ -44,7 +50,10 @@ class VoteForm extends React.Component {
       hotBillSubscribe: this.props.hotBillSubscribe,
       email_isValid: this.props.email_isValid,
       zip_isValid: this.props.zip_isValid,
-      emailLimit: this.props.emailLimit
+      emailLimit: this.props.emailLimit,
+      vote_isValid: this.props.vote_isValid,
+      firstTimeUse: this.props.defaultValue,
+      defaultValue: this.props.defaultValue,
     }
   }
 
@@ -58,10 +67,7 @@ class VoteForm extends React.Component {
           hotBillSubscribe: this.state.hotBillSubscribe,
         }
       )
-      alert('Form is Submitted')
-    } else {
-      alert('Form is Invalid')
-    }
+    } 
   }
 
   render() {

@@ -13,30 +13,23 @@ import { grey50 } from 'material-ui/styles/colors';
 import Scss from './bannerComponent.scss';
 
 class Banner extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      componentProps: 0,
       max: 100,
-      defaultValue: 50,
+      defaultValue: this.props.defaultValue,
       ballotNumber: null,
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
-      firstTimeUse: true
+      firstTimeUse: this.props.defaultValue
     }
   }
 
   styleForOverlay = {
     width: '100%',
     height: '100%',
-  }
-
-  // capture slider data
-  onValueChange = (data) => {
-    this.setState({
-      componentProps: (data / (this.state.step)) || 0
-    })
   }
 
   componentDidMount() {
@@ -86,7 +79,7 @@ class Banner extends React.Component {
               overlay={
                 <div
                   className={classNames(
-                    `${this.state.firstTimeUse ? 'overlay first-time-use' : 'slider__color--stop-' + this.state.componentProps}`
+                    `${this.state.firstTimeUse ? 'overlay first-time-use' : 'slider__color--stop-' + this.props.bannerProps}`
                   )}
                 >
                 <div className={'overlay-content'}>
@@ -126,7 +119,7 @@ class Banner extends React.Component {
                 <HorizontalSlider
                   max={this.state.max}
                   defaultValue={this.state.defaultValue}
-                  callback={this.onValueChange}
+                  callback={this.props.callback}
                   toggleFirstTimeUser={
                     {
                       callback: this.toggleFirstTimeUser,
