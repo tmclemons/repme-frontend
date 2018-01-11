@@ -122,6 +122,9 @@ class Ballot extends React.Component {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
+            <div style={{ background: 'black' }}>
+              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
+            </div>
             <Header org={this.state.params.org}/>
             <Banner
               ballotInfo={this.state.params.bill}
@@ -175,6 +178,9 @@ class Ballot extends React.Component {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
+            <div style={{ background: 'black' }}>
+              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
+            </div>
             <Header org={this.state.params.org} />
             <Banner
               ballotInfo={this.state.params.bill}
