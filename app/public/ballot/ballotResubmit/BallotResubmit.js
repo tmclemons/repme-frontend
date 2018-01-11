@@ -3,7 +3,7 @@ import VoteForm from '../../../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../../template/components/mainFooter/MainFooter';
-import Scss from './ballotReSubmit.scss';
+import Scss from './ballotResubmit.scss';
 
 class BallotResubmit extends React.Component {
   constructor(props) {

@@ -10,7 +10,7 @@ $toolTipColor: rgb(0, 76, 135);
   background: #e6e6e6;
   -ms-touch-action: none;
   touch-action: none;
-
+}
   .customslider__fill {
     display: block;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -43,169 +43,73 @@ $toolTipColor: rgb(0, 76, 135);
     left: 50%;
     transform: translate3d(-50%, 0, 0);
   }
-  .step-container {
-    display: flex;
-    flex-flow: row nowrap;
-    width: 100%;
-    .step-icon-wrapper {
-      width: 20px;
-      height: 20px;
-      flex: auto;
-      display: flex;
-      justify-content: center;
-      .step-icon{
-        width: 20px;
-        height: 20px;
-        border: 5px solid white;
-        border-radius: 25px;
-        position: relative;
-        display: block;
-        top: -9px;
-      }
-      &:last-child{
-        .step-icon:after{
-          content: '';
-          height: 20px;
-          width: 50px;
-          background: white;
-          position: absolute;
-          top: 10px;
-          left: 43px;
-        }
-      }
-      &:first-child{
-        .step-icon:before{
-          content: '';
-          height: 20px;
-          width: 50px;
-          background: white;
-          position: absolute;
-          top: 10px;
-          right: 43px;
-        }
-      }
-    }
-      @media screen and (min-width: 1280px) {
-      .step-icon-wrapper {
-        &:nth-child(n) {
-          .step-icon {
-            width: 20px;
-            height: 20px;
-            top: -9px;
-          }
-        }
-        &:nth-child(5n+1) {
-          .step-icon {
-            width: 40px;
-            height: 40px;
-            top: -20px;
-          }
-        }
-      }
-    }
-    @media screen and (min-width: 1128px) and (max-width: 1279px) {
-      .step-icon-wrapper {
-        &:nth-child(n) {
-          .step-icon {
-            width: 20px;
-            height: 20px;
-            top: -9px;
-          }
-        }
-        &:nth-child(4n+1) {
-          .step-icon {
-            width: 40px;
-            height: 40px;
-            top: -20px;
-          }
-        }
-      }
-    }
-    @media screen and (min-width: 981px) and (max-width: 1127px) {
-      .step-icon-wrapper {
-        &:nth-child(n) {
-          .step-icon {
-            width: 20px;
-            height: 20px;
-            top: -9px;
-          }
-        }
-        &:nth-child(5n+1) {
-          .step-icon {
-            width: 40px;
-            height: 40px;
-            top: -20px;
-          }
-        }
-        &:nth-child(2n + 1),
-        &:nth-child(4n + 1),
-         {
-          display: none;
-          .step-icon {
-          }
-        }
-        &:nth-child(1),
-         {
-          display: flex;
-          .step-icon {
-          }
-        }
-      }
-    }
-    @media screen and (max-width: 980px) {
-      .step-icon-wrapper {
-        &:nth-child(n) {
-          .step-icon {
-            width: 20px;
-            height: 20px;
-            top: -9px;
-          }
-        }
-        &:nth-child(1), &:nth-child(2) {
-          justify-content: flex-start;
-        }
-        &:nth-child(4), &:nth-child(5) {
-          justify-content: flex-end;
-        }
-        &:nth-child(2) {
-          .step-icon {
-            margin-left: 45px;
-          }
-        }
-        &:nth-child(4){
-          .step-icon {
-            margin-right: 45px;
-          }
-        }
-        &:nth-child(1), &:nth-child(3),
-        &:nth-child(5) {
-          .step-icon {
-            width: 40px;
-            height: 40px;
-            top: -20px;
-          }
-        }
-      }
-    }
-  }
-}
 
-
-/**
-* Customslider - Horizontal slider
-*/
-
-.customslider-horizontal {
+  
+  
+  /**
+  * Customslider - Horizontal slider
+  */
+  
+  .customslider-horizontal {
     height: 8px;
     border-radius: 10px;
     position: relative;
-  .step-container {
-    display: flex;
-    flex-flow: row nowrap;
-    width: 100%;
-    position: relative;
-    top: -2px;
-    left: 12px;
+    .step-container {
+      display: flex;
+      position: relative;
+      flex-flow: row nowrap;
+      width: 100%;
+      top: -2px;
+      .slider__marker {
+        flex: 1 1 60px;
+        position: relative;
+        top: -10px;
+        &.slider__in-between {
+          flex: 1 1 100%;
+        }
+        &--label-wrapper{
+          position: absolute;
+          top: 70px;
+          left: 10px;
+        }
+        .step-icon-wrapper {
+          width: 60px;
+          height: 60px;
+          flex: auto;
+          display: flex;
+          justify-content: center;
+          .step-icon{
+            width: 40px;
+            height: 40px;
+            border: 5px solid white;
+            border-radius: 25px;
+            position: relative;
+            display: block;
+            top: -9px;
+          }
+        }
+        &:nth-child(n+5) {
+          .slider__marker--label-wrapper {
+            left: 5px;
+          }
+        }
+        &:first-child{
+          .step-icon-wrapper {
+            justify-content: flex-start;
+          }
+          .slider__marker--label-wrapper{
+            left: 0px;
+          }
+        }
+        &:last-child{
+          .step-icon-wrapper {
+            justify-content: flex-end;
+          }
+          .slider__marker--label-wrapper{
+            left: 10px;
+          }
+        }
+      }
   }
   .customslider__fill {
     height: 100%;
@@ -219,7 +123,7 @@ $toolTipColor: rgb(0, 76, 135);
     top: 50%;
     position: relative;
     z-index: 3;
-    transform: translate3d(-50%, -63%, 0);
+    transform: translate3d(-50%, -110%, 0);
     outline: none;
 
   }
@@ -351,39 +255,39 @@ $toolTipColor: rgb(0, 76, 135);
 * Customslider - Labels
 */
 
-.customslider__labels {
-  position: relative;
-  .customslider-vertical & {
+  .customslider__labels {
     position: relative;
-    list-style-type: none;
-    margin: 0 0 0 24px;
-    padding: 0;
-    text-align: left;
-    width: 250px;
-    height: 100%;
-    left: 10px;
-    .customslider__label-item {
-      position: absolute;
-      transform: translate3d(0, -50%, 0);
-      &::before {
-        content: '';
-        width: 10px;
-        height: 2px;
-        background: black;
+    .customslider-vertical {
+      position: relative;
+      list-style-type: none;
+      margin: 0 0 0 24px;
+      padding: 0;
+      text-align: left;
+      width: 250px;
+      height: 100%;
+      left: 10px;
+      .customslider__label-item {
         position: absolute;
-        left: -14px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: -1;
+        transform: translate3d(0, -50%, 0);
+        &::before {
+          content: '';
+          width: 10px;
+          height: 2px;
+          background: black;
+          position: absolute;
+          left: -14px;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: -1;
+        }
       }
     }
+    .customslider__label-item {
+      position: absolute;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-block;
+      top: 10px;
+      transform: translate3d(-50%, 0, 0);
+    }
   }
-  .customslider__label-item {
-    position: absolute;
-    font-size: 14px;
-    cursor: pointer;
-    display: inline-block;
-    top: 10px;
-    transform: translate3d(-50%, 0, 0);
-  }
-}

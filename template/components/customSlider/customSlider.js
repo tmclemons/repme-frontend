@@ -344,29 +344,55 @@ class CustomSlider extends React.Component {
     }
     return updateLabels;
   }
-  
-  getMarkerPositions = () => {
 
+  getMarkerPositions = () => {
     const { min, max, step } = this.props;
     const { limit, sliderSize } = this.state;
     const steps = (max - min) / step;
     let stepIcons = [];
-    //create markers
-    if (stepIcons.length < 1 && steps > 1) {
-      for (let index = 0; index < (steps + 1); index++) {
-        stepIcons.push(
-          <div
-            style={{
-              width: `${
-                this.getHandleCoordsFromValue((index + 1) * step) -
-              this.getHandleCoordsFromValue((index) * step)
-                }px`,
-            }}
-            key={index}
-            className={ 'step-icon-wrapper' }>
-            <div className={`step-icon step-icon-stop-${index}`}>
+
+    const sliderSpacer = (index) => {
+      if( (index % 2) < 1) {
+        return(
+          <div key={index} className="slider__marker">
+            <div
+              key={index}
+              className={'step-icon-wrapper'}>
+              <div className={`step-icon step-icon-stop-${index}`} />
+            </div>
+            <div className="slider__marker--label-wrapper">
+              <div className="slider__marker--label-content">
+               { this.props.labels[Math.floor(index / 2)] }
+              </div>
             </div>
           </div>
+        )
+      } else {
+        return(
+          <div key={index} className="slider__marker slider__in-between">
+    
+          </div>
+        )
+      }
+    };
+
+          // <div
+          //   // style={{
+          //   //   width: `${
+          //   //     this.getHandleCoordsFromValue((index + 1) * step) -
+          //   //   this.getHandleCoordsFromValue((index) * step)
+          //   //     }px`,
+          //   // }}
+          //   key={index}
+          //   className={ 'step-icon-wrapper' }>
+            // <div className={`step-icon step-icon-stop-${index}`}>
+            // </div>
+
+    //create markers
+    if (stepIcons.length < 1 && steps > 1) {
+      for (let index = 0; index < 9; index++) {
+        stepIcons.push(
+          sliderSpacer(index) 
         );
       }
     } else {
@@ -523,14 +549,14 @@ class CustomSlider extends React.Component {
           </div>
           {labels ? this.renderHandleLabels(labelItems) : null}
         </div>
-        <ChartLabelComponent style={{
+        {/* <ChartLabelComponent style={{
           background: 'transparent',
           borderTop: 'none',
           paddingLeft: '0',
           paddingRight: '0'
         }}
          labels={this.positionLabels()}
-        />
+        /> */}
       </div>
     )
   }

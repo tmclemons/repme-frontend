@@ -56,95 +56,11 @@ class Banner extends React.Component {
 
   getFormattedData = () => {
     let dataLabels = [
-      {
-        major: true,
-        styles: {},
-        copy: 'Strongly Agree',
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        major: true,
-        styles: {},
-        copy: 'Agree',
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        major: true,
-        styles: {},
-        copy: 'Neutral',
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        major: true,
-        styles: {},
-        copy: 'Disagree',
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        styles: {},
-        copy: "",
-      },
-      {
-        major: true,
-        styles: {},
-        copy: 'Strongly Disagree',
-      }
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree',
     ];
 
     return {
@@ -217,7 +133,7 @@ class Banner extends React.Component {
                       state: this.state.firstTimeUse
                     }
                   }
-                  labels={this.getFormattedData().dataLabels }
+                  labels={ this.getFormattedData().dataLabels }
                 />  
                 </div>: null
             }
