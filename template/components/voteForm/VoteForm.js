@@ -58,16 +58,14 @@ class VoteForm extends React.Component {
   }
 
   formOnSubmit = () => {
-    if (this.state.email_isValid && this.state.zip_isValid) {
-      this.props.callback(
-        {
-          userEmail: this.state.userEmail,
-          zipCode: this.state.zipCode,
-          otherLegislationSubscribe: this.state.otherLegislationSubscribe,
-          hotBillSubscribe: this.state.hotBillSubscribe,
-        }
-      )
-    } 
+    this.props.callback(
+      {
+        userEmail: this.state.userEmail,
+        zipCode: this.state.zipCode,
+        otherLegislationSubscribe: this.state.otherLegislationSubscribe,
+        hotBillSubscribe: this.state.hotBillSubscribe,
+      }
+    )
   }
 
   render() {
@@ -125,7 +123,8 @@ class VoteForm extends React.Component {
                         userEmail: newValue
                       })} else {
                       this.setState({
-                        email_isValid: false
+                        email_isValid: false,
+                        userEmail: ''
                       })
                       }
                     }
@@ -142,7 +141,8 @@ class VoteForm extends React.Component {
                         zipCode: newValue
                       })} else {
                         this.setState({
-                          zip_isValid: false
+                          zip_isValid: false,
+                          zipCode: ''
                         })
                       }
                     }

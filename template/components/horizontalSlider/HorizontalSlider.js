@@ -7,6 +7,9 @@ class Horizontal extends React.Component {
     super(props, context)
     this.state = {
       value: this.props.defaultValue,
+      changed: false,
+      isValid: false,
+      validationCount: 0
     }
   }
 
@@ -16,7 +19,8 @@ class Horizontal extends React.Component {
 
   handleChange = value => {
     this.setState({
-      value: value
+      value: value,
+      changed: true
     })
     this.props.callback(value)
     this.props.toggleFirstTimeUser.callback()
@@ -37,7 +41,9 @@ class Horizontal extends React.Component {
           onChangeStart={this.handleChangeStart}
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}
-          firstTimeUse={this.props.toggleFirstTimeUser.state}
+          firstTimeUse={this.props.toggleFirstTimeUser.firstTimeUse}
+          secondAttempt={this.props.secondAttempt}
+          changed={this.state.changed}
           labels={this.props.labels}
         />
       </div>

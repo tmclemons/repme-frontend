@@ -19,9 +19,8 @@ import Scss from './ballotResults.scss';
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
     this.state = {
-      yourState: 'Il',
+      yourState: 'IL',
       backgroundImg: {
         url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
       },
@@ -322,12 +321,9 @@ class BallotResults extends React.Component {
 
     return (
       <div> 
-        {/* <div className={'representative-votes'}>
-          <RepresentativeCard component={StateIllinois} votes={this.state.repVotes}/>
-        </div> */}
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
-          <StateDemographic component={StateIllinois} { ...this.state.repDemographics}/>
+          <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics}/>
           <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
           <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
         </div>

@@ -30,6 +30,7 @@ class Routing extends React.Component {
         height: '100vh'
       }}>
         <Route exact path='/' component={Ballot} />
+        <Route path='/:org' component={Ballot} />
       </div>
     )
   }

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom'
 import VoteForm from '../../../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
@@ -8,12 +9,26 @@ import axios from 'axios';
 
 import Scss from './ballot.scss';
 
+const SampleHeader = (props) => {
+  return (
+    <div>
+      <div style={{ background: 'black', display: 'flex' }}>
+        <div style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} onClick={props.callback}>Resubmit</div>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/repme/">Rep-Me Demo </Link>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/aarp/">AARP Demo </Link>
+      </div>
+    </div>
+  )
+}
+
 class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
+    console.log(props.match)
     this.states = ['vote', 'results', 'revote'],
     this.state = {
+      org: (props.match.params.org ? `/${props.match.params.org}` : ''),
       voteResults: null,
       activeState: 'vote',
       firstTimeUse: true,
@@ -21,6 +36,7 @@ class Ballot extends React.Component {
       voteValue: 50,
       bannerProps: 0,
       step: 5,
+      submitCount: 0,
       params: {},
       backgroundImg: {
         url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
@@ -46,7 +62,19 @@ class Ballot extends React.Component {
       }
     }
   }
-  //TODO: Post TO
+
+  componentWillReceiveProps(nextProps) {
+    axios.post(`http://54.187.193.156/api/profile${(nextProps.match.params.org ? `/${nextProps.match.params.org}` : '')}`)
+      .then(res => {
+        this.setState({
+          params: Object.assign(this.state.params, res.data.results),
+          activeState: this.states[0]
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   // capture slider data
   onValueChange = (data) => {
@@ -61,9 +89,12 @@ class Ballot extends React.Component {
     //hook api post call here
     //DONE: preset data object to zero before data input
     //DONE: Setup ASYNC promises
+    this.state.submitCount++
+    this.setState({
+      firstTimeUse: this.state.submitCount > 0 ? false : true
+    })
     let params = this.state;
     if(params.firstTimeUse && params.voteValue === 50) {
-      alert('Must Choose Vote')
     } else {
       let data = {
         "vote": params.voteValue || null,
@@ -86,9 +117,8 @@ class Ballot extends React.Component {
     }
   }
 
-
   componentDidMount() {
-    axios.post(`http://54.187.193.156/api/profile`)
+    axios.post(`http://54.187.193.156/api/profile${this.state.org}`)
       .then(res => {
         this.setState({
           params: Object.assign(this.state.params, res.data.results),
@@ -102,7 +132,7 @@ class Ballot extends React.Component {
 
   /// TODO: clean this data logic up
   showSampleReVoteView = () => {
-    axios.post(`http://54.187.193.156/api/profile`)
+    axios.post(`http://54.187.193.156/api/profile${this.state.org}`)
       .then(res => {
         this.setState({
           activeState: this.states[2],
@@ -118,19 +148,18 @@ class Ballot extends React.Component {
 
   render() {
     //vote view
-    if (this.state.activeState === 'vote') {
+    if (this.state.activeState === this.states[0]) {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
-            <div style={{ background: 'black' }}>
-              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
-            </div>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <Header org={this.state.params.org}/>
             <Banner
               ballotInfo={this.state.params.bill}
               backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
               callback={this.submitVote}
               firstTimeUse={this.state.firstTimeUse}
+              secondVoteAttempt={this.state.submitCount > 0 ? true : false}
               defaultValue={this.state.defaultValue}
               bannerProps={this.state.bannerProps}
               callback={this.onValueChange}
@@ -147,13 +176,11 @@ class Ballot extends React.Component {
       }
     } 
     //results view
-    if (this.state.activeState === 'results') {
+    if (this.state.activeState === this.states[1]) {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return(
           <div className={'ballot__wrapper'}>
-            <div style={{ background: 'black' }}>
-              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
-            </div>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <Header org={this.state.params.org} />
             <Banner
               ballotInfo={this.state.params.bill}
@@ -174,19 +201,18 @@ class Ballot extends React.Component {
       }
     }
     //results resubmit view
-    if (this.state.activeState === 'revote') {
+    if (this.state.activeState === this.states[2]) {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
-            <div style={{ background: 'black' }}>
-              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
-            </div>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
             <Header org={this.state.params.org} />
             <Banner
               ballotInfo={this.state.params.bill}
               backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
               callback={this.submitVote}
               firstTimeUse={this.state.firstTimeUse}
+              submitCount={this.state.submitCount}
               defaultValue={this.state.defaultValue}
               bannerProps={this.state.bannerProps}
               callback={this.onValueChange}

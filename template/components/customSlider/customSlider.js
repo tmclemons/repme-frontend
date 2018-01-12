@@ -94,30 +94,6 @@ class CustomSlider extends React.Component {
    * Update steps for slider state on change
    * @return {void}
    */
-// remove
-  //  getStepUpdates = (size) => {
-  //    if (size > 1280) {
-  //      return 5;
-  //    }
-
-  //    if (size > 1128 && size <= 1279) {
-  //      return 9.09;
-  //     }
-      
-  //    if (size > 981 && size <= 1127){
-  //      console.log('12.5')
-  //      return 12.5;
-  //     }
-      
-  //    if (size <= 980 ) {
-  //       console.log('20')
-  //      return 25;
-  //    }
-
-
-  //    return 5;
-  //  }
-
 
    /**
    * Update slider state on change
@@ -469,18 +445,33 @@ class CustomSlider extends React.Component {
     }
 
 
-    const GetTooltip = () => {
-      if(this.props.firstTimeUse) {
-        return(
-          <div className={'label'}>
-            <span>Touch or Click the thumbprint &amp; drag it to cast your vote</span>
-            <div className={'slider-hint'}>
-              <i className={'ion-arrow-left-b'}></i>
-              <span>Slide to cast</span>
-              <i className={'ion-arrow-right-b'}></i>
+    const GetTooltip = (state) => {
+      let stateCheck = state.firstTime && state.secondTime;
+      if (!state.changed) {
+        if (!stateCheck) {
+          return(
+            <div className={'label'}>
+              <span>Touch or Click the thumbprint &amp; drag it to cast your vote</span>
+              <div className={'slider-hint'}>
+                <i className={'ion-arrow-left-b'}></i>
+                <span>Slide to cast</span>
+                <i className={'ion-arrow-right-b'}></i>
+              </div>
             </div>
-          </div>
-        )
+          )
+        } else {
+          return (
+            <div className={'label'}>
+              <span>Are you sure this is your vote?</span>
+              <div className={'slider-hint'}>
+                <i className={'ion-arrow-left-b'}></i>
+                <span>Slide to cast</span>
+                <i className={'ion-arrow-right-b'}></i>
+              </div>
+            </div>
+          )
+        }
+        return(<div></div>)
       } else {
         return(
           <div className={'label'}>
@@ -489,6 +480,7 @@ class CustomSlider extends React.Component {
           </div>
         )
       }
+      return(<div></div>)
     }
 
     return (
@@ -538,7 +530,9 @@ class CustomSlider extends React.Component {
             tabIndex={0}
           >
           <div className={'thumb-button'}>
-            <SliderIconComponent />
+              <SliderIconComponent { ...{ 
+                error: (this.props.firstTimeUse && this.props.secondAttempt)
+              }}/>
           </div>
             {
               showTooltip
@@ -549,11 +543,16 @@ class CustomSlider extends React.Component {
                 }}
                   className={
                     `customslider__handle-tooltip 
-                      ${this.props.firstTimeUse ? 'first-time-use' : ''}`
+                      ${this.props.firstTimeUse ? 'first-time-use' : ''}
+                      ${this.props.secondAttempt ? 'second-attempt' : ''}`
                   }
               >
                 {/* <span>{this.formatHandle(value)}</span> */}
-                <GetTooltip />
+                  <GetTooltip { ...{ 
+                    firstTime: this.props.firstTimeUse,
+                    secondTime: this.props.secondAttempt,
+                    changed: this.props.changed
+                    } }/>
               </div>
               : null}
             <div className='customslider__handle-label'>{handleLabel}</div>
