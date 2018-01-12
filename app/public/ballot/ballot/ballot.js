@@ -21,6 +21,7 @@ class Ballot extends React.Component {
       voteValue: 50,
       bannerProps: 0,
       step: 5,
+      submitCount: 0,
       params: {},
       backgroundImg: {
         url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
@@ -61,9 +62,12 @@ class Ballot extends React.Component {
     //hook api post call here
     //DONE: preset data object to zero before data input
     //DONE: Setup ASYNC promises
+    this.state.submitCount++
+    this.setState({
+      firstTimeUse: this.state.submitCount > 0 ? false : true
+    })
     let params = this.state;
     if(params.firstTimeUse && params.voteValue === 50) {
-      alert('Must Choose Vote')
     } else {
       let data = {
         "vote": params.voteValue || null,
@@ -118,7 +122,7 @@ class Ballot extends React.Component {
 
   render() {
     //vote view
-    if (this.state.activeState === 'vote') {
+    if (this.state.activeState === this.states[0]) {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
@@ -131,6 +135,7 @@ class Ballot extends React.Component {
               backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
               callback={this.submitVote}
               firstTimeUse={this.state.firstTimeUse}
+              secondVoteAttempt={this.state.submitCount > 0 ? true : false}
               defaultValue={this.state.defaultValue}
               bannerProps={this.state.bannerProps}
               callback={this.onValueChange}
@@ -147,7 +152,7 @@ class Ballot extends React.Component {
       }
     } 
     //results view
-    if (this.state.activeState === 'results') {
+    if (this.state.activeState === this.states[1]) {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return(
           <div className={'ballot__wrapper'}>
@@ -174,7 +179,7 @@ class Ballot extends React.Component {
       }
     }
     //results resubmit view
-    if (this.state.activeState === 'revote') {
+    if (this.state.activeState === this.states[2]) {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
@@ -187,6 +192,7 @@ class Ballot extends React.Component {
               backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
               callback={this.submitVote}
               firstTimeUse={this.state.firstTimeUse}
+              submitCount={this.state.submitCount}
               defaultValue={this.state.defaultValue}
               bannerProps={this.state.bannerProps}
               callback={this.onValueChange}

@@ -17,7 +17,7 @@ class SliderIconComponent extends React.Component {
           <g clipPath='url(#_clip1)'>
             <g transform='matrix(.78972 0 0 .7928 -17.05 -12.217)'>
               <path d='M74.32,15.298L273.572,15.589L320.549,85.836L273.426,154.048L74.029,153.32L21.961,84.964L74.32,15.298Z'
-                fill='#015692' />
+                fill={this.props.error ? '#FF0000' : '#015692'} />
               <path d='M278.662,76.383L278.662,94.563L287.534,85.109L278.662,76.383Z'
                 fill='#4e89b3' />
               <path d='M278.662,76.383L278.662,94.563L287.534,85.109L278.662,76.383Z'

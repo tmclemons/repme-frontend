@@ -23,7 +23,7 @@ class Banner extends React.Component {
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
-      firstTimeUse: this.props.defaultValue
+      firstTimeUse: this.props.firstTimeUse,
     }
   }
 
@@ -123,9 +123,10 @@ class Banner extends React.Component {
                   toggleFirstTimeUser={
                     {
                       callback: this.toggleFirstTimeUser,
-                      state: this.state.firstTimeUse
+                      firstTimeUse: this.state.firstTimeUse,
                     }
                   }
+                  secondAttempt={this.props.secondVoteAttempt}
                   labels={ this.getFormattedData().dataLabels }
                 />  
                 </div>: null

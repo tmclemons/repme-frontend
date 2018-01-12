@@ -218,7 +218,8 @@ $fontFamily: 'Playfair Display', serif;
       }
     }
 
-
+    
+    
     &:after {
       content: ' ';
       position: absolute;
@@ -232,6 +233,21 @@ $fontFamily: 'Playfair Display', serif;
       left: 50%;
       bottom: -$toolTipPoint + 1px;
       transform: translate3d(-50%, 0, 0);
+    }
+    &.first-time-use.second-attempt {
+      background: red;
+      top: -245px;
+      width: 400px;
+      height: 150px;
+      .label {
+        font-size: 50px;
+      }
+      .label .slider-hint {
+        left: 150px;
+      }
+      &:after {
+          border-top: $toolTipPoint solid red;
+      }
     }
   }
 }
