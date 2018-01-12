@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom'
 import VoteForm from '../../../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
@@ -8,11 +9,23 @@ import axios from 'axios';
 
 import Scss from './ballot.scss';
 
+const SampleHeader = (props) => {
+  return (
+    <div>
+      <div style={{ background: 'black', display: 'flex' }}>
+        <div style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} onClick={props.callback}>Resubmit</div>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/repme/">Rep-Me Demo </Link>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/aarp/">AARP Demo </Link>
+      </div>
+    </div>
+  )
+}
+
 class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
-    console.log(props)
+    console.log(props.match)
     this.states = ['vote', 'results', 'revote'],
     this.state = {
       org: (props.match.params.org ? `/${props.match.params.org}` : ''),
@@ -49,7 +62,19 @@ class Ballot extends React.Component {
       }
     }
   }
-  //TODO: Post TO
+
+  componentWillReceiveProps(nextProps) {
+    axios.post(`http://54.187.193.156/api/profile${(nextProps.match.params.org ? `/${nextProps.match.params.org}` : '')}`)
+      .then(res => {
+        this.setState({
+          params: Object.assign(this.state.params, res.data.results),
+          activeState: this.states[0]
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   // capture slider data
   onValueChange = (data) => {
@@ -92,7 +117,6 @@ class Ballot extends React.Component {
     }
   }
 
-
   componentDidMount() {
     axios.post(`http://54.187.193.156/api/profile${this.state.org}`)
       .then(res => {
@@ -128,9 +152,7 @@ class Ballot extends React.Component {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
-            <div style={{ background: 'black' }}>
-              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
-            </div>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <Header org={this.state.params.org}/>
             <Banner
               ballotInfo={this.state.params.bill}
@@ -158,9 +180,7 @@ class Ballot extends React.Component {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return(
           <div className={'ballot__wrapper'}>
-            <div style={{ background: 'black' }}>
-              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
-            </div>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <Header org={this.state.params.org} />
             <Banner
               ballotInfo={this.state.params.bill}
@@ -185,9 +205,7 @@ class Ballot extends React.Component {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
-            <div style={{ background: 'black' }}>
-              <div style={{ margin: '0 20px', color: 'white' }} onClick={this.showSampleReVoteView}>Resubmit</div>
-            </div>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
             <Header org={this.state.params.org} />
             <Banner
               ballotInfo={this.state.params.bill}
