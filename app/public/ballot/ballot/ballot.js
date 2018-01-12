@@ -12,8 +12,10 @@ class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     this.states = ['vote', 'results', 'revote'],
     this.state = {
+      org: (props.match.params.org ? `/${props.match.params.org}` : ''),
       voteResults: null,
       activeState: 'vote',
       firstTimeUse: true,
@@ -77,7 +79,7 @@ class Ballot extends React.Component {
         "bill_id": params.params.bill['id'] || null,
       }
 
-      axios.post(`http://54.187.193.156/api/vote`, data)
+      axios.post(`http://54.187.193.156/api/vote${this.state.org}`, data)
         .then(res => {
           this.setState({
             activeState: this.states[1],
@@ -92,7 +94,7 @@ class Ballot extends React.Component {
 
 
   componentDidMount() {
-    axios.post(`http://54.187.193.156/api/profile`)
+    axios.post(`http://54.187.193.156/api/profile${this.state.org}`)
       .then(res => {
         this.setState({
           params: Object.assign(this.state.params, res.data.results),
@@ -106,7 +108,7 @@ class Ballot extends React.Component {
 
   /// TODO: clean this data logic up
   showSampleReVoteView = () => {
-    axios.post(`http://54.187.193.156/api/profile`)
+    axios.post(`http://54.187.193.156/api/profile${this.state.org}`)
       .then(res => {
         this.setState({
           activeState: this.states[2],
