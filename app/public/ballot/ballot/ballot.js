@@ -104,7 +104,7 @@ class Ballot extends React.Component {
         "bill_id": params.params.bill['id'] || null,
       }
 
-      axios.post(`http://54.187.193.156/api/vote${this.state.org}`, data)
+      axios.post(`http://54.187.193.156/api/vote`, data)
         .then(res => {
           this.setState({
             activeState: this.states[1],
