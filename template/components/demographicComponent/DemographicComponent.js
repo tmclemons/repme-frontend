@@ -22,8 +22,16 @@ class StateDemographic extends React.Component {
               <div>{this.props.districtCity}</div>
             </div>
           </div>
-          <div className="demo_data--icon">
-            <Component />
+          <div 
+            style={{
+              backgroundImage:`url('${(`/images/${this.props.stateCode || 'IL'}.svg`)}')`,
+              width: '200px',
+              height: '200px',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'contain',
+              backgroundPosition: 'center'
+            }}
+            className="demo_data--icon">
           </div>
         </div>
       </div>
