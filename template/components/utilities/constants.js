@@ -3,15 +3,16 @@ const repMeConstants = () => {
     ballotCopy: {
       headerTagLine: `by the people 2.0`,
       formNotice: `**We will not use any of your information for any 3rd
-          Part. Nor will we send you emails unless you opt-in to receive 
+          Party. Nor will we send you emails unless you opt-in to receive 
           them**`,
-      emailInput: `To receive results including final Senate Floor Votes`,
-      zipCodeInput: `This will allow us to include your private ballot in
-         the constituency that we will provide your Senators`,
+      emailInputSenate: `To receive results including final Senate Floor Votes`,
+      emailInputHouse: `To receive results including final House Votes`,
+      zipCodeInputSenate: `This will allow us to include your private ballot with the constituency that we will provide your Senators`,
+      zipCodeInputHouse: `This will allow us to include your private ballot with the constituency that we will provide your Representative`,
       subscribeToHotBill: `To receive other Hot 
           Congressional Bill Ballots and track results`,
-      subscribeToOtherLegislationInfo: `to receive information 
-          from other Legislators and Bills and Ballot results`,
+      subscribeToOtherLegislationInfo: `To receive information 
+          from your Legislators about Ballots and Voting results`,
       subscribeToHotBillTitle: `Opt-In`,
       subscribeToOtherLegislationInfoTitle: `Legislator Opt-In`,
       preSubmitInfo: `This is your private Ballot for 

@@ -41,7 +41,6 @@ class VoteForm extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state= {
       userEmail: this.props.userEmail,
       zipCode: this.props.zipCode,
@@ -113,7 +112,7 @@ class VoteForm extends React.Component {
               }>
                 <TextField
                   hintText="Email Address"
-                  errorText={this.props.copy.emailInput}
+                  errorText={this.props.copy[`emailInput${this.props.chamber}`]}
                   errorStyle={styles.errorStyle}
                   onChange={(event, newValue) => {
                     if (formValidation.emailValidation(newValue, this.state.emailLimit)) {
@@ -131,7 +130,7 @@ class VoteForm extends React.Component {
                 /><br />
                 <TextField
                   hintText="Zip Code"
-                  errorText={this.props.copy.zipCodeInput}
+                  errorText={this.props.copy[`zipCodeInput${this.props.chamber}`]}
                   errorStyle={styles.errorStyle}
                   onChange={(event, newValue) => {
                     if (formValidation.zipCodeValidation(newValue)) {

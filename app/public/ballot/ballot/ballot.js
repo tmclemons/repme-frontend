@@ -108,6 +108,7 @@ class Ballot extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
+      console.log(this.state.params)
   }
 
   /// TODO: clean this data logic up
@@ -127,7 +128,8 @@ class Ballot extends React.Component {
   //TODO: ASAP: GET IT DONE: create better error handling for view changes
 
   render() {
-    //vote view
+    //vote view\
+    let { bill } = this.state.params;
     if (this.state.activeState === this.states[0]) {
       if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
         return (
@@ -145,7 +147,7 @@ class Ballot extends React.Component {
               callback={this.onValueChange}
               showSlider={true}
             />
-            <VoteForm firstSubmission={true} callback={this.submitVote} copy={ballotCopy} />
+            <VoteForm firstSubmission={true} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy} />
             <Footer />
           </div>
         )
@@ -198,7 +200,7 @@ class Ballot extends React.Component {
               callback={this.onValueChange}
               showSlider={true}
             />
-            <VoteForm firstSubmission={false} callback={this.submitVote} copy={ballotCopy} />
+            <VoteForm firstSubmission={false} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy} />
             <Results { ...this.state.voteResults} />
             <Footer />
           </div>
