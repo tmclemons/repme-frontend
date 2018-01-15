@@ -6,6 +6,8 @@ import Banner from '../../../../template/components/bannerComponent/BannerCompon
 import Footer from '../../../../template/components/mainFooter/MainFooter';
 import Results from '../ballotResults/BallotResults';
 import axios from 'axios';
+import Copy from '../../../../template/components/utilities/RepMeCopy';
+const { ballotCopy } = Copy;  
 
 import Scss from './ballot.scss';
 
@@ -25,7 +27,6 @@ class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
-    console.log(props.match)
     this.states = ['vote', 'results', 'revote'],
     this.state = {
       org: (props.match.params.org ? `/${props.match.params.org}` : ''),
@@ -38,28 +39,6 @@ class Ballot extends React.Component {
       step: 5,
       submitCount: 0,
       params: {},
-      backgroundImg: {
-        url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
-      },
-      viewCopy: {
-        headerTagLine: `by the people 2.0`,
-        formNotice: `**We will not use any of your information for any 3rd
-          Part. Nor will we send you emails unless you opt-in to receive 
-          them**`,
-        emailInput: `To receive results including final Senate Floor Votes`,
-        zipCodeInput: `This will allow us to include your private ballot in
-         the constituency that we will provide your Senators`,
-        subscribeToHotBill: `To receive other Hot 
-          Congressional Bill Ballots and track results`,
-        subscribeToOtherLegislationInfo: `to receive information 
-          from other Legislators and Bills and Ballot results`,
-        subscribeToHotBillTitle: `Opt-In`,
-        subscribeToOtherLegislationInfoTitle: `Legislator Opt-In`,
-        preSubmitInfo: `This is your private Ballot for 
-          (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
-        sliderHint: `Slide to Cast`,
-        submissionCTA: `Submit my VOTE`
-      }
     }
   }
 
@@ -101,6 +80,7 @@ class Ballot extends React.Component {
         "email": voteData['userEmail'] || '',
         "zip_code": voteData['zipCode'] || '',
         "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
+        "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
         "bill_id": params.params.bill['id'] || null,
       }
 
@@ -165,7 +145,7 @@ class Ballot extends React.Component {
               callback={this.onValueChange}
               showSlider={true}
             />
-            <VoteForm firstSubmission={true} callback={this.submitVote} copy={this.state.viewCopy} />
+            <VoteForm firstSubmission={true} callback={this.submitVote} copy={ballotCopy} />
             <Footer />
           </div>
         )
@@ -218,7 +198,7 @@ class Ballot extends React.Component {
               callback={this.onValueChange}
               showSlider={true}
             />
-            <VoteForm firstSubmission={false} callback={this.submitVote} copy={this.state.viewCopy} />
+            <VoteForm firstSubmission={false} callback={this.submitVote} copy={ballotCopy} />
             <Results { ...this.state.voteResults} />
             <Footer />
           </div>

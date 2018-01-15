@@ -6,7 +6,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import GetMuiTheme from 'material-ui/styles/getMuiTheme';
 import PropTypes from 'prop-types';
 
-
 import formValidation from '../../components/utilities/formValidation';
 
 import { green500, blue500 } from 'material-ui/styles/colors';
