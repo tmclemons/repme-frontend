@@ -15,8 +15,10 @@ const repMeConstants = () => {
           from your Legislators about Ballots and Voting results`,
       subscribeToHotBillTitle: `Opt-In`,
       subscribeToOtherLegislationInfoTitle: `Legislator Opt-In`,
-      preSubmitInfo: `This is your private Ballot for 
-          (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
+    //deprecated
+    //   preSubmitInfo: (billData) => {
+    //       return `This is your private Ballot for 
+    //       (Your Ballot No. H.R. ${billData.number}-${billData.hash})` },
       sliderHint: `Slide to Cast`,
       submissionCTA: `Submit my VOTE`
     },
