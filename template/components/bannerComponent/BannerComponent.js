@@ -62,6 +62,7 @@ class Banner extends React.Component {
   }
 
   render() {
+    let overflowCheck = false;
     return (
       <div>
         <MuiThemeProvider>
@@ -88,7 +89,7 @@ class Banner extends React.Component {
                       <StarIcon color={ grey50 }/>
                     </div>
                     <span className={'bill-number'}>{this.state.ballotNumber}</span>
-                    <h1>{this.state.ballotTitle || null}</h1>
+                      <h1 ref={(elem) => { console.log(elem)}}>{this.state.ballotTitle || null}</h1>
                     <span className={'closing-date'}
                       >Ballot Closing Date:&emsp; 
                         <DataComponent

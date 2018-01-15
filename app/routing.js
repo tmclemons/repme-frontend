@@ -23,7 +23,7 @@ class Routing extends React.Component {
   constructor(props) {
     super(props);
   }
-
+  //TODO:setup redirect for when user hits reload
   render() {
     return (
       <div style={{

@@ -1,5 +1,7 @@
 $fontFamily: 'Playfair Display', serif;
 $fontFamilySmall: 'Lato', sans-serif;
+$lineHeight: 32px;
+$maxLines: 3;
 
 .overlay-content {
   display: flex;
@@ -15,8 +17,13 @@ $fontFamilySmall: 'Lato', sans-serif;
     }
     h1 {
       margin-bottom: 10px;
-      max-height: 300px;
       overflow: hidden;
+      font-size: $lineHeight;
+      max-height: $lineHeight * $maxLines;
+
+      &:after{
+        content:'...';
+      }
     }
     .bill-number{
       text-transform: uppercase;
