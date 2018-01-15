@@ -2,6 +2,10 @@
       $voteGreen: green;
       $white: white;
       $fontFamily: 'Playfair Display', serif;
+      
+      .highcharts-container {
+        overflow: visible !important;
+      }
 
       .vote-labels {
         display: flex;

@@ -177,6 +177,7 @@ class BallotResults extends React.Component {
     let getFormattedData = this.getFormattedData(resultType);
     let setVoteIconPosition = this.setVoteIconPosition;
     let param = this.props.bill.data;
+    let resultTypeCheck = resultType ? true : false;
     let results = {
       title: null,
       chart: {
@@ -197,27 +198,34 @@ class BallotResults extends React.Component {
           enabled: true,
           rotation: 0,
           color: '#FFFFFF',
-          align: 'center',
+          align: 'left',
           // format: '{point.y:1f}', // no decimal
           y: -30, // 10 pixels down from the top
+          //this.series.xAxis.labelAlign
             useHTML: true,
             formatter: function() {
-              console.log(this)
               let positionTest = setVoteIconPosition({
                 xPos: this.x,
                 yPos: this.y,
                 comparableValue: voteResult
               });
-
-              if (positionTest) {
+              let pointWidth = Math.round(this.point.pointWidth);
+              let pointHeight = pointWidth * 2.7;
+              let labelPos = 5;
+              if (positionTest & !resultTypeCheck) {
                 let results = 
                 '<div>'+
-                 `<div>${this.point.y}</div>` +
-                  `<div style=" left: -10px;position: absolute; top: ${-this.point.shapeArgs.height - 30}px;">`+
-                  'Your Vote</div>' +
+                  `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
+                  `<div style=" left: ${-labelPos}px; position: absolute; width: ${pointWidth}px; height:${pointWidth * 2.7}px; top: ${-this.point.shapeArgs.height - pointHeight + (pointWidth * .667)}px; background-image:url('/images/yourVoteIcon.png'); background-size:cover; background-repeat: no-repeat">`+
+                  '</div>' +
                 '</div>';
-                console.log(results)
-                return results;
+                return this.point.y < 1 ? null : results;
+              } else {
+                let results = 
+                '<div>'+
+                  `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
+                '</div>';
+                return this.point.y <1 ? null : results;
               }
             },
           style: {
