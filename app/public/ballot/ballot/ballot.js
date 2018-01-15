@@ -6,11 +6,10 @@ import Banner from '../../../../template/components/bannerComponent/BannerCompon
 import Footer from '../../../../template/components/mainFooter/MainFooter';
 import Results from '../ballotResults/BallotResults';
 import axios from 'axios';
-import Copy from '../../../../template/components/utilities/RepMeCopy';
-const { ballotCopy } = Copy;  
+import Constants from '../../../../template/components/utilities/constants';
+const { ballotCopy, sampleData } = Constants;  
 
 import Scss from './ballot.scss';
-
 const SampleHeader = (props) => {
   return (
     <div>
@@ -88,7 +87,8 @@ class Ballot extends React.Component {
         .then(res => {
           this.setState({
             activeState: this.states[1],
-            voteResults: res.data.results
+            // voteResults: res.data.results
+            voteResults: sampleData.results
           })
         })
         .catch(function (error) {

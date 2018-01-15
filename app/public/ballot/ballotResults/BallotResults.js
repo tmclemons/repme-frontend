@@ -12,7 +12,8 @@ import ChartLabelComponent from '../../../../template/components/chartLabelCompo
 import StateDemographic from '../../../../template/components/demographicComponent/DemographicComponent';
 import RepresentativeCard from '../../../../template/components/representativeCardComponent/RepresentativeCardComponent';
 import ChartTitleBarComponent from '../../../../template/components/titleBarComponent/TitleBarComponent';
-import StateIllinois from '../../../../template/components/utilities/SampleStateComponent';
+import Constants from '../../../../template/components/utilities/constants';
+const { colorStops } = Constants;  
 
 import Scss from './ballotResults.scss';
   
@@ -79,104 +80,30 @@ class BallotResults extends React.Component {
   }
 
   getColorStops = () => {
-    let colors = [
-      {
-        prop: 'stop-0',
-        hex: '#30ad40'
-      },
-      {
-        prop: 'stop-1',
-        hex: '#45b03f'
-      },
-      {
-        prop: 'stop-2',
-        hex: '#59b43e'
-      },
-      {
-        prop: 'stop-3',
-        hex: '#6eb73c'
-      },
-      {
-        prop: 'stop-4',
-        hex: '#83ba3b'
-      },
-      {
-        prop: 'stop-5',
-        hex: '#98be3a'
-      },
-      {
-        prop: 'stop-6',
-        hex: '#acc139'
-      },
-      {
-        prop: 'stop-7',
-        hex: '#c1c438'
-      },
-      {
-        prop: 'stop-8',
-        hex: '#d6c736'
-      },
-      {
-        prop: 'stop-9',
-        hex: '#eacb35'
-      },
-      {
-        prop: 'stop-10',
-        hex: '#7f7f7f'
-      },
-      {
-        prop: 'stop-11',
-        hex: '#fdbe32'
-      },
-      {
-        prop: 'stop-12',
-        hex: '#fbae2f'
-      },
-      {
-        prop: 'stop-13',
-        hex: '#fa9e2d'
-      },
-      {
-        prop: 'stop-14',
-        hex: '#f88e2a'
-      },
-      {
-        prop: 'stop-15',
-        hex: '#f67e28'
-      },
-      {
-        prop: 'stop-16',
-        hex: '#f46e25'
-      },
-      {
-        prop: 'stop-17',
-        hex: '#f25e23'
-      },
-      {
-        prop: 'stop-18',
-        hex: '#f14e20'
-      },
-      {
-        prop: 'stop-19',
-        hex: '#ef3e1e'
-      },
-      {
-        prop: 'stop-20',
-        hex: '#ed2e1b'
-      }
-    ];
-    
-    let colorStops = [];
 
-    colors.forEach((stop) => {
-      colorStops.push(stop.hex)
+    let colorBuffer = [];
+    colorStops.forEach((stop) => {
+      colorBuffer.push(stop.hex)
     });
 
-    return colorStops.length ? colorStops : null;
+    return colorBuffer.length ? colorBuffer : null;
+  }
+
+  setVoteIconPosition(data, param) {
+    let voteRanges = [];
+    let splitRange = data.xPos.split('-'); 
+    let vote = data.comparableValue;
+    if ((Number(splitRange[0]) - .001) < vote ) {
+      if (Number(`${splitRange[1]}.001`) > vote) {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
 
   getFormattedData = () => {
-    let dataLabels = [
+    let textLabels = [
       'Strongly Agree',
       "",
       "",
@@ -202,6 +129,7 @@ class BallotResults extends React.Component {
 
     let formattedData = [];
     let formattedDataBuffer = [];
+    let dataLabels = [];
     let param = this.props.bill.data;
 
     // this.props.bill.data
@@ -210,7 +138,8 @@ class BallotResults extends React.Component {
       if (param.hasOwnProperty(prop)) {
         sortBuffer.push(
           {
-            order: Number(prop.split('-')[0]),
+            minOrder: Number(prop.split('-')[0]),
+            maxOrder: Number(prop.split('-')[1]),
             label: prop,
             value: param[prop]
           }
@@ -219,11 +148,12 @@ class BallotResults extends React.Component {
     }
     
     sortBuffer.sort(function (a, b) {
-      return b.order - a.order;
+      return b.minOrder - a.minOrder;
     });
 
     sortBuffer.forEach((buffer) => {
-      formattedDataBuffer.push(buffer.value)
+      formattedDataBuffer.push(buffer.value);
+      dataLabels.push(buffer.label);
     });
 
     formattedDataBuffer.forEach((dataItem, index) => {
@@ -237,11 +167,16 @@ class BallotResults extends React.Component {
 
     return {
       data: formattedData,
+      textLabels: textLabels,
       dataLabels: dataLabels
     };
   }
 
   getSampleDistrictResultsArray = (resultType) => {
+    let voteResult = this.props.vote;
+    let getFormattedData = this.getFormattedData(resultType);
+    let setVoteIconPosition = this.setVoteIconPosition;
+    let param = this.props.bill.data;
     let results = {
       title: null,
       chart: {
@@ -257,14 +192,34 @@ class BallotResults extends React.Component {
       },
       colors: this.getColorStops(),
       series:[{
-        data: this.getFormattedData(resultType).data,
+        data: getFormattedData.data,
         dataLabels: {
           enabled: true,
           rotation: 0,
           color: '#FFFFFF',
           align: 'center',
-          format: '{point.y:1f}', // no decimal
+          // format: '{point.y:1f}', // no decimal
           y: -30, // 10 pixels down from the top
+            useHTML: true,
+            formatter: function() {
+              console.log(this)
+              let positionTest = setVoteIconPosition({
+                xPos: this.x,
+                yPos: this.y,
+                comparableValue: voteResult
+              });
+
+              if (positionTest) {
+                let results = 
+                '<div>'+
+                 `<div>${this.point.y}</div>` +
+                  `<div style=" left: -10px;position: absolute; top: ${-this.point.shapeArgs.height - 30}px;">`+
+                  'Your Vote</div>' +
+                '</div>';
+                console.log(results)
+                return results;
+              }
+            },
           style: {
             fontSize: '16px',
             fontFamily: 'Roboto, sans-serif'
@@ -297,7 +252,7 @@ class BallotResults extends React.Component {
         labels: {
           enabled: false
         },
-        categories: this.getFormattedData(resultType).dataLabels
+        categories: getFormattedData.dataLabels
       }
     }
     return results;
@@ -324,12 +279,12 @@ class BallotResults extends React.Component {
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
           <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics}/>
-          <ChartLabelComponent { ...this.getFormattedData().dataLabels}/>
+          <ChartLabelComponent { ...this.getFormattedData().textLabels}/>
           <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
         </div>
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: 'votes', title: 'United State Results'}}/>
-          <ChartLabelComponent { ...this.getFormattedData('usa').dataLabels}/>
+          <ChartLabelComponent { ...this.getFormattedData('usa').textLabels}/>
           <BarChartComponent {  ...this.getSampleDistrictResultsArray('usa')}/>
         </div>
       </div>
