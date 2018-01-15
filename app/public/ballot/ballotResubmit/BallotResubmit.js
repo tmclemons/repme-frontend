@@ -338,13 +338,7 @@ class BallotResubmit extends React.Component {
     }
     return results;
   }
-
-  submitVote(voteData) {
-    //hook api post call here
-    //TODO: preset data object to zero before data input
-    console.log(voteData)
-  }
-
+  
   render() {
     return (
       <div className={'ballot__wrapper'}>

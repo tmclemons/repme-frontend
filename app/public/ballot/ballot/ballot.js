@@ -15,8 +15,8 @@ const SampleHeader = (props) => {
     <div>
       <div style={{ background: 'black', display: 'flex' }}>
         <div style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} onClick={props.callback}>Resubmit</div>
-        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/repme/">Rep-Me Demo </Link>
-        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/aarp/">AARP Demo </Link>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/repme">Rep-Me Demo </Link>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/aarp">AARP Demo </Link>
       </div>
     </div>
   )
@@ -108,7 +108,6 @@ class Ballot extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-      console.log(this.state.params)
   }
 
   /// TODO: clean this data logic up
