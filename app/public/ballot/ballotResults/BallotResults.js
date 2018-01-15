@@ -104,17 +104,7 @@ class BallotResults extends React.Component {
 
   getFormattedData = () => {
     let textLabels = [
-      'Strongly Agree',
-      "",
-      "",
-      "",
-      "",
-      'Agree',
-      "",
-      "",
-      "",
-      "",
-      'Neutral',
+      'Strongly Disagree',
       "",
       "",
       "",
@@ -124,7 +114,17 @@ class BallotResults extends React.Component {
       "",
       "",
       "",
-      'Strongly Disagree',
+      'Neutral',
+      "",
+      "",
+      "",
+      "",
+      'Agree',
+      "",
+      "",
+      "",
+      "",
+      'Strongly Agree',
     ];
 
     let formattedData = [];
@@ -148,7 +148,7 @@ class BallotResults extends React.Component {
     }
     
     sortBuffer.sort(function (a, b) {
-      return b.minOrder - a.minOrder;
+      return a.minOrder - b.minOrder;
     });
 
     sortBuffer.forEach((buffer) => {

@@ -58,7 +58,7 @@ class Ballot extends React.Component {
   onValueChange = (data) => {
     this.setState({
       bannerProps: (data / (this.state.step)) || 0,
-      voteValue: data,
+      voteValue: (100 - data),
       firstTimeUse: false,
     })
   }

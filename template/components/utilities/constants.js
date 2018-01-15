@@ -25,88 +25,88 @@ const repMeConstants = () => {
     colorStops: [
         {
             prop: 'stop-0',
-            hex: '#30ad40'
+            hex: '#f14724'
         },
         {
             prop: 'stop-1',
-            hex: '#45b03f'
+            hex: '#f25527'
         },
         {
             prop: 'stop-2',
-            hex: '#59b43e'
+            hex: '#f36329'
         },
         {
             prop: 'stop-3',
-            hex: '#6eb73c'
+            hex: '#f5712c'
         },
         {
             prop: 'stop-4',
-            hex: '#83ba3b'
+            hex: '#f67f2e'
         },
         {
             prop: 'stop-5',
-            hex: '#98be3a'
+            hex: '#f78d31'
         },
         {
             prop: 'stop-6',
-            hex: '#acc139'
+            hex: '#f89b34'
         },
         {
             prop: 'stop-7',
-            hex: '#c1c438'
+            hex: '#f9a936'
         },
         {
             prop: 'stop-8',
-            hex: '#d6c736'
+            hex: '#fbb739'
         },
         {
             prop: 'stop-9',
-            hex: '#eacb35'
+            hex: '#fcc53b'
         },
         {
             prop: 'stop-10',
-            hex: '#7f7f7f'
+            hex: '#868686'
         },
         {
             prop: 'stop-11',
-            hex: '#fdbe32'
+            hex: '#f0d23f'
         },
         {
             prop: 'stop-12',
-            hex: '#fbae2f'
+            hex: '#e2d040'
         },
         {
             prop: 'stop-13',
-            hex: '#fa9e2d'
+            hex: '#d5cf41'
         },
         {
             prop: 'stop-14',
-            hex: '#f88e2a'
+            hex: '#c7cd42'
         },
         {
             prop: 'stop-15',
-            hex: '#f67e28'
+            hex: '#bacc43'
         },
         {
             prop: 'stop-16',
-            hex: '#f46e25'
+            hex: '#acca43'
         },
         {
             prop: 'stop-17',
-            hex: '#f25e23'
+            hex: '#9fc944'
         },
         {
             prop: 'stop-18',
-            hex: '#f14e20'
+            hex: '#91c745'
         },
         {
             prop: 'stop-19',
-            hex: '#ef3e1e'
+            hex: '#84c646'
         },
         {
             prop: 'stop-20',
-            hex: '#ed2e1b'
-        }
+            hex: '#76c447'
+        },
     ],
     sampleData: {
         "response_code": 200,

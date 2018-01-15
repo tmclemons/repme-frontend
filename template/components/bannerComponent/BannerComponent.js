@@ -49,11 +49,11 @@ class Banner extends React.Component {
 
   getFormattedData = () => {
     let dataLabels = [
-      'Strongly Agree',
-      'Agree',
-      'Neutral',
-      'Disagree',
       'Strongly Disagree',
+      'Disagree',
+      'Neutral',
+      'Agree',
+      'Strongly Agree',
     ];
 
     return {
