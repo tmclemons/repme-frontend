@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactHighCharts from 'react-highcharts';
 
+
 class BarChartComponent extends React.Component {
   constructor(props) {
     super(props);

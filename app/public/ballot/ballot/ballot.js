@@ -5,18 +5,21 @@ import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../../template/components/mainFooter/MainFooter';
 import Results from '../ballotResults/BallotResults';
+import Frame from 'react-frame-component';
 import axios from 'axios';
 import Constants from '../../../../template/components/utilities/constants';
-const { ballotCopy, sampleData } = Constants;  
+const { ballotCopy } = Constants;  
 
 import Scss from './ballot.scss';
 const SampleHeader = (props) => {
   return (
     <div>
       <div style={{ background: 'black', display: 'flex' }}>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/">Home </Link>
         <div style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} onClick={props.callback}>Resubmit</div>
         <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/repme">Rep-Me Demo </Link>
         <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/aarp">AARP Demo </Link>
+        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/print">Print View Demo </Link>
       </div>
     </div>
   )
@@ -26,27 +29,42 @@ class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
-    this.states = ['vote', 'results', 'revote'],
+    this.states = ['vote', 'results', 'revote', 'print', 'widget'],
     this.state = {
-      org: (props.match.params.org ? `/${props.match.params.org}` : ''),
-      voteResults: null,
-      activeState: 'vote',
+      org: props.match.params.org,
+      voteResults: {},
+      iFrame: false,
+      toImage: false,
+      activeState: this.states[0],
       firstTimeUse: true,
       defaultValue: 50,
       voteValue: 50,
       bannerProps: 0,
       step: 5,
       submitCount: 0,
-      params: {},
+    }
+  }
+
+  urlCheck = (urlProps) => {
+    let apiUrl = urlProps && urlProps !== this.states[3] ? `/${urlProps}` : '';
+    let apiCheckForImage = urlProps === this.states[3];
+    let activeState = apiCheckForImage ? this.states[3] : this.states[0];
+    return {
+      url: apiUrl,
+      toImage: apiCheckForImage,
+      activeState: activeState
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    axios.post(`http://54.187.193.156/api/profile${(nextProps.match.params.org ? `/${nextProps.match.params.org}` : '')}`)
+    let urlProps = nextProps.match.params.org;
+
+    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
       .then(res => {
         this.setState({
-          params: Object.assign(this.state.params, res.data.results),
-          activeState: this.states[0]
+          params: Object.assign(this.state.voteResults, res.data.results),
+          activeState: this.urlCheck(urlProps).activeState,
+          toImage: this.urlCheck(urlProps).toImage,
         })
       })
       .catch(function (error) {
@@ -80,15 +98,14 @@ class Ballot extends React.Component {
         "zip_code": voteData['zipCode'] || '',
         "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
         "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
-        "bill_id": params.params.bill['id'] || null,
+        "bill_id": params.voteResults.bill['id'] || null,
       }
 
       axios.post(`http://54.187.193.156/api/vote`, data)
         .then(res => {
           this.setState({
             activeState: this.states[1],
-            // voteResults: res.data.results
-            voteResults: sampleData.results
+            voteResults: res.data.results
           })
         })
         .catch(function (error) {
@@ -98,21 +115,24 @@ class Ballot extends React.Component {
   }
 
   componentDidMount() {
-    axios.post(`http://54.187.193.156/api/profile${this.state.org}`)
+    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
         this.setState({
-          params: Object.assign(this.state.params, res.data.results),
-          activeState: this.states[0]
+          voteResults: res.data.results,
+          activeState: this.urlCheck(this.state.org).activeState,
+          toImage: this.urlCheck(this.state.org).toImage
         })
       })
       .catch(function (error) {
         console.log(error);
       });
   }
-
   /// TODO: clean this data logic up
   showSampleReVoteView = () => {
-    axios.post(`http://54.187.193.156/api/profile${this.state.org}`)
+    this.setState({
+
+    })
+    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
         this.setState({
           activeState: this.states[2],
@@ -128,28 +148,54 @@ class Ballot extends React.Component {
 
   render() {
     //vote view\
-    let { bill } = this.state.params;
+    let { bill } = this.state.voteResults;
     if (this.state.activeState === this.states[0]) {
-      if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
-        return (
-          <div className={'ballot__wrapper'}>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
-            <Header org={this.state.params.org}/>
-            <Banner
-              ballotInfo={this.state.params.bill}
-              backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
-              callback={this.submitVote}
-              firstTimeUse={this.state.firstTimeUse}
-              secondVoteAttempt={this.state.submitCount > 0 ? true : false}
-              defaultValue={this.state.defaultValue}
-              bannerProps={this.state.bannerProps}
-              callback={this.onValueChange}
-              showSlider={true}
-            />
-            <VoteForm firstSubmission={true} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy} />
-            <Footer />
-          </div>
-        )
+      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+        if(!this.state.iFrame) {
+          return (
+            <div className={'ballot__wrapper'}>
+              <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
+              <Header org={this.state.voteResults.org}/>
+              <Banner
+                ballotInfo={this.state.voteResults.bill}
+                backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
+                callback={this.submitVote}
+                firstTimeUse={this.state.firstTimeUse}
+                secondVoteAttempt={this.state.submitCount > 0 ? true : false}
+                defaultValue={this.state.defaultValue}
+                bannerProps={this.state.bannerProps}
+                callback={this.onValueChange}
+                showSlider={true}
+              />
+              <VoteForm firstSubmission={true} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy} />
+              <Footer />
+            </div>
+          )
+        } else {
+            return (
+            <div>
+              <Frame>
+                  <div className={'ballot__wrapper'}>
+                    <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
+                    <Header org={this.state.voteResults.org}/>
+                    <Banner
+                      ballotInfo={this.state.voteResults.bill}
+                      backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
+                      callback={this.submitVote}
+                      firstTimeUse={this.state.firstTimeUse}
+                      secondVoteAttempt={this.state.submitCount > 0 ? true : false}
+                      defaultValue={this.state.defaultValue}
+                      bannerProps={this.state.bannerProps}
+                      callback={this.onValueChange}
+                      showSlider={true}
+                    />
+                    <VoteForm firstSubmission={true} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy} />
+                    <Footer />
+                  </div>
+                </Frame>
+              </div>
+            )
+        }
       } else {
         return(
           <div className={'ballot__wrapper'} />
@@ -158,13 +204,13 @@ class Ballot extends React.Component {
     } 
     //results view
     if (this.state.activeState === this.states[1]) {
-      if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
+      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
         return(
           <div className={'ballot__wrapper'}>
             <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
-            <Header org={this.state.params.org} />
+            <Header org={this.state.voteResults.org} />
             <Banner
-              ballotInfo={this.state.params.bill}
+              ballotInfo={this.state.voteResults.bill}
               backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
               callback={this.submitVote}
               firstTimeUse={this.state.firstTimeUse}
@@ -173,7 +219,7 @@ class Ballot extends React.Component {
               callback={this.onValueChange}
               showSlider={false}
             />
-            <Results { ...this.state.voteResults}/>
+            <Results toImage={this.state.toImage} { ...this.state.voteResults}/>
             <Footer />
           </div>
         )
@@ -183,13 +229,13 @@ class Ballot extends React.Component {
     }
     //results resubmit view
     if (this.state.activeState === this.states[2]) {
-      if (Object.keys(this.state.params).length > 0 && this.state.params.constructor === Object) {
+      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
         return (
           <div className={'ballot__wrapper'}>
             <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
-            <Header org={this.state.params.org} />
+            <Header org={this.state.voteResults.org} />
             <Banner
-              ballotInfo={this.state.params.bill}
+              ballotInfo={this.state.voteResults.bill}
               backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
               callback={this.submitVote}
               firstTimeUse={this.state.firstTimeUse}
@@ -200,14 +246,42 @@ class Ballot extends React.Component {
               showSlider={true}
             />
             <VoteForm firstSubmission={false} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy} />
-            <Results { ...this.state.voteResults} />
+            <Results toImage={this.state.toImage} { ...this.state.voteResults} />
             <Footer />
           </div>
         )
       } else {
         return (<div className={'ballot__wrapper'} />)
       }
-    } else {
+    }
+    //results print view
+    if (this.state.activeState === this.states[3]) {
+      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+        return (
+          <div className={'ballot__wrapper'}>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
+            <div id={'delete-results'}>
+              <Results toImage={this.state.toImage} { ...this.state.voteResults} />
+            </div>
+          </div>
+        )
+      } else {
+        return (<div className={'ballot__wrapper'} />)
+      }
+    } 
+    // widget view
+    if (this.state.activeState === this.states[4]) {
+      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+        return (
+          <div className={'ballot__wrapper'}>
+            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
+            <Results toImage={this.state.toImage} { ...this.state.voteResults} />
+          </div>
+        )
+      } else {
+        return (<div className={'ballot__wrapper'} />)
+      }
+    }  else {
       return (
         <div> Something went wrong</div>
       )

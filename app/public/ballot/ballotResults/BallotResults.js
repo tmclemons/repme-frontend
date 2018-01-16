@@ -15,12 +15,14 @@ import ChartTitleBarComponent from '../../../../template/components/titleBarComp
 import Constants from '../../../../template/components/utilities/constants';
 const { colorStops } = Constants;  
 
+import domtoimage from 'dom-to-image';
 import Scss from './ballotResults.scss';
   
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      toImage: true,
       yourState: 'IL',
       backgroundImg: {
         url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
@@ -89,7 +91,7 @@ class BallotResults extends React.Component {
     return colorBuffer.length ? colorBuffer : null;
   }
 
-  setVoteIconPosition(data, param) {
+  setVoteIconPosition(data) {
     let voteRanges = [];
     let splitRange = data.xPos.split('-'); 
     let vote = data.comparableValue;
@@ -179,7 +181,7 @@ class BallotResults extends React.Component {
     let param = this.props.bill.data;
     let resultTypeCheck = resultType ? true : false;
     let results = {
-      title: null,
+      title: 'none',
       chart: {
         type: 'column',
         spacing: [0,35,0,35]
@@ -270,7 +272,31 @@ class BallotResults extends React.Component {
     //hook api post call here
     console.log(voteData)
   }
+
+  convertResultsToPng(){
+    let node = document.getElementById('your-results');
+    let deleteResults = document.getElementById('delete-results');
+    domtoimage.toPng(node).then(function (dataUrl) {
+      //maybe a time issue because the chart hasnt drawn yet
+      var img = new Image();
+      img.src = dataUrl;
+      img.className="results-image"
+      document.body.appendChild(img);
+      deleteResults.outerHTML = "";
+    }).catch(function (error) {
+      console.error('oops, something went wrong!', error);
+    });
+  }
   
+  componentDidMount() {
+    console.log('mounted')
+    if (this.props.toImage) {
+      setTimeout(() => {
+        console.log('did it run')
+        this.convertResultsToPng();
+      }, 1000);
+    }
+  }
 
   render() {
     const barChartData = {
@@ -287,8 +313,15 @@ class BallotResults extends React.Component {
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
           <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics}/>
-          <ChartLabelComponent { ...this.getFormattedData().textLabels}/>
-          <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
+          <div id={'your-results'}>
+            <div style={{
+              display: `${this.state.toImage ? 'block' : 'none'}`,
+              height: `${this.state.toImage ? '100px' : '0'}`,
+              background: 'white'
+            }}/>
+            <ChartLabelComponent { ...this.getFormattedData().textLabels}/>
+            <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
+          </div>
         </div>
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: 'votes', title: 'United State Results'}}/>

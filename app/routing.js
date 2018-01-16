@@ -26,9 +26,7 @@ class Routing extends React.Component {
   //TODO:setup redirect for when user hits reload
   render() {
     return (
-      <div style={{
-        height: '100vh'
-      }}>
+      <div>
         <Route exact path='/' component={Ballot} />
         <Route path='/:org' component={Ballot} />
       </div>
