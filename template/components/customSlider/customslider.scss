@@ -252,6 +252,11 @@ $fontFamily: 'Playfair Display', serif;
   }
 }
 
+.widget-view .customslider-horizontal .step-container .slider__marker{
+  .minor-step {
+    display: none !important;
+  }
+}
 
 /**
 * Customslider - Vertical slider
