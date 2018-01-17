@@ -51,24 +51,27 @@ class Ballot extends React.Component {
     }
   }
 
-  urlCheck = (urlProps) => {
-    let apiUrl = urlProps && urlProps !== this.states[3] && urlProps !== this.states[4] ? `/${urlProps}` : '';
-    let apiCheckForImage = urlProps === this.states[3];
+  locationCheckForWidget = () => {
     let regex = new RegExp('([^=&?]+)=([^&]+)');
     let queryString = this.props.location.search ? this.props.location.search.match(regex) : null;
     let apiCheckForWidget = queryString && (queryString[2] === 'true') ? true : false;
+    return apiCheckForWidget;
+  }
+
+  urlCheck = (urlProps) => {
+    let apiUrl = urlProps && urlProps !== this.states[3] && urlProps !== this.states[4] ? `/${urlProps}` : '';
+    let apiCheckForImage = urlProps === this.states[3];
     let activeState = apiCheckForImage ? this.states[3] : this.states[0];
-    activeState = apiCheckForWidget ? this.states[4] : this.states[0];
-    
+    activeState = this.locationCheckForWidget() ? this.states[4] : this.states[0];
     return {
       url: apiUrl,
       toImage: apiCheckForImage,
       activeState: activeState,
-      isWidget: apiCheckForWidget
+      isWidget: this.locationCheckForWidget()
     }
   }
 
-setCookie = (props, state) => {
+setCookie = (props, state, results) => {
   if(props === true) {
     // set cookie to active state
     cookie.save('fromWidget', true, {
@@ -79,6 +82,12 @@ setCookie = (props, state) => {
       path: '/',
       maxAge: 1000,
     });
+    if(results) {
+      cookie.save('voteResults', results, {
+        path: '/',
+        maxAge: 1000,
+      });
+    }
   }
   
   if(props === false) {
@@ -89,11 +98,13 @@ setCookie = (props, state) => {
     // set cookie to active state
     cookie.remove('fromWidget');
   }
+  if(results === false) {
+    cookie.remove('voteResults');
+  }
 }
 
   componentWillReceiveProps(nextProps) {
     let urlProps = nextProps.match.params.org;
-    console.log('click')
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
       .then(res => {
         this.setState({
@@ -140,18 +151,21 @@ setCookie = (props, state) => {
       axios.post(`http://54.187.193.156/api/vote`, data)
         .then(res => {
           this.setState({
-            activeState: this.states[1],
+            // here is where state will be maintained or lost after vote submission
+            activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
             voteResults: res.data.results
           })
+        })
+        .then(() => {
+          if(this.state.isWidget) {
+            this.setCookie(this.state.isWidget, this.states[1], this.state.voteResults);
+          }
         })
         .catch(function (error) {
           console.log(error);
         });
-
         if(this.state.isWidget) {
-          this.setCookie(this.urlCheck(this.state.org).isWidget, this.states[1]);
           window.open('/', '_blank');
-
           //set state to results view
           //set results to cookie
           // on component mount if state is from widget the loaded cookied view
@@ -161,12 +175,13 @@ setCookie = (props, state) => {
   }
 
   componentDidMount() {
-    let cookieCheck = cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true";
+    let cookieCheck = !this.locationCheckForWidget() && (cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true");
+    let cookieResultsCheck = cookie.load('voteResults') ? cookie.load('voteResults') : null;
 
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
         this.setState({
-          voteResults: res.data.results,
+          voteResults: cookieResultsCheck ? cookieResultsCheck : res.data.results,
           activeState: cookieCheck ? this.states[1] : this.urlCheck(this.state.org).activeState,
           toImage: this.urlCheck(this.state.org).toImage,
           isWidget: this.urlCheck(this.state.org).isWidget
@@ -175,8 +190,11 @@ setCookie = (props, state) => {
       .catch(function (error) {
         console.log(error);
       });
-
-    this.setCookie(false, this.urlCheck(this.state.org).activeState)
+    if (cookie.load('voteResults') ) {
+      this.setCookie(false, this.urlCheck(this.state.org).activeState, false);
+    } else {
+      this.setCookie(false, this.urlCheck(this.state.org).activeState)
+    }
   }
   /// TODO: clean this data logic up
   showSampleReVoteView = () => {
@@ -196,7 +214,6 @@ setCookie = (props, state) => {
 
   render() {
     //vote view\
-    console.log(cookie.loadAll())
     let { bill } = this.state.voteResults;
     if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
