@@ -24,12 +24,20 @@ class Banner extends React.Component {
       ballotContent: null,
       ballotClosingDate: null,
       firstTimeUse: this.props.firstTimeUse,
+      secondVoteAttempt: this.props.secondVoteAttempt
     }
   }
 
   styleForOverlay = {
     width: '100%',
     height: '100%',
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      firstTimeUse: this.props.firstTimeUse,
+      secondVoteAttempt: this.props.secondVoteAttempt
+    })
   }
 
   componentDidMount() {
@@ -128,7 +136,7 @@ class Banner extends React.Component {
                       firstTimeUse: this.state.firstTimeUse,
                     }
                   }
-                  secondAttempt={this.props.secondVoteAttempt}
+                  secondAttempt={this.state.secondVoteAttempt}
                   labels={ this.getFormattedData().dataLabels }
                 />  
                 </div>: null

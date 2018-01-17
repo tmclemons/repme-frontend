@@ -74,55 +74,82 @@ class Ballot extends React.Component {
     }
   }
 
-setCookie = (props, state, results) => {
+setCookie = () => {
   // set cookie props
   // console.log('setCookie', props, state, results)
-
-  if(props === true) {
-    // set cookie to active state
-    cookie.save('fromWidget', true, {
-      path: '/',
-      maxAge: 1000,
-    });
-    cookie.save('viewState', state, {
-      path: '/',
-      maxAge: 1000,
-    });
-    if(results) {
-      cookie.save('voteResults', results, {
+  const changePage = (props, state, results) => {
+    if(props === true) {
+      // set cookie to active state
+      cookie.save('fromWidget', true, {
         path: '/',
         maxAge: 1000,
       });
+      cookie.save('viewState', state, {
+        path: '/',
+        maxAge: 1000,
+      });
+      if(results) {
+        cookie.save('voteResults', results, {
+          path: '/',
+          maxAge: 1000,
+        });
+      }
+    }
+    
+    if(props === false) {
+      cookie.save('viewState', state, {
+        path: '/',
+        maxAge: 1000,
+      });
+      // set cookie to active state
+      cookie.remove('fromWidget');
+    }
+    
+    // state change
+    // console.log('stateChange', state)
+
+    if (results === false) {
+      cookie.remove('voteResults');
     }
   }
   
-  if(props === false) {
-    cookie.save('viewState', state, {
+  const setFirstTimeFlow = (bool) => {
+    bool = typeof bool === 'boolean' ? bool : true;
+    cookie.remove('firstTimeVote');
+    cookie.save('firstTimeVote', (bool), {
       path: '/',
       maxAge: 1000,
     });
-    // set cookie to active state
-    cookie.remove('fromWidget');
+    return bool;
   }
-  if(results === false) {
-    cookie.remove('voteResults');
+
+  const getFirstTimeFlow = () => {
+    let cookieResult = cookie.load('firstTimeVote') == 'true' ? true : false;
+    return cookieResult;
+  }
+  return {
+    changePage: changePage,
+    setFirstTimeFlow: setFirstTimeFlow,
+    getFirstTimeFlow: getFirstTimeFlow
   }
 }
 
-componentWillReceiveProps(nextProps) {
-  let urlProps = nextProps.match.params.org;
-  axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
-    .then(res => {
-      this.setState({
-        params: Object.assign(this.state.voteResults, res.data.results),
-        activeState: this.urlCheck(urlProps).activeState,
-        toImage: this.urlCheck(urlProps).toImage,
-        isWidget: this.urlCheck(urlProps).isWidget,
+  componentWillReceiveProps(nextProps) {
+    // console.log('componentWillReceiveProps')
+    let urlProps = nextProps.match.params.org;
+    this.setCookie().setFirstTimeFlow(true)
+    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
+      .then(res => {
+        this.setState({
+          params: Object.assign(this.state.voteResults, res.data.results),
+          activeState: this.urlCheck(urlProps).activeState,
+          toImage: this.urlCheck(urlProps).toImage,
+          isWidget: this.urlCheck(urlProps).isWidget,
+        })
       })
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   // capture slider data
@@ -130,17 +157,13 @@ componentWillReceiveProps(nextProps) {
     this.setState({
       bannerProps: (data / (this.state.step)) || 0,
       voteValue: (100 - data),
-      firstTimeUse: false,
     })
+    this.setCookie().setFirstTimeFlow(false)
   }
 
   submitVote = (voteData) => {
     this.state.submitCount++
-
-    this.setState({
-      firstTimeUse: this.state.submitCount > 0 ? false : true
-    })
-
+    this.setCookie().setFirstTimeFlow((this.state.submitCount > 0 ? false : true))
     let params = this.state;
 
     if(params.firstTimeUse && params.voteValue === 50) {
@@ -164,7 +187,9 @@ componentWillReceiveProps(nextProps) {
         })
         .then(() => {
           if(this.state.isWidget) {
-            this.setCookie(this.state.isWidget, this.states[1], this.state.voteResults);
+            this.setCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
+          } else {
+            this.setCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
           }
         })
         .catch(function (error) {
@@ -180,13 +205,12 @@ componentWillReceiveProps(nextProps) {
   componentDidMount() {
     let cookieCheck = !this.locationCheckForWidget() && (cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true");
     let cookieResultsCheck = cookie.load('voteResults') ? cookie.load('voteResults') : null;
-
     // check state
     // console.log('componentDidMount', this.state.org)
 
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
-        console.log(this.urlCheck(this.state.org).activeState)
+
         this.setState({
           voteResults: cookieResultsCheck ? cookieResultsCheck : res.data.results,
           activeState: cookieCheck ? this.states[1] : this.urlCheck(this.state.org).activeState,
@@ -198,9 +222,10 @@ componentWillReceiveProps(nextProps) {
         console.log(error);
       });
     if (cookie.load('voteResults') ) {
-      this.setCookie(false, this.urlCheck(this.state.org).activeState, false);
+      this.setCookie().changePage(false, this.urlCheck(this.state.org).activeState, false);
     } else {
-      this.setCookie(false, this.urlCheck(this.state.org).activeState)
+      this.setCookie().setFirstTimeFlow(true);
+      this.setCookie().changePage(false, this.urlCheck(this.state.org).activeState)
     }
   }
 
@@ -221,7 +246,6 @@ componentWillReceiveProps(nextProps) {
   //TODO: ASAP: GET IT DONE: create better error handling for view changes
 
   render() {
-
     //vote view
     let { bill } = this.state.voteResults;
     if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
@@ -235,7 +259,7 @@ componentWillReceiveProps(nextProps) {
                 ballotInfo={this.state.voteResults.bill}
                 backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
                 callback={this.submitVote}
-                firstTimeUse={this.state.firstTimeUse}
+                firstTimeUse={this.setCookie().getFirstTimeFlow()}
                 secondVoteAttempt={this.state.submitCount > 0 ? true : false}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
@@ -266,7 +290,7 @@ componentWillReceiveProps(nextProps) {
                 ballotInfo={this.state.voteResults.bill}
                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
                 callback={this.submitVote}
-                firstTimeUse={this.state.firstTimeUse}
+                firstTimeUse={this.setCookie().getFirstTimeFlow()}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
@@ -294,7 +318,7 @@ componentWillReceiveProps(nextProps) {
                 ballotInfo={this.state.voteResults.bill}
                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
                 callback={this.submitVote}
-                firstTimeUse={this.state.firstTimeUse}
+                firstTimeUse={this.setCookie().getFirstTimeFlow()}
                 submitCount={this.state.submitCount}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
@@ -311,7 +335,7 @@ componentWillReceiveProps(nextProps) {
         return (<div className={'ballot__wrapper'} />)
       }
     }
-    
+
     //results print view
     if (this.state.activeState === this.states[3]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
