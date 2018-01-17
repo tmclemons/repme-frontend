@@ -23,7 +23,7 @@
   - TODO: validation error go to vote page with option to input email and zipcode
 
 
-  Discussions:
+  xxDiscussions:
   - TODO: cookies
   - TODO: Bill closed logic
 
@@ -32,7 +32,8 @@
   - TODO: setup smaller candidate card and flex inline row so they are side by side and carry over
   - TODO: setup roll call vote results
 
-  Future TODOS:
+  xxFuture TODOS:
+  - TODO: match css further to do design
   - TODO: bill page
     # TODO: /api/bill/<bill_id>
     # TODO: /vote/bill/<bill_id>

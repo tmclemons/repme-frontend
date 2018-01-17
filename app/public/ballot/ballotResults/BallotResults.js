@@ -22,62 +22,15 @@ class BallotResults extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      toImage: true,
+      toImage: true, //this.props.toImage || false,
       yourState: 'IL',
       backgroundImg: {
         url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
       },
-      viewCopy: {
-        headerTagLine: `by the people 2.0`,
-        formNotice: `**We will not use any of your information for any 3rd
-          Part. Nor will we send you emails unless you opt-in to receive 
-          them**`,
-        emailInput: `To receive results including final Senate Floor Votes`,
-        zipCodeInput: `This will allow us to include your private ballot in
-         the constituency that we will provide your Senators`,
-        subscribeToHotBill: `To receive other Hot 
-          Congressional Bill Ballots and track results`,
-        subscribeToOtherLegislationInfo: `to receive information 
-          from other Legislators and Bills and Ballot results`,
-        subscribeToHotBillTitle: `Opt-In`,
-        subscribeToOtherLegislationInfoTitle: `Legislator Opt-In`,
-        preSubmitInfo: `This is your private Ballot for 
-          (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
-        sliderHint: `Slide to Cast`,
-        submissionCTA: `Submit my VOTE`
-      },
       repDemographics: {
         state: 'illinois',
-        districtCity: 'chicago',
-        maleVotes: 345,
-        femaleVotes: 279,
-      },
-      repVotes: [
-        {
-          firstName: 'Mark',
-          lastName: 'Kirk',
-          position: 'senator',
-          profileImg: 'https://i.pinimg.com/736x/a5/56/b8/a556b885cbb54b6495ae2083c0846642--mark-kirk-running-for-president.jpg',
-          party: 'republican',
-          district: 10,
-          votingParity: 1,
-          voted: true,
-          state: 'illinois',
-          body: 'house of representatives'
-        },
-        {
-          firstName: 'Richard',
-          lastName: 'Durbin',
-          position: 'senator',
-          profileImg: 'https://nrf.com/sites/default/files/styles/dynamic_body_side_caption_480x300/public/Images/Who%20We%20Are/Dick-Durbin_wide-1000px.jpg?itok=W0wJtyrM&c=5cab1ece9d195e79bf7351eec4880e36',
-          party: 'democratic',
-          district: 20,
-          votingParity: .5,
-          voted: false,
-          state: 'illinois',
-          body: 'house of representatives'
-        }
-      ]
+        districtCity: 'chicago'
+      }
     }
   }
 
@@ -268,11 +221,6 @@ class BallotResults extends React.Component {
     return results;
   }
 
-  submitVote(voteData) {
-    //hook api post call here
-    console.log(voteData)
-  }
-
   convertResultsToPng(){
     let node = document.getElementById('your-results');
     let deleteResults = document.getElementById('delete-results');
@@ -298,6 +246,16 @@ class BallotResults extends React.Component {
     }
   }
 
+  getStateDemographic = () => {
+    let isZipCode = this.props.zip_code && this.props.zip_code.length > 0; //this.props.zip_code
+    if(isZipCode) {
+      return(
+        <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics} />
+      )
+    }
+    return null;
+  }
+
   render() {
     const barChartData = {
       labels: this.getSampleDistrictResultsArray().xAxis.categories,
@@ -312,7 +270,7 @@ class BallotResults extends React.Component {
       <div> 
         <div className={'ballot__results--barchart'}>
           <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
-          <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics}/>
+          {this.getStateDemographic()}
           <div id={'your-results'}>
             <div style={{
               display: `${this.state.toImage ? 'block' : 'none'}`,

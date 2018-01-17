@@ -59,10 +59,13 @@ class Ballot extends React.Component {
   }
 
   urlCheck = (urlProps) => {
-    let apiUrl = urlProps && urlProps !== this.states[3] && urlProps !== this.states[4] ? `/${urlProps}` : '';
+    // url props check
+    // console.log('urlCheck', urlProps)
+
+    let apiUrl = urlProps && ( urlProps !== this.states[3] ) && ( urlProps !== this.states[4] ) ? `/${urlProps}` : '';
     let apiCheckForImage = urlProps === this.states[3];
     let activeState = apiCheckForImage ? this.states[3] : this.states[0];
-    activeState = this.locationCheckForWidget() ? this.states[4] : this.states[0];
+    activeState = this.locationCheckForWidget() ? this.states[4] : activeState;
     return {
       url: apiUrl,
       toImage: apiCheckForImage,
@@ -72,6 +75,9 @@ class Ballot extends React.Component {
   }
 
 setCookie = (props, state, results) => {
+  // set cookie props
+  // console.log('setCookie', props, state, results)
+
   if(props === true) {
     // set cookie to active state
     cookie.save('fromWidget', true, {
@@ -103,20 +109,20 @@ setCookie = (props, state, results) => {
   }
 }
 
-  componentWillReceiveProps(nextProps) {
-    let urlProps = nextProps.match.params.org;
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
-      .then(res => {
-        this.setState({
-          params: Object.assign(this.state.voteResults, res.data.results),
-          activeState: this.urlCheck(urlProps).activeState,
-          toImage: this.urlCheck(urlProps).toImage,
-          isWidget: this.urlCheck(urlProps).isWidget,
-        })
+componentWillReceiveProps(nextProps) {
+  let urlProps = nextProps.match.params.org;
+  axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
+    .then(res => {
+      this.setState({
+        params: Object.assign(this.state.voteResults, res.data.results),
+        activeState: this.urlCheck(urlProps).activeState,
+        toImage: this.urlCheck(urlProps).toImage,
+        isWidget: this.urlCheck(urlProps).isWidget,
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   // capture slider data
@@ -129,14 +135,14 @@ setCookie = (props, state, results) => {
   }
 
   submitVote = (voteData) => {
-    //hook api post call here
-    //DONE: preset data object to zero before data input
-    //DONE: Setup ASYNC promises
     this.state.submitCount++
+
     this.setState({
       firstTimeUse: this.state.submitCount > 0 ? false : true
     })
+
     let params = this.state;
+
     if(params.firstTimeUse && params.voteValue === 50) {
     } else {
       let data = {
@@ -164,12 +170,9 @@ setCookie = (props, state, results) => {
         .catch(function (error) {
           console.log(error);
         });
+        
         if(this.state.isWidget) {
           window.open('/', '_blank');
-          //set state to results view
-          //set results to cookie
-          // on component mount if state is from widget the loaded cookied view
-          // after load delete cookies from view
         }
     }
   }
@@ -178,8 +181,12 @@ setCookie = (props, state, results) => {
     let cookieCheck = !this.locationCheckForWidget() && (cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true");
     let cookieResultsCheck = cookie.load('voteResults') ? cookie.load('voteResults') : null;
 
+    // check state
+    // console.log('componentDidMount', this.state.org)
+
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
+        console.log(this.urlCheck(this.state.org).activeState)
         this.setState({
           voteResults: cookieResultsCheck ? cookieResultsCheck : res.data.results,
           activeState: cookieCheck ? this.states[1] : this.urlCheck(this.state.org).activeState,
@@ -196,6 +203,7 @@ setCookie = (props, state, results) => {
       this.setCookie(false, this.urlCheck(this.state.org).activeState)
     }
   }
+
   /// TODO: clean this data logic up
   showSampleReVoteView = () => {
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
@@ -213,7 +221,8 @@ setCookie = (props, state, results) => {
   //TODO: ASAP: GET IT DONE: create better error handling for view changes
 
   render() {
-    //vote view\
+
+    //vote view
     let { bill } = this.state.voteResults;
     if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
@@ -244,6 +253,7 @@ setCookie = (props, state, results) => {
         )
       }
     } 
+
     //results view
     if (this.state.activeState === this.states[1]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
@@ -301,6 +311,7 @@ setCookie = (props, state, results) => {
         return (<div className={'ballot__wrapper'} />)
       }
     }
+    
     //results print view
     if (this.state.activeState === this.states[3]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
