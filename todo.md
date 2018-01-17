@@ -3,8 +3,9 @@
   - TODO: setup page similar to vote page with bill number
     # TODO /api/bill/<bill_id>
   Votes:
-  - TODO: remove tool tip from vote afters slider is touched
-  - TODO: put my vote on all charts, move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.
+  - DONE: remove tool tip from vote afters slider is touched
+  - DONE: put my vote on all charts, 
+  - TODO: move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.
   - TODO: checkbox css to match repme blue
   - TODO: get what ever social media links are available
     # TODO: set up to email callback / icon

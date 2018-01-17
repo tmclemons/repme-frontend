@@ -46,7 +46,7 @@ class BallotResults extends React.Component {
 
   setVoteIconPosition(data) {
     let voteRanges = [];
-    let splitRange = data.xPos.split('-'); 
+    let splitRange = data.value.split('-'); 
     let vote = data.comparableValue;
     if ((Number(splitRange[0]) - .001) < vote ) {
       if (Number(`${splitRange[1]}.001`) > vote) {
@@ -154,34 +154,15 @@ class BallotResults extends React.Component {
           rotation: 0,
           color: '#FFFFFF',
           align: 'left',
-          // format: '{point.y:1f}', // no decimal
-          y: -30, // 10 pixels down from the top
-          //this.series.xAxis.labelAlign
-            useHTML: true,
-            formatter: function() {
-              let positionTest = setVoteIconPosition({
-                xPos: this.x,
-                yPos: this.y,
-                comparableValue: voteResult
-              });
-              let pointWidth = Math.round(this.point.pointWidth);
-              let pointHeight = pointWidth * 2.7;
-              let labelPos = 5;
-              if (positionTest & !resultTypeCheck) {
-                let results = 
-                '<div>'+
-                  `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
-                  `<div style=" left: ${-labelPos}px; position: absolute; width: ${pointWidth}px; height:${pointWidth * 2.7}px; top: ${-this.point.shapeArgs.height - pointHeight + (pointWidth * .667)}px; background-image:url('/images/yourVoteIcon.png'); background-size:cover; background-repeat: no-repeat">`+
-                  '</div>' +
-                '</div>';
-                return this.point.y < 1 ? null : results;
-              } else {
-                let results = 
-                '<div>'+
-                  `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
-                '</div>';
-                return this.point.y <1 ? null : results;
-              }
+          y: -30, 
+          useHTML: true,
+          formatter: function() {
+            let pointWidth = Math.round(this.point.pointWidth);
+            let results = 
+              '<div>'+
+                `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
+              '</div>';
+              return this.point.y < 1 ? null : results;
             },
           style: {
             fontSize: '16px',
@@ -213,7 +194,31 @@ class BallotResults extends React.Component {
         gridLineWidth: 0,
         opposite: true,
         labels: {
-          enabled: false
+          enabled: true,
+          useHTML: true,
+          autoRotation: [0],
+          align: 'left',
+          formatter: function(){
+            let positionTest = setVoteIconPosition({
+              value: this.value,
+              comparableValue: voteResult
+            });
+            let results;
+            if (positionTest) {
+              let barData = this.chart.series[0].data[this.pos];
+              if (barData) {
+                let pointWidth = Math.floor(barData.pointWidth);
+                let positionLeft = -(pointWidth / 2);
+                let pointHeight = pointWidth * 2.7;
+                let positionTop = (-1 * pointHeight ) + 20;
+                results = `<div style=" left: ${positionLeft}px; position: absolute; width: ${pointWidth}px; height:${pointHeight}px; top: ${positionTop}px; background-image:url('/images/yourVoteIcon.png'); background-size:cover; background-repeat: no-repeat">` +
+                  '</div>';
+              }
+            } else {
+              results = null;
+            }
+            return results;
+          }
         },
         categories: getFormattedData.dataLabels
       }

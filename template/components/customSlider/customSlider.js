@@ -444,7 +444,6 @@ class CustomSlider extends React.Component {
       }
     }
 
-
     const GetTooltip = (state) => {
       let stateCheck = state.firstTime && state.secondTime;
       if (!state.changed) {
@@ -526,7 +525,7 @@ class CustomSlider extends React.Component {
           >
           <div className={'thumb-button'}>
               <SliderIconComponent { ...{ 
-                error: (this.props.firstTimeUse && this.props.secondAttempt)
+                error: (!this.props.changed && (this.props.firstTimeUse && this.props.secondAttempt))
               }}/>
           </div>
             {
@@ -538,8 +537,8 @@ class CustomSlider extends React.Component {
                 }}
                   className={
                     `customslider__handle-tooltip 
-                      ${this.props.firstTimeUse ? 'first-time-use' : ''}
-                      ${this.props.secondAttempt ? 'second-attempt' : ''}`
+                      ${this.props.firstTimeUse && !this.props.changed ? 'first-time-use' : ''}
+                      ${this.props.secondAttempt && !this.props.changed ? 'second-attempt' : ''}`
                   }
               >
                 {/* <span>{this.formatHandle(value)}</span> */}
@@ -554,14 +553,6 @@ class CustomSlider extends React.Component {
           </div>
           {labels ? this.renderHandleLabels(labelItems) : null}
         </div>
-        {/* <ChartLabelComponent style={{
-          background: 'transparent',
-          borderTop: 'none',
-          paddingLeft: '0',
-          paddingRight: '0'
-        }}
-         labels={this.positionLabels()}
-        /> */}
       </div>
     )
   }

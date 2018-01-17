@@ -134,25 +134,6 @@ class Ballot extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log('componentWillReceiveProps')
-    let urlProps = nextProps.match.params.org;
-    this.setCookie().setFirstTimeFlow(true)
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
-      .then(res => {
-        this.setState({
-          params: Object.assign(this.state.voteResults, res.data.results),
-          activeState: this.urlCheck(urlProps).activeState,
-          toImage: this.urlCheck(urlProps).toImage,
-          isWidget: this.urlCheck(urlProps).isWidget,
-          submitCount: 0
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   // capture slider data
   onValueChange = (data) => {
     this.setState({
@@ -194,6 +175,7 @@ class Ballot extends React.Component {
           })
         })
         .then(() => {
+          this.setCookie().setFirstTimeFlow(false)
           if(this.state.isWidget) {
             this.setCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
           } else {
@@ -203,11 +185,46 @@ class Ballot extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
-        console.log(this.state)
+
         if(this.state.isWidget) {
           window.open('/', '_blank');
         }
     }
+  }
+
+  /// TODO: clean this data logic up
+  showSampleReVoteView = () => {
+    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
+      .then(res => {
+        this.setState({
+          activeState: this.states[2],
+          voteResults: res.data.results
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+
+  // LIFE CYCLE HOOKS
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps')
+    let urlProps = nextProps.match.params.org;
+    this.setCookie().setFirstTimeFlow(true)
+    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
+      .then(res => {
+        this.setState({
+          params: Object.assign(this.state.voteResults, res.data.results),
+          activeState: this.urlCheck(urlProps).activeState,
+          toImage: this.urlCheck(urlProps).toImage,
+          isWidget: this.urlCheck(urlProps).isWidget,
+          submitCount: 0
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   componentDidMount() {
@@ -231,24 +248,11 @@ class Ballot extends React.Component {
       });
     if (cookie.load('voteResults') ) {
       this.setCookie().changePage(false, this.urlCheck(this.state.org).activeState, false);
+      this.setCookie().setFirstTimeFlow(false)
     } else {
       this.setCookie().setFirstTimeFlow(true);
       this.setCookie().changePage(false, this.urlCheck(this.state.org).activeState)
     }
-  }
-
-  /// TODO: clean this data logic up
-  showSampleReVoteView = () => {
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
-      .then(res => {
-        this.setState({
-          activeState: this.states[2],
-          voteResults: res.data.results
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
   //TODO: ASAP: GET IT DONE: create better error handling for view changes
@@ -270,7 +274,7 @@ class Ballot extends React.Component {
                 backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
                 callback={this.submitVote}
                 firstTimeUse={this.setCookie().getFirstTimeFlow()}
-                secondVoteAttempt={ submitCount > 0 ? true : false}
+                secondVoteAttempt={this.setCookie().getFirstTimeFlow() && submitCount > 0 ? true : false}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
@@ -300,7 +304,8 @@ class Ballot extends React.Component {
                 ballotInfo={this.state.voteResults.bill}
                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
                 callback={this.submitVote}
-                firstTimeUse={this.setCookie().getFirstTimeFlow()}
+                // need to revisit
+                firstTimeUse={false}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
