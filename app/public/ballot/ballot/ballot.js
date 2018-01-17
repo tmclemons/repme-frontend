@@ -45,7 +45,7 @@ class Ballot extends React.Component {
       firstTimeUse: true,
       defaultValue: 50,
       voteValue: 50,
-      bannerProps: 0,
+      bannerProps: 10,
       step: 5,
       submitCount: 0,
     }
@@ -156,7 +156,7 @@ class Ballot extends React.Component {
   // capture slider data
   onValueChange = (data) => {
     this.setState({
-      bannerProps: (data / (this.state.step)) || 0,
+      bannerProps: (data / (this.state.step)) || this.state.bannerProps,
       voteValue: (100 - data),
     })
     this.setCookie().setFirstTimeFlow(false)
@@ -164,18 +164,20 @@ class Ballot extends React.Component {
 
   submitVote = (voteData) => {
     let submitCount = this.state.submitCount < 1 ? 1 : this.state.submitCount++;
+
+    let params = this.state;
+
     this.setState({
       submitCount: submitCount
     })
 
     this.setCookie().setFirstTimeFlow((this.state.submitCount > 0 ? false : true))
-    let params = this.state;
 
-    if(params.firstTimeUse && params.voteValue === 50) {
-      
+    if (this.setCookie().getFirstTimeFlow() && params.voteValue === 50) {
+      return null;
     } else {
       let data = {
-        "vote": params.voteValue || null,
+        "vote": params.voteValue || 50,
         "email": voteData['userEmail'] || '',
         "zip_code": voteData['zipCode'] || '',
         "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
@@ -201,7 +203,7 @@ class Ballot extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
-        
+        console.log(this.state)
         if(this.state.isWidget) {
           window.open('/', '_blank');
         }
