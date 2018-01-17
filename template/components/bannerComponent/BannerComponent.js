@@ -23,8 +23,7 @@ class Banner extends React.Component {
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
-      firstTimeUse: this.props.firstTimeUse,
-      secondVoteAttempt: this.props.secondVoteAttempt
+      firstTimeUse: props.firstTimeUse
     }
   }
 
@@ -36,10 +35,9 @@ class Banner extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       firstTimeUse: this.props.firstTimeUse,
-      secondVoteAttempt: this.props.secondVoteAttempt
     })
   }
-
+  
   componentDidMount() {
     if ( this.props && this.props.ballotInfo) {
       this.setState({
@@ -136,7 +134,7 @@ class Banner extends React.Component {
                       firstTimeUse: this.state.firstTimeUse,
                     }
                   }
-                  secondAttempt={this.state.secondVoteAttempt}
+                  secondAttempt={this.props.secondVoteAttempt}
                   labels={ this.getFormattedData().dataLabels }
                 />  
                 </div>: null

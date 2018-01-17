@@ -74,65 +74,65 @@ class Ballot extends React.Component {
     }
   }
 
-setCookie = () => {
-  // set cookie props
-  // console.log('setCookie', props, state, results)
-  const changePage = (props, state, results) => {
-    if(props === true) {
-      // set cookie to active state
-      cookie.save('fromWidget', true, {
-        path: '/',
-        maxAge: 1000,
-      });
-      cookie.save('viewState', state, {
-        path: '/',
-        maxAge: 1000,
-      });
-      if(results) {
-        cookie.save('voteResults', results, {
+  setCookie = () => {
+    // set cookie props
+    // console.log('setCookie', props, state, results)
+    const changePage = (props, state, results) => {
+      if(props === true) {
+        // set cookie to active state
+        cookie.save('fromWidget', true, {
           path: '/',
           maxAge: 1000,
         });
+        cookie.save('viewState', state, {
+          path: '/',
+          maxAge: 1000,
+        });
+        if(results) {
+          cookie.save('voteResults', results, {
+            path: '/',
+            maxAge: 1000,
+          });
+        }
+      }
+      
+      if(props === false) {
+        cookie.save('viewState', state, {
+          path: '/',
+          maxAge: 1000,
+        });
+        // set cookie to active state
+        cookie.remove('fromWidget');
+      }
+      
+      // state change
+      // console.log('stateChange', state)
+
+      if (results === false) {
+        cookie.remove('voteResults');
       }
     }
     
-    if(props === false) {
-      cookie.save('viewState', state, {
+    const setFirstTimeFlow = (bool) => {
+      bool = typeof bool === 'boolean' ? bool : true;
+      cookie.remove('firstTimeVote');
+      cookie.save('firstTimeVote', (bool), {
         path: '/',
         maxAge: 1000,
       });
-      // set cookie to active state
-      cookie.remove('fromWidget');
+      return bool;
     }
-    
-    // state change
-    // console.log('stateChange', state)
 
-    if (results === false) {
-      cookie.remove('voteResults');
+    const getFirstTimeFlow = () => {
+      let cookieResult = cookie.load('firstTimeVote') == 'true' ? true : false;
+      return cookieResult;
+    }
+    return {
+      changePage: changePage,
+      setFirstTimeFlow: setFirstTimeFlow,
+      getFirstTimeFlow: getFirstTimeFlow
     }
   }
-  
-  const setFirstTimeFlow = (bool) => {
-    bool = typeof bool === 'boolean' ? bool : true;
-    cookie.remove('firstTimeVote');
-    cookie.save('firstTimeVote', (bool), {
-      path: '/',
-      maxAge: 1000,
-    });
-    return bool;
-  }
-
-  const getFirstTimeFlow = () => {
-    let cookieResult = cookie.load('firstTimeVote') == 'true' ? true : false;
-    return cookieResult;
-  }
-  return {
-    changePage: changePage,
-    setFirstTimeFlow: setFirstTimeFlow,
-    getFirstTimeFlow: getFirstTimeFlow
-  }
-}
 
   componentWillReceiveProps(nextProps) {
     // console.log('componentWillReceiveProps')
@@ -145,6 +145,7 @@ setCookie = () => {
           activeState: this.urlCheck(urlProps).activeState,
           toImage: this.urlCheck(urlProps).toImage,
           isWidget: this.urlCheck(urlProps).isWidget,
+          submitCount: 0
         })
       })
       .catch(function (error) {
@@ -162,7 +163,11 @@ setCookie = () => {
   }
 
   submitVote = (voteData) => {
-    this.state.submitCount++
+    let submitCount = this.state.submitCount < 1 ? 1 : this.state.submitCount++;
+    this.setState({
+      submitCount: submitCount
+    })
+
     this.setCookie().setFirstTimeFlow((this.state.submitCount > 0 ? false : true))
     let params = this.state;
 
@@ -248,6 +253,8 @@ setCookie = () => {
   render() {
     //vote view
     let { bill } = this.state.voteResults;
+    let { submitCount } = this.state;
+
     if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
         return (
@@ -260,7 +267,7 @@ setCookie = () => {
                 backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
                 callback={this.submitVote}
                 firstTimeUse={this.setCookie().getFirstTimeFlow()}
-                secondVoteAttempt={this.state.submitCount > 0 ? true : false}
+                secondVoteAttempt={ submitCount > 0 ? true : false}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
@@ -319,7 +326,6 @@ setCookie = () => {
                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
                 callback={this.submitVote}
                 firstTimeUse={this.setCookie().getFirstTimeFlow()}
-                submitCount={this.state.submitCount}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}

@@ -1,4 +1,7 @@
 ### TODO: 1/17/18
+  Bill page
+  - TODO: setup page similar to vote page with bill number
+    # TODO /api/bill/<bill_id>
   Votes:
   - TODO: remove tool tip from vote afters slider is touched
   - TODO: put my vote on all charts, move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.

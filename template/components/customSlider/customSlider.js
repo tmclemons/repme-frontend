@@ -473,12 +473,7 @@ class CustomSlider extends React.Component {
         }
         return(<div></div>)
       } else {
-        return(
-          <div className={'label'}>
-            <span>My</span>
-            <span>Vote</span>
-          </div>
-        )
+        return null;
       }
       return(<div></div>)
     }
