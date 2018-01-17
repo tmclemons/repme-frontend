@@ -1,6 +1,43 @@
-### TODO:
+### TODO: 1/17/18
+  Votes:
+  - TODO: remove tool tip from vote afters slider is touched
+  - TODO: put my vote on all charts, move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.
+  - TODO: checkbox css to match repme blue
+  - TODO: get what ever social media links are available
+    # TODO: set up to email callback / icon
+  - TODO: slider
+    # TODO: blue tool tip goes away entirely
+    # TODO: make slider hint a little larger and more apparent(red)
+    # TODO: continue showing slider error tooltip, maybe not as big though
+  - TODO: validation modal, for zip and email to remind to enter / challenge
+    # TODO: modal for slider submission
+    # TODO: modal pop up with option for data entry  with go back(return to entry) or "no thanks" continue(submit) for either/or/and email and zipcode
 
-#Create RepMe Front End UI
+
+  Results:
+  - TODO: Show revote on results page 100% of time, show on homepage based on cookie logic.
+  - TODO: ballots results and ballot vote only
+
+
+  Widget:
+  - TODO: validation error go to vote page with option to input email and zipcode
+
+
+  Discussions:
+  - TODO: cookies
+  - TODO: Bill closed logic
+
+
+  Email:
+  - TODO: setup smaller candidate card and flex inline row so they are side by side and carry over
+  - TODO: setup roll call vote results
+
+  Future TODOS:
+  - TODO: bill page
+    # TODO: /api/bill/<bill_id>
+    # TODO: /vote/bill/<bill_id>
+
+# DONE: Create RepMe Front End UI
 -- DONE: Header
 -- DONE: Custom Slider that passes vote data and color style data
 -- DONE: Customize slider icon
@@ -11,17 +48,15 @@
 -- DONE: form submission button
 -- DONE: Footer component with social media buttons
 -- DONE: Social Media buttons
--- TODO: Setup cookies for  vote --> submit --> resubmit
--- TODO: Refactor dummy data so api data will get passed through better, also check api routing logic
+-- DONE: Setup cookies for  vote --> submit --> resubmit
 -- DONE: update font assets, implement states assets
 -- DONE: setup dummy api based on routes
--- TODO: change checkbox colors
--- TODO: remove unneeded dependencies (????canvg and dom-to-image, need to be reviewed)
 
 -- DONE: make sure to update routing and submission forms for recasting, check invision
--- TODO: GET--DONE: -- ASAP Xsubmit, Xresubmit, results, Xslider, results email
--- TODO: GET--DONE: Need to verify congress/ senate results in element, if not made create - RESULT OF ROLL
 -- DONE: Create README
+-- DONE: Refactor dummy data so api data will get passed through better, also check api routing logic
+-- TODO: GET--DONE: Need to verify congress/ senate results in element, if not made create - RESULT OF ROLL
+-- TODO: GET--DONE: -- ASAP Xsubmit, Xresubmit, results, Xslider, results email
 
 
 -- TODO: refactor styling to a core configuration flow i.e pass one config for all colors

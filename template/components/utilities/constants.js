@@ -7,10 +7,10 @@ const repMeConstants = () => {
           them**`,
       emailInputSenate: `To receive results including final Senate Floor Votes`,
       emailInputHouse: `To receive results including final House Votes`,
-      zipCodeInputSenate: `This will allow us to include your private ballot with the constituency that we will provide your Senators`,
-      zipCodeInputHouse: `This will allow us to include your private ballot with the constituency that we will provide your Representative`,
+      zipCodeInputSenate: `This will allow us to include your private ballot along with your constituents that we will provide your Senators`,
+      zipCodeInputHouse: `This will allow us to include your private ballot along with your constituents that we will provide your Representative`,
       subscribeToHotBill: `To receive other Hot 
-          Congressional Bill Ballots and track results`,
+          Congressional Bill Ballots and track their results`,
       subscribeToOtherLegislationInfo: `To receive information 
           from your Legislators about Ballots and Voting results`,
       subscribeToHotBillTitle: `Opt-In`,
