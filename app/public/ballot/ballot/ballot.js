@@ -172,6 +172,7 @@ class Ballot extends React.Component {
     let params = this.state;
 
     if(params.firstTimeUse && params.voteValue === 50) {
+      
     } else {
       let data = {
         "vote": params.voteValue || null,

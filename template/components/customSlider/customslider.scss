@@ -3,6 +3,7 @@
 */
 $toolTipPoint: 25px;
 $toolTipColor: rgb(0, 76, 135);
+$toolTipRed: red;
 $fontFamily: 'Playfair Display', serif;
 
 .customslider {
@@ -174,6 +175,7 @@ $fontFamily: 'Playfair Display', serif;
   }
   .customslider__handle-tooltip {
     top: -100px;
+    display: none;
     .label {
       transform: rotate(-90deg);
       display: flex;
@@ -194,6 +196,7 @@ $fontFamily: 'Playfair Display', serif;
       top: -189px;
       width: 250px;
       height: 100px;
+      display: inherit;
       .label {
         transform: rotate(0deg);
         display: inherit;
@@ -202,15 +205,15 @@ $fontFamily: 'Playfair Display', serif;
         .slider-hint {
           position: absolute;
           bottom: -255px;
-          left: 70px;
+          left: 65px;
           display: flex;
           flex-flow: row nowrap;
           max-width: 200px;
           text-transform: uppercase;
-          color: #c1c2c2;
+          color: $toolTipRed;
           font-size: 20px;
           span {
-            font-size: 10px;
+            font-size: 14px;
             margin: 0 10px;
             padding-top: 5px;
           }
@@ -235,18 +238,19 @@ $fontFamily: 'Playfair Display', serif;
       transform: translate3d(-50%, 0, 0);
     }
     &.first-time-use.second-attempt {
-      background: red;
-      top: -245px;
-      width: 400px;
-      height: 150px;
+      background: $toolTipRed;
+      top: -195px;
+      width: 300px;
+      height: 110px;
+      display: inherit;
       .label {
-        font-size: 50px;
+        font-size: 35px;
       }
       .label .slider-hint {
-        left: 150px;
+        left: 80px;
       }
       &:after {
-          border-top: $toolTipPoint solid red;
+          border-top: $toolTipPoint solid $toolTipRed;
       }
     }
   }
