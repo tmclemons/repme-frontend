@@ -77,10 +77,11 @@ class VoteForm extends React.Component {
       labelStyle: {
         fontSize: '12px',
         lineHeight: '18px',
-        fontStyle: 'italic'
+        fontStyle: 'italic',
       },
       iconStyle: {
-        marginRight: '10px'
+        marginRight: '10px',
+        fill: 'rgb(0, 76, 135)'
       },
       buttonStyle: {
         height: '50px',

@@ -6,7 +6,7 @@
   - DONE: remove tool tip from vote afters slider is touched
   - DONE: put my vote on all charts, 
   - DONE: move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.
-  - TODO: checkbox css to match repme blue
+  - DONE: checkbox css to match repme blue
   - DONE: get what ever social media links are available
     # DONE: set up to email callback / icon
   - TODO: slider
