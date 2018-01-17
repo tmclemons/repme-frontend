@@ -5,14 +5,14 @@
   Votes:
   - DONE: remove tool tip from vote afters slider is touched
   - DONE: put my vote on all charts, 
-  - TODO: move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.
+  - DONE: move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.
   - TODO: checkbox css to match repme blue
-  - TODO: get what ever social media links are available
-    # TODO: set up to email callback / icon
+  - DONE: get what ever social media links are available
+    # DONE: set up to email callback / icon
   - TODO: slider
-    # TODO: blue tool tip goes away entirely
-    # TODO: make slider hint a little larger and more apparent(red)
-    # TODO: continue showing slider error tooltip, maybe not as big though
+    # DONE: blue tool tip goes away entirely
+    # DONE: make slider hint a little larger and more apparent(red)
+    # DONE: continue showing slider error tooltip, maybe not as big though
   - TODO: validation modal, for zip and email to remind to enter / challenge
     # TODO: modal for slider submission
     # TODO: modal pop up with option for data entry  with go back(return to entry) or "no thanks" continue(submit) for either/or/and email and zipcode

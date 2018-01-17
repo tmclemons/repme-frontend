@@ -20,23 +20,29 @@ class MainFooter extends React.Component {
       nav: [
         {
           name: 'facebook',
-          path: 'ion-social-facebook-outline'
+          path: 'ion-social-facebook',
+          callback: () => {
+            window.open('https://www.facebook.com/representmeplease', '_blank')
+          }
         },
         {
           name: 'twitter',
-          path: 'ion-social-twitter-outline'
+          path: 'ion-social-twitter'
         },
         {
           name: 'linkedin',
-          path: 'ion-social-linkedin-outline'
+          path: 'ion-social-linkedin'
         },
         {
           name: 'google',
-          path: 'ion-social-googleplus-outline'
+          path: 'ion-social-googleplus'
         },
         {
-          name: 'youtube',
-          path: 'ion-social-youtube-outline'
+          name: 'email',
+          path: 'ion-ios-email',
+          callback: () => {
+            window.open('mailto:mike@represent-me.com?subject="Subscribe to Represent Me"')
+          }
         },
         {
           name: 'instagram',
@@ -100,7 +106,7 @@ class MainFooter extends React.Component {
                       className={`social-nav--icon ${navItem.path}`}
                     ></i>
                   }
-                  onClick={() => this.select(index)}
+                  onClick={() => {navItem.callback ? navItem.callback() : this.select(index)}}
                 />
               )
             })
