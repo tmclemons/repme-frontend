@@ -9,6 +9,9 @@ import Frame from 'react-frame-component';
 import NewWindow from 'react-popout';
 import axios from 'axios';
 import Constants from '../../../../template/components/utilities/constants';
+import { instanceOf } from 'prop-types';
+import cookie from 'react-cookies';
+
 
 const { ballotCopy } = Constants;  
 
@@ -65,9 +68,32 @@ class Ballot extends React.Component {
     }
   }
 
+setCookie = (props, state) => {
+  if(props === true) {
+    // set cookie to active state
+    cookie.save('fromWidget', true, {
+      path: '/',
+      maxAge: 1000,
+    });
+    cookie.save('viewState', state, {
+      path: '/',
+      maxAge: 1000,
+    });
+  }
+  
+  if(props === false) {
+    cookie.save('viewState', state, {
+      path: '/',
+      maxAge: 1000,
+    });
+    // set cookie to active state
+    cookie.remove('fromWidget');
+  }
+}
+
   componentWillReceiveProps(nextProps) {
     let urlProps = nextProps.match.params.org;
-
+    console.log('click')
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
       .then(res => {
         this.setState({
@@ -121,15 +147,27 @@ class Ballot extends React.Component {
         .catch(function (error) {
           console.log(error);
         });
+
+        if(this.state.isWidget) {
+          this.setCookie(this.urlCheck(this.state.org).isWidget, this.states[1]);
+          window.open('/', '_blank');
+
+          //set state to results view
+          //set results to cookie
+          // on component mount if state is from widget the loaded cookied view
+          // after load delete cookies from view
+        }
     }
   }
 
   componentDidMount() {
+    let cookieCheck = cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true";
+
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
         this.setState({
           voteResults: res.data.results,
-          activeState: this.urlCheck(this.state.org).activeState,
+          activeState: cookieCheck ? this.states[1] : this.urlCheck(this.state.org).activeState,
           toImage: this.urlCheck(this.state.org).toImage,
           isWidget: this.urlCheck(this.state.org).isWidget
         })
@@ -137,6 +175,8 @@ class Ballot extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
+
+    this.setCookie(false, this.urlCheck(this.state.org).activeState)
   }
   /// TODO: clean this data logic up
   showSampleReVoteView = () => {
@@ -156,6 +196,7 @@ class Ballot extends React.Component {
 
   render() {
     //vote view\
+    console.log(cookie.loadAll())
     let { bill } = this.state.voteResults;
     if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
@@ -214,35 +255,6 @@ class Ballot extends React.Component {
       }
     }
 
-    // //results view
-    // if (this.state.activeState === this.states[1] && this.state.isWidget === true) {
-    //   if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
-    //     return(
-    //       <div>
-    //         <NewWindow title='Window title' onClosing={() => {console.log('closed')}}>
-    //             <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
-    //             <div className={'ballot__wrapper'}>
-    //               <Header org={this.state.voteResults.org} />
-    //               <Banner
-    //                 ballotInfo={this.state.voteResults.bill}
-    //                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
-    //                 callback={this.submitVote}
-    //                 firstTimeUse={this.state.firstTimeUse}
-    //                 defaultValue={this.state.defaultValue}
-    //                 bannerProps={this.state.bannerProps}
-    //                 callback={this.onValueChange}
-    //                 showSlider={false}
-    //               />
-    //               <Results toImage={this.state.toImage} { ...this.state.voteResults}/>
-    //               <Footer />
-    //             </div>
-    //         </NewWindow>
-    //       </div>
-    //     )
-    //   } else {
-    //     return (<div className={'ballot__wrapper'} /> )
-    //   }
-    // }
     //results resubmit view
     if (this.state.activeState === this.states[2]) {
       if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
