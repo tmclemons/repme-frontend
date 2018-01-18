@@ -46,7 +46,9 @@ class Header extends React.Component {
               minWidth: '300px',
             }}
             iconStyleRight={{
-              maxWidth: '100px',
+              maxHeight: '100px',
+              maxWidth: '500px',
+              marginRight: '0'
             }}
           />
         </MuiThemeProvider>

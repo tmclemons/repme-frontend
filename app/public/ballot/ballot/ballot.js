@@ -19,7 +19,7 @@ import Scss from './ballot.scss';
 const SampleHeader = (props) => {
   return (
     <div>
-      <div style={{ background: 'black', display: 'flex' }}>
+      <div style={{ background: 'black', display: 'none' }}>
         <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/">Home </Link>
         <div style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} onClick={props.callback}>Resubmit</div>
         <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/repme">Rep-Me Demo </Link>
@@ -164,7 +164,7 @@ class Ballot extends React.Component {
       "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
       "bill_id": this.voteResults.bill['id'] || null,
     }
-    console.log(data)
+
     axios.post(`http://54.187.193.156/api/vote`, data)
       .then(res => {
         this.voteResults = res.data.results;
@@ -289,7 +289,7 @@ class Ballot extends React.Component {
     }
   }
 
-  //DONE: ASAP: GET IT DONE: create better error handling for view changes
+  //TODO: ASAP: GET IT DONE: create better error handling for view changes
   render() {
 
     //vote view

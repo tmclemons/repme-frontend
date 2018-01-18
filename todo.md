@@ -29,8 +29,8 @@
   - DONE: validation error go to vote page with option to input email and zipcode
 
   Email:
-  - TODO: setup smaller candidate card and flex inline row so they are side by side and carry over
-  - TODO: setup roll call vote results
+  - DONE: setup smaller candidate card and flex inline row so they are side by side and carry over
+  - DONE: setup roll call vote results
 
   xxDiscussions:
   - TODO: cookies
@@ -39,6 +39,7 @@
 
 
   xxFuture TODOS:
+  - TODO: Hook up api logic to cookies via guid
   - TODO: match css further to do design
   - TODO: bill page
     # TODO: /api/bill/<bill_id>
