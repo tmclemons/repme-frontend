@@ -51,6 +51,19 @@ class Ballot extends React.Component {
       submitCount: 0,
     }
   }
+  
+   getS4 = ()=> {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+
+  getGuid = () => {
+    return `${this.getS4() + this.getS4() + '-' + this.getS4() + '-' + this.getS4() + '-' +
+    this.getS4() + '-' + this.getS4() + this.getS4() + this.getS4()}`;
+}
+
+
 
   locationCheckForWidget = () => {
     let regex = new RegExp('([^=&?]+)=([^&]+)');
@@ -60,14 +73,14 @@ class Ballot extends React.Component {
   }
 
   urlCheck = (urlProps) => {
-
+    let billIdCheck = urlProps ? urlProps.split('-') : '';
     let apiUrl = urlProps && ( urlProps !== this.states[3] ) && ( urlProps !== this.states[4] ) ? `/${urlProps}` : '';
     let apiCheckForImage = urlProps === this.states[3];
     let activeState = apiCheckForImage ? this.states[3] : this.states[0];
     activeState = this.locationCheckForWidget() ? this.states[4] : activeState;
     
     return {
-      url: apiUrl,
+      url: billIdCheck.length > 1 ? `/bill/${urlProps}` : `/profile${apiUrl}`,
       activeState: activeState,
       isWidget: this.locationCheckForWidget()
     }
@@ -143,6 +156,7 @@ class Ballot extends React.Component {
     let params = this.state;
     
     let data = {
+      // "guid": this.getGuid(),
       "vote": this.voteValue,
       "email": voteData['userEmail'] || '',
       "zip_code": voteData['zipCode'] || '',
@@ -158,8 +172,15 @@ class Ballot extends React.Component {
           // here is where state will be maintained or lost after vote submission
           activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
         })
+        // for guid results logic
+        // if (this.state.isWidget) {
+        //   this.updateCookie().changePage(this.state.isWidget, res.data.results.state, this.voteResults);
+        // } else {
+        //   this.updateCookie().changePage(this.state.isWidget, res.data.results.state, this.voteResults);
+        // }
       })
       .then(() => {
+        //old logic
         this.updateCookie().setUserFlow('firstTimeVote', false)
         if (this.state.isWidget) {
           this.updateCookie().changePage(this.state.isWidget, this.states[1], this.voteResults);
@@ -175,38 +196,40 @@ class Ballot extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-
-    if (this.state.isWidget) {
-      window.open('/', '_blank');
-    }
   }
 
   submitVote = (voteData) => {
     //TODO: add guid logic
-    if ( this.updateCookie().getUserFlow('sliderPristine') ) {
-      this.state.submitCount++;
-      this.updateCookie().setUserFlow('firstTimeVote', (this.state.submitCount > 0 ? false : true));
-      this.updateCookie().setUserFlow('secondTimeAttempt', (this.state.submitCount === 1 ? true : false));
-    }
-    this.sliderDebounce = false;
-    this.setState({
-      firstTimeUse: this.updateCookie().getUserFlow('firstTimeVote')
-    });
-    
-    if ((this.updateCookie().getUserFlow('firstTimeVote') && this.state.submitCount > 1 )  && this.voteValue === 50) {
-      return null;
+
+    if (this.state.isWidget) {
+      window.open('/', '_blank');
     } else {
-      if (!this.updateCookie().getUserFlow('firstTimeVote') && !this.updateCookie().getUserFlow('secondTimeAttempt')) {
-        if ((cookie.load('viewState') === this.states[1]) || voteData['userIsSure']) {
-          this.submitDataToApi(voteData)
+      if ( this.updateCookie().getUserFlow('sliderPristine') ) {
+        this.state.submitCount++;
+        this.updateCookie().setUserFlow('firstTimeVote', (this.state.submitCount > 0 ? false : true));
+        this.updateCookie().setUserFlow('secondTimeAttempt', (this.state.submitCount === 1 ? true : false));
+      }
+      this.sliderDebounce = false;
+      this.setState({
+        firstTimeUse: this.updateCookie().getUserFlow('firstTimeVote')
+      });
+      
+      if ((this.updateCookie().getUserFlow('firstTimeVote') && this.state.submitCount > 1 )  && this.voteValue === 50) {
+        return null;
+      } else {
+        if (!this.updateCookie().getUserFlow('firstTimeVote') && !this.updateCookie().getUserFlow('secondTimeAttempt')) {
+          if ((cookie.load('viewState') === this.states[1]) || voteData['userIsSure']) {
+            this.submitDataToApi(voteData)
+          }
         }
       }
     }
+
   }
 
   /// TODO: clean this data logic up
   showSampleReVoteView = () => {
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
+    axios.post(`http://54.187.193.156/api${this.urlCheck(this.state.org).url}`)
       .then(res => {
         this.voteResults = res.data.results;
         this.setState({
@@ -224,7 +247,8 @@ class Ballot extends React.Component {
     let urlProps = nextProps.match.params.org;
     this.updateCookie().setUserFlow('firstTimeVote', true);
     this.updateCookie().setUserFlow('secondTimeAttempt', false);
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
+    this.voteResults = 50;
+    axios.post(`http://54.187.193.156/api${this.urlCheck(urlProps).url}`)
       .then(res => {
         this.voteResults = res.data.results;
         this.setState({
@@ -242,8 +266,8 @@ class Ballot extends React.Component {
     this.updateCookie().setUserFlow('sliderPristine', true);
     let cookieCheck = !this.locationCheckForWidget() && (cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true");
     let cookieResultsCheck = cookie.load('voteResults') ? cookie.load('voteResults') : null;
-
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
+   
+    axios.post(`http://54.187.193.156/api${this.urlCheck(this.state.org).url}`)
       .then(res => {
         this.voteResults = cookieResultsCheck ? cookieResultsCheck : res.data.results;
         this.setState({

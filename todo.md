@@ -1,7 +1,7 @@
 ### TODO: 1/17/18
   Bill page
-  - TODO: setup page similar to vote page with bill number
-    # TODO /api/bill/<bill_id>
+  - DONE: setup page similar to vote page with bill number
+    # DONE: /api/bill/<bill_id>
   Votes:
   - DONE: remove tool tip from vote afters slider is touched
   - DONE: put my vote on all charts, 
@@ -26,7 +26,7 @@
 
 
   Widget:
-  - TODO: validation error go to vote page with option to input email and zipcode
+  - DONE: validation error go to vote page with option to input email and zipcode
 
   Email:
   - TODO: setup smaller candidate card and flex inline row so they are side by side and carry over
