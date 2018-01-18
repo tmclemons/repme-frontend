@@ -43,6 +43,7 @@ class Ballot extends React.Component {
       toImage: false,
       activeState: this.states[0],
       firstTimeUse: true,
+      secondTimeAttempt: false,
       defaultValue: 50,
       voteValue: 50,
       bannerProps: 10,
@@ -74,9 +75,8 @@ class Ballot extends React.Component {
     }
   }
 
-  setCookie = () => {
+  updateCookie = () => {
     // set cookie props
-    // console.log('setCookie', props, state, results)
     const changePage = (props, state, results) => {
       if(props === true) {
         // set cookie to active state
@@ -113,24 +113,24 @@ class Ballot extends React.Component {
       }
     }
     
-    const setFirstTimeFlow = (bool) => {
+    const setUserFlow = (userFlow, bool) => {
       bool = typeof bool === 'boolean' ? bool : true;
-      cookie.remove('firstTimeVote');
-      cookie.save('firstTimeVote', (bool), {
+      cookie.remove(userFlow);
+      cookie.save(userFlow, (bool), {
         path: '/',
         maxAge: 1000,
       });
       return bool;
     }
 
-    const getFirstTimeFlow = () => {
-      let cookieResult = cookie.load('firstTimeVote') == 'true' ? true : false;
+    const getUserFlow = (userFlow) => {
+      let cookieResult = cookie.load(userFlow) == 'true' ? true : false;
       return cookieResult;
     }
     return {
       changePage: changePage,
-      setFirstTimeFlow: setFirstTimeFlow,
-      getFirstTimeFlow: getFirstTimeFlow
+      setUserFlow: setUserFlow,
+      getUserFlow: getUserFlow
     }
   }
 
@@ -140,55 +140,60 @@ class Ballot extends React.Component {
       bannerProps: (data / (this.state.step)) || this.state.bannerProps,
       voteValue: (100 - data),
     })
-    this.setCookie().setFirstTimeFlow(false)
+    this.updateCookie().setUserFlow('firstTimeVote', false)
+  }
+
+  submitDataToApi = (voteData) => {
+    let data = {
+      "vote": params.voteValue || 50,
+      "email": voteData['userEmail'] || '',
+      "zip_code": voteData['zipCode'] || '',
+      "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
+      "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
+      "bill_id": params.voteResults.bill['id'] || null,
+    }
+
+    axios.post(`http://54.187.193.156/api/vote`, data)
+      .then(res => {
+        this.setState({
+          // here is where state will be maintained or lost after vote submission
+          activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
+          voteResults: res.data.results
+        })
+      })
+      .then(() => {
+        this.updateCookie().setUserFlow('firstTimeVote', false)
+        if (this.state.isWidget) {
+          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
+        } else {
+          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    if (this.state.isWidget) {
+      window.open('/', '_blank');
+    }
   }
 
   submitVote = (voteData) => {
-    let submitCount = this.state.submitCount < 1 ? 1 : this.state.submitCount++;
-
-    let params = this.state;
+    //TODO: add guid logic
+    this.state.submitCount++;
+    this.updateCookie().setUserFlow('firstTimeVote', (this.state.submitCount > 0 ? false : true));
+    this.updateCookie().setUserFlow('secondTimeAttempt', (this.state.submitCount === 1 ? true : false));
 
     this.setState({
-      submitCount: submitCount
-    })
+      firstTimeUse: this.updateCookie().getUserFlow('firstTimeVote')
+    });
+    
+    let params = this.state;
 
-    this.setCookie().setFirstTimeFlow((this.state.submitCount > 0 ? false : true))
-
-    if (this.setCookie().getFirstTimeFlow() && params.voteValue === 50) {
+    if ((this.updateCookie().getUserFlow('firstTimeVote') && this.state.submitCount > 1 )  && params.voteValue === 50) {
       return null;
     } else {
-      let data = {
-        "vote": params.voteValue || 50,
-        "email": voteData['userEmail'] || '',
-        "zip_code": voteData['zipCode'] || '',
-        "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
-        "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
-        "bill_id": params.voteResults.bill['id'] || null,
-      }
-
-      axios.post(`http://54.187.193.156/api/vote`, data)
-        .then(res => {
-          this.setState({
-            // here is where state will be maintained or lost after vote submission
-            activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
-            voteResults: res.data.results
-          })
-        })
-        .then(() => {
-          this.setCookie().setFirstTimeFlow(false)
-          if(this.state.isWidget) {
-            this.setCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
-          } else {
-            this.setCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-        if(this.state.isWidget) {
-          window.open('/', '_blank');
-        }
+      // this.submitDataToApi(voteData)
     }
   }
 
@@ -209,9 +214,11 @@ class Ballot extends React.Component {
 
   // LIFE CYCLE HOOKS
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps')
+    // console.log('componentWillReceiveProps')
+
     let urlProps = nextProps.match.params.org;
-    this.setCookie().setFirstTimeFlow(true)
+    this.updateCookie().setUserFlow('firstTimeVote', true);
+    this.updateCookie().setUserFlow('secondTimeAttempt', false);
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
       .then(res => {
         this.setState({
@@ -247,16 +254,16 @@ class Ballot extends React.Component {
         console.log(error);
       });
     if (cookie.load('voteResults') ) {
-      this.setCookie().changePage(false, this.urlCheck(this.state.org).activeState, false);
-      this.setCookie().setFirstTimeFlow(false)
+      this.updateCookie().changePage(false, this.urlCheck(this.state.org).activeState, false);
+      this.updateCookie().setUserFlow('firstTimeVote', false);
     } else {
-      this.setCookie().setFirstTimeFlow(true);
-      this.setCookie().changePage(false, this.urlCheck(this.state.org).activeState)
+      this.updateCookie().setUserFlow('firstTimeVote', true);
+      this.updateCookie().setUserFlow('secondTimeAttempt', false);
+      this.updateCookie().changePage(false, this.urlCheck(this.state.org).activeState)
     }
   }
 
-  //TODO: ASAP: GET IT DONE: create better error handling for view changes
-
+  //DONE: ASAP: GET IT DONE: create better error handling for view changes
   render() {
     //vote view
     let { bill } = this.state.voteResults;
@@ -273,14 +280,21 @@ class Ballot extends React.Component {
                 ballotInfo={this.state.voteResults.bill}
                 backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
                 callback={this.submitVote}
-                firstTimeUse={this.setCookie().getFirstTimeFlow()}
-                secondVoteAttempt={this.setCookie().getFirstTimeFlow() && submitCount > 0 ? true : false}
+                firstTimeUse={this.updateCookie().getUserFlow('firstTimeVote')}
+                secondAttempt={this.updateCookie().getUserFlow('secondTimeAttempt')}
+                submitCount={this.state.submitCount}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
               />
-              <VoteForm firstSubmission={true} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy}/>
+              <VoteForm 
+                firstSubmission={true} 
+                chamber={bill.chamber} 
+                callback={this.submitVote} 
+                submitCount={submitCount >= 1}
+                copy={ballotCopy}
+              />
               <Footer />
             </div>
           </div>
@@ -333,7 +347,7 @@ class Ballot extends React.Component {
                 ballotInfo={this.state.voteResults.bill}
                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
                 callback={this.submitVote}
-                firstTimeUse={this.setCookie().getFirstTimeFlow()}
+                firstTimeUse={this.updateCookie().getUserFlow('firstTimeVote')}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}

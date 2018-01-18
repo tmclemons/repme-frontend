@@ -4,6 +4,11 @@ import Checkbox from 'material-ui/Checkbox';
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import GetMuiTheme from 'material-ui/styles/getMuiTheme';
+
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+
+
 import PropTypes from 'prop-types';
 
 import formValidation from '../../components/utilities/formValidation';
@@ -22,7 +27,8 @@ class VoteForm extends React.Component {
     emailLimit: PropTypes.number,
     vote_isValid: PropTypes.bool,
     firstTimeUse: PropTypes.bool,
-    defaultValue: PropTypes.number
+    defaultValue: PropTypes.number,
+    modalOpen: PropTypes.bool
   }
 
   static defaultProps = {
@@ -36,6 +42,7 @@ class VoteForm extends React.Component {
     vote_isValid: false,
     firstTimeUse: true,
     defaultValue: 50,
+    modalOpen: false
   }
 
 
@@ -52,19 +59,40 @@ class VoteForm extends React.Component {
       vote_isValid: this.props.vote_isValid,
       firstTimeUse: this.props.defaultValue,
       defaultValue: this.props.defaultValue,
+      modalOpen: this.props.modalOpen
     }
   }
 
   formOnSubmit = () => {
-    this.props.callback(
-      {
-        userEmail: this.state.userEmail,
-        zipCode: this.state.zipCode,
-        otherLegislationSubscribe: this.state.otherLegislationSubscribe,
-        hotBillSubscribe: this.state.hotBillSubscribe,
+    let dataSet = {
+      userEmail: this.state.userEmail,
+      zipCode: this.state.zipCode,
+      otherLegislationSubscribe: this.state.otherLegislationSubscribe,
+      hotBillSubscribe: this.state.hotBillSubscribe,
+    }
+    if ( this.state.modalOpen && (this.state.email_isValid && this.state.zip_isValid) ) {
+      this.props.callback(dataSet)
+    } else {
+      if (!this.state.modalOpen) {
+        // this.setState({ modalOpen: true })
+        this.props.callback();
+      } else {
+
       }
-    )
+    }
   }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps')
+  }
+
+  handleOpen = () => {
+    this.setState({ modalOpen: true });
+  };
+
+  handleClose = () => {
+    this.setState({ modalOpen: false });
+  };
 
   render() {
     const styles = {
@@ -95,11 +123,33 @@ class VoteForm extends React.Component {
       }
     };
 
+    const actions = [
+      <FlatButton
+        label="Go Back"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="No Thanks, Continue"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+    ];
+
     return (
       <MuiThemeProvider>
         <div className={
           'vote__form'
         }>
+        <Dialog
+          title="Dialog With Actions"
+          actions={actions}
+          modal={false}
+          open={this.state.modalOpen}
+          onRequestClose={this.handleClose}
+        >
+          The actions in this window were passed in as an array of React objects.
+        </Dialog>
 
         { this.props.firstSubmission ? 
           <div>

@@ -31,12 +31,6 @@ class Banner extends React.Component {
     height: '100%',
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      firstTimeUse: this.props.firstTimeUse,
-    })
-  }
-  
   componentDidMount() {
     if ( this.props && this.props.ballotInfo) {
       this.setState({
@@ -46,10 +40,6 @@ class Banner extends React.Component {
         ballotClosingDate: this.props.ballotInfo.closing_date,
       })
     }
-  }
-
-  toggleFirstTimeUser = () => {
-    this.setState({firstTimeUse: false});
   }
 
   getFormattedData = () => {
@@ -127,13 +117,8 @@ class Banner extends React.Component {
                   max={this.state.max}
                   defaultValue={this.state.defaultValue}
                   callback={this.props.callback}
-                  toggleFirstTimeUser={
-                    {
-                      callback: this.toggleFirstTimeUser,
-                      firstTimeUse: this.props.firstTimeUse,
-                    }
-                  }
-                  secondAttempt={this.props.secondVoteAttempt}
+                  firstTimeUse= {this.props.firstTimeUse}
+                  secondAttempt={this.props.secondAttempt}
                   labels={ this.getFormattedData().dataLabels }
                 />  
                 </div>: null

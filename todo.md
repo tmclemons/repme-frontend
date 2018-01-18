@@ -9,7 +9,7 @@
   - DONE: checkbox css to match repme blue
   - DONE: get what ever social media links are available
     # DONE: set up to email callback / icon
-  - TODO: slider
+  - DONE: slider
     # DONE: blue tool tip goes away entirely
     # DONE: make slider hint a little larger and more apparent(red)
     # DONE: continue showing slider error tooltip, maybe not as big though

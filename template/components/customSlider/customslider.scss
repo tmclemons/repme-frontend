@@ -176,8 +176,9 @@ $fontFamily: 'Playfair Display', serif;
   .customslider__handle-tooltip {
     top: -100px;
     display: none;
+    padding: 30px 35px;
     .label {
-      transform: rotate(-90deg);
+      transform: rotate(0deg);
       display: flex;
       flex-flow: column nowrap;
       margin-top: 20px;
@@ -188,36 +189,35 @@ $fontFamily: 'Playfair Display', serif;
     span:nth-child(2) {
       font-size: 20px;
     }
+    
+    .slider-hint {
+      position: absolute;
+      bottom: -255px;
+      left: 65px;
+      display: flex;
+      flex-flow: row nowrap;
+      max-width: 200px;
+      text-transform: uppercase;
+      color: $toolTipRed;
+      font-size: 20px;
+      span {
+        font-size: 14px;
+        margin: 0 10px;
+        padding-top: 5px;
+      }
+    }
 
     &.first-time-use {
       height: 100%;
-      padding: 30px 35px;
       font-size: 25px;
       top: -189px;
       width: 250px;
       height: 100px;
       display: inherit;
       .label {
-        transform: rotate(0deg);
         display: inherit;
         height: 100%;
         margin-top: 5px;
-        .slider-hint {
-          position: absolute;
-          bottom: -255px;
-          left: 65px;
-          display: flex;
-          flex-flow: row nowrap;
-          max-width: 200px;
-          text-transform: uppercase;
-          color: $toolTipRed;
-          font-size: 20px;
-          span {
-            font-size: 14px;
-            margin: 0 10px;
-            padding-top: 5px;
-          }
-        }
       }
     }
 
@@ -237,17 +237,19 @@ $fontFamily: 'Playfair Display', serif;
       bottom: -$toolTipPoint + 1px;
       transform: translate3d(-50%, 0, 0);
     }
-    &.first-time-use.second-attempt {
+    &.second-attempt {
       background: $toolTipRed;
       top: -195px;
       width: 300px;
       height: 110px;
       display: inherit;
       .label {
+        margin-top: 10px;
         font-size: 35px;
       }
       .label .slider-hint {
         left: 80px;
+        bottom: -265px;
       }
       &:after {
           border-top: $toolTipPoint solid $toolTipRed;

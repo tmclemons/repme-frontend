@@ -445,9 +445,9 @@ class CustomSlider extends React.Component {
     }
 
     const GetTooltip = (state) => {
-      let stateCheck = state.firstTime && state.secondTime;
+      let stateCheck = state.firstTime && !state.secondTime;
       if (!state.changed) {
-        if (!stateCheck) {
+        if (stateCheck) {
           return(
             <div className={'label'}>
               <span>Touch or Click the thumbprint &amp; drag it to cast your vote</span>
@@ -525,7 +525,7 @@ class CustomSlider extends React.Component {
           >
           <div className={'thumb-button'}>
               <SliderIconComponent { ...{ 
-                error: (!this.props.changed && (this.props.firstTimeUse && this.props.secondAttempt))
+                error: (!this.props.changed && (!this.props.firstTimeUse && this.props.secondAttempt))
               }}/>
           </div>
             {
