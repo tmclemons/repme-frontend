@@ -26,9 +26,9 @@ class VoteForm extends React.Component {
     email_isValid: PropTypes.bool,
     emailLimit: PropTypes.number,
     vote_isValid: PropTypes.bool,
-    firstTimeUse: PropTypes.bool,
     defaultValue: PropTypes.number,
-    modalOpen: PropTypes.bool
+    modalOpen: PropTypes.bool,
+    userIsSure: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -36,13 +36,12 @@ class VoteForm extends React.Component {
     zipCode: '',
     otherLegislationSubscribe: false,
     hotBillSubscribe: false,
-    email_isValid: true,
-    zip_isValid: true,
+    email_isValid: false,
+    zip_isValid: false,
     emailLimit: 64,
     vote_isValid: false,
-    firstTimeUse: true,
     defaultValue: 50,
-    modalOpen: false
+    modalOpen: false,
   }
 
 
@@ -57,41 +56,57 @@ class VoteForm extends React.Component {
       zip_isValid: this.props.zip_isValid,
       emailLimit: this.props.emailLimit,
       vote_isValid: this.props.vote_isValid,
-      firstTimeUse: this.props.defaultValue,
       defaultValue: this.props.defaultValue,
-      modalOpen: this.props.modalOpen
+      modalOpen: this.props.modalOpen,
+      isDirty: false,
     }
   }
 
-  formOnSubmit = () => {
+  submitThruModal = () => {
+    if ( this.state.modalOpen ) {
+      this.submitData({userIsSure: true});
+      this.handleClose()
+    }
+  }
+  
+  submitThruForm = () => {
+    this.setState({
+      isDirty: true
+    })
+    if (this.state.email_isValid && this.state.zip_isValid) {
+      this.submitData({userIsSure: true});
+    } else {
+      this.submitData({userIsSure: false});
+    }
+  } 
+
+  submitData = (param) => {
     let dataSet = {
       userEmail: this.state.userEmail,
       zipCode: this.state.zipCode,
       otherLegislationSubscribe: this.state.otherLegislationSubscribe,
       hotBillSubscribe: this.state.hotBillSubscribe,
+      userIsSure: ( param.userIsSure ? param.userIsSure : false )
     }
-    if ( this.state.modalOpen && (this.state.email_isValid && this.state.zip_isValid) ) {
-      this.props.callback(dataSet)
-    } else {
-      if (!this.state.modalOpen) {
-        // this.setState({ modalOpen: true })
-        this.props.callback();
-      } else {
-
-      }
-    }
+    this.props.callback(dataSet);
   }
-
+  
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps')
+    if(!nextProps.debounce) {
+      if (!this.state.modalOpen && (!nextProps.firstTimeUse && !nextProps.secondAttempt) ){
+        if (!this.state.email_isValid || !this.state.zip_isValid) {
+          this.setState({ modalOpen: true })
+        }
+      } 
+    }
   }
 
-  handleOpen = () => {
-    this.setState({ modalOpen: true });
-  };
+  componentDidMount() {}
 
   handleClose = () => {
-    this.setState({ modalOpen: false });
+    this.setState({ 
+      modalOpen: false
+     });
   };
 
   render() {
@@ -126,13 +141,19 @@ class VoteForm extends React.Component {
     const actions = [
       <FlatButton
         label="Go Back"
+        style={{
+          color: 'rgb(0, 76, 135)'
+        }}
         primary={true}
         onClick={this.handleClose}
       />,
-      <FlatButton
+      <RaisedButton
+        buttonStyle={{
+          backgroundColor: 'rgb(0, 76, 135)'
+        }}
         label="No Thanks, Continue"
         primary={true}
-        onClick={this.handleClose}
+        onClick={this.submitThruModal}
       />,
     ];
 
@@ -142,13 +163,23 @@ class VoteForm extends React.Component {
           'vote__form'
         }>
         <Dialog
-          title="Dialog With Actions"
+          title={this.props.copy.validationTitle}
+          titleStyle={{
+            textTransform: 'uppercase'
+          }}
           actions={actions}
           modal={false}
           open={this.state.modalOpen}
           onRequestClose={this.handleClose}
         >
-          The actions in this window were passed in as an array of React objects.
+        {
+          `${this.props.copy['validationPartOne']} ` +
+          `${!this.state.email_isValid ? 'Email ' : ''}` +
+          `${!this.state.email_isValid && !this.state.zip_isValid ? 
+            ' or ' : ''}` +
+          `${!this.state.zip_isValid ? 'Zip Code ' : ''}` +
+          `${this.props.copy['validationPartTwo']}` 
+        }
         </Dialog>
 
         { this.props.firstSubmission ? 
@@ -268,7 +299,7 @@ class VoteForm extends React.Component {
               primary={true} 
               labelStyle={styles.buttonLabelStyle}
               style={styles.buttonStyle}
-              onClick={this.formOnSubmit} 
+              onClick={this.submitThruForm} 
             />
           </div>
         </div>

@@ -15,6 +15,9 @@ const repMeConstants = () => {
           from your Legislators about Ballots and Voting results`,
       subscribeToHotBillTitle: `Opt-In`,
       subscribeToOtherLegislationInfoTitle: `Legislator Opt-In`,
+      validationPartOne: `Are you sure you do not want to enter your`,
+      validationPartTwo: `it will help connect you with fellow constituents and communicate to your elected officials.`,
+      validationTitle: `Ready to submit?`,
     //deprecated
     //   preSubmitInfo: (billData) => {
     //       return `This is your private Ballot for 

@@ -75,7 +75,7 @@ class Banner extends React.Component {
               overlay={
                 <div
                   className={classNames(
-                    `${this.props.firstTimeUse ? 'overlay first-time-use' : 'slider__color--stop-' + this.props.bannerProps}`
+                    `${(this.props.firstTimeUse || this.props.secondAttempt ) ? 'overlay first-time-use' : 'slider__color--stop-' + this.props.bannerProps}`
                   )}
                 >
                 <div className={'overlay-content'}>

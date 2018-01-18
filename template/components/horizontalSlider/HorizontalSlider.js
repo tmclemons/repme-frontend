@@ -22,9 +22,9 @@ class Horizontal extends React.Component {
       value: value,
       changed: true
     })
-    this.props.callback(value)
+    this.props.callback(value, true)
   };
-
+  
   handleChangeComplete = () => {
     console.log('Change event completed')
   };

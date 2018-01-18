@@ -13,9 +13,9 @@
     # DONE: blue tool tip goes away entirely
     # DONE: make slider hint a little larger and more apparent(red)
     # DONE: continue showing slider error tooltip, maybe not as big though
-  - TODO: validation modal, for zip and email to remind to enter / challenge
-    # TODO: modal for slider submission
-    # TODO: modal pop up with option for data entry  with go back(return to entry) or "no thanks" continue(submit) for either/or/and email and zipcode
+  - DONE: validation modal, for zip and email to remind to enter / challenge
+    # DONE: modal for slider submission
+    # DONE: modal pop up with option for data entry  with go back(return to entry) or "no thanks" continue(submit) for either/or/and email and zipcode
 
 
   Results:
@@ -26,15 +26,15 @@
   Widget:
   - TODO: validation error go to vote page with option to input email and zipcode
 
+  Email:
+  - TODO: setup smaller candidate card and flex inline row so they are side by side and carry over
+  - TODO: setup roll call vote results
 
   xxDiscussions:
   - TODO: cookies
   - TODO: Bill closed logic
 
 
-  Email:
-  - TODO: setup smaller candidate card and flex inline row so they are side by side and carry over
-  - TODO: setup roll call vote results
 
   xxFuture TODOS:
   - TODO: match css further to do design
