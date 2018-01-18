@@ -35,21 +35,20 @@ class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
-    this.states = ['vote', 'results', 'revote', 'print', 'widget'],
+    this.states = ['vote', 'results', 'revote', 'print', 'widget'];
+    this.voteResults = {};
+    this.bannerProps = 10;
+    this.voteValue = 50;
+    this.sliderDebounce = false;
     this.state = {
       org: props.match.params.org,
-      voteResults: {},
       isWidget: false,
-      toImage: false,
       activeState: this.states[0],
       firstTimeUse: true,
       secondTimeAttempt: false,
       defaultValue: 50,
-      voteValue: 50,
-      bannerProps: 10,
       step: 5,
       submitCount: 0,
-      sliderDebounce: false
     }
   }
 
@@ -69,7 +68,6 @@ class Ballot extends React.Component {
     
     return {
       url: apiUrl,
-      toImage: apiCheckForImage,
       activeState: activeState,
       isWidget: this.locationCheckForWidget()
     }
@@ -133,47 +131,46 @@ class Ballot extends React.Component {
 
   // capture slider data
   onValueChange = (data, inUse) => {
-    if(data) {
-      this.setState({
-        bannerProps: (data / (this.state.step)) || this.state.bannerProps,
-        voteValue: (100 - data),
-      })
-      this.updateCookie().setUserFlow('firstTimeVote', false)
-      this.updateCookie().setUserFlow('secondTimeAttempt', false);
-    }
+    this.bannerProps = (data / (this.state.step)) || this.bannerProps
+    this.voteValue = (100 - data);
+    this.sliderDebounce = (inUse ? inUse : false);
+    this.updateCookie().setUserFlow('firstTimeVote', false)
+    this.updateCookie().setUserFlow('secondTimeAttempt', false);
     this.updateCookie().setUserFlow('sliderPristine', false);
-    this.setState({
-      sliderDebounce: (inUse ? inUse : false)
-    })
   }
 
   submitDataToApi = (voteData) => {
     let params = this.state;
     
     let data = {
-      "vote": params.voteValue || 50,
+      "vote": this.voteValue,
       "email": voteData['userEmail'] || '',
       "zip_code": voteData['zipCode'] || '',
       "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
       "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
-      "bill_id": params.voteResults.bill['id'] || null,
+      "bill_id": this.voteResults.bill['id'] || null,
     }
-
+    console.log(data)
     axios.post(`http://54.187.193.156/api/vote`, data)
       .then(res => {
+        this.voteResults = res.data.results;
         this.setState({
           // here is where state will be maintained or lost after vote submission
           activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
-          voteResults: res.data.results
         })
       })
       .then(() => {
         this.updateCookie().setUserFlow('firstTimeVote', false)
         if (this.state.isWidget) {
-          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
+          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.voteResults);
         } else {
-          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.state.voteResults);
+          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.voteResults);
         }
+      })
+      .then(() => {
+        this.setState({
+          firstTimeUse: true
+        })
       })
       .catch(function (error) {
         console.log(error);
@@ -191,17 +188,16 @@ class Ballot extends React.Component {
       this.updateCookie().setUserFlow('firstTimeVote', (this.state.submitCount > 0 ? false : true));
       this.updateCookie().setUserFlow('secondTimeAttempt', (this.state.submitCount === 1 ? true : false));
     }
-
+    this.sliderDebounce = false;
     this.setState({
-      sliderDebounce: false,
       firstTimeUse: this.updateCookie().getUserFlow('firstTimeVote')
     });
     
-    if ((this.updateCookie().getUserFlow('firstTimeVote') && this.state.submitCount > 1 )  && params.voteValue === 50) {
+    if ((this.updateCookie().getUserFlow('firstTimeVote') && this.state.submitCount > 1 )  && this.voteValue === 50) {
       return null;
     } else {
       if (!this.updateCookie().getUserFlow('firstTimeVote') && !this.updateCookie().getUserFlow('secondTimeAttempt')) {
-        if (voteData['userIsSure']) {
+        if ((cookie.load('viewState') === this.states[1]) || voteData['userIsSure']) {
           this.submitDataToApi(voteData)
         }
       }
@@ -212,9 +208,9 @@ class Ballot extends React.Component {
   showSampleReVoteView = () => {
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
+        this.voteResults = res.data.results;
         this.setState({
           activeState: this.states[2],
-          voteResults: res.data.results
         })
       })
       .catch(function (error) {
@@ -225,16 +221,14 @@ class Ballot extends React.Component {
 
   // LIFE CYCLE HOOKS
   componentWillReceiveProps(nextProps) {
-
     let urlProps = nextProps.match.params.org;
     this.updateCookie().setUserFlow('firstTimeVote', true);
     this.updateCookie().setUserFlow('secondTimeAttempt', false);
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
       .then(res => {
+        this.voteResults = res.data.results;
         this.setState({
-          params: Object.assign(this.state.voteResults, res.data.results),
           activeState: this.urlCheck(urlProps).activeState,
-          toImage: this.urlCheck(urlProps).toImage,
           isWidget: this.urlCheck(urlProps).isWidget,
           submitCount: 0
         })
@@ -251,11 +245,9 @@ class Ballot extends React.Component {
 
     axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
       .then(res => {
-
+        this.voteResults = cookieResultsCheck ? cookieResultsCheck : res.data.results;
         this.setState({
-          voteResults: cookieResultsCheck ? cookieResultsCheck : res.data.results,
           activeState: cookieCheck ? this.states[1] : this.urlCheck(this.state.org).activeState,
-          toImage: this.urlCheck(this.state.org).toImage,
           isWidget: this.urlCheck(this.state.org).isWidget
         })
       })
@@ -275,25 +267,26 @@ class Ballot extends React.Component {
 
   //DONE: ASAP: GET IT DONE: create better error handling for view changes
   render() {
+
     //vote view
-    let { bill } = this.state.voteResults;
+    let { bill } = this.voteResults;
     let { submitCount } = this.state;
 
     if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
             <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <div className={`ballot__wrapper ${this.state.isWidget ? 'widget-view' : ''}`}>
-              <Header org={this.state.voteResults.org}/>
+              <Header org={this.voteResults.org}/>
               <Banner
-                ballotInfo={this.state.voteResults.bill}
+                ballotInfo={this.voteResults.bill}
                 backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
                 callback={this.submitVote}
                 firstTimeUse={this.updateCookie().getUserFlow('firstTimeVote')}
                 secondAttempt={this.updateCookie().getUserFlow('secondTimeAttempt')}
                 defaultValue={this.state.defaultValue}
-                bannerProps={this.state.bannerProps}
+                bannerProps={this.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
               />
@@ -304,7 +297,7 @@ class Ballot extends React.Component {
                 firstTimeUse={this.updateCookie().getUserFlow('firstTimeVote')}
                 secondAttempt={this.updateCookie().getUserFlow('secondTimeAttempt')}
                 copy={ballotCopy}
-                debounce={this.state.sliderDebounce}
+                debounce={this.sliderDebounce}
               />
               <Footer />
             </div>
@@ -319,24 +312,31 @@ class Ballot extends React.Component {
 
     //results view
     if (this.state.activeState === this.states[1]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return(
           <div>
             <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <div className={'ballot__wrapper'}>
-              <Header org={this.state.voteResults.org} />
+              <Header org={this.voteResults.org} />
               <Banner
-                ballotInfo={this.state.voteResults.bill}
+                ballotInfo={this.voteResults.bill}
                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
                 callback={this.submitVote}
-                // need to revisit
                 firstTimeUse={false}
+                secondAttempt={false}
                 defaultValue={this.state.defaultValue}
-                bannerProps={this.state.bannerProps}
+                bannerProps={this.bannerProps}
                 callback={this.onValueChange}
-                showSlider={false}
+                showSlider={true}
               />
-              <Results toImage={this.state.toImage} { ...this.state.voteResults}/>
+              <VoteForm 
+                firstSubmission={false} 
+                chamber={bill.chamber} 
+                callback={this.submitVote} 
+                copy={ballotCopy} 
+                debounce={true}
+              />
+              <Results toImage={false} { ...this.voteResults}/>
               <Footer />
             </div>
           </div>
@@ -348,24 +348,30 @@ class Ballot extends React.Component {
 
     //results resubmit view
     if (this.state.activeState === this.states[2]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
             <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
             <div className={'ballot__wrapper'}>
-              <Header org={this.state.voteResults.org} />
+              <Header org={this.voteResults.org} />
               <Banner
-                ballotInfo={this.state.voteResults.bill}
+                ballotInfo={this.voteResults.bill}
                 backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
                 callback={this.submitVote}
                 firstTimeUse={this.updateCookie().getUserFlow('firstTimeVote')}
                 defaultValue={this.state.defaultValue}
-                bannerProps={this.state.bannerProps}
+                bannerProps={this.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
               />
-              <VoteForm firstSubmission={cookie.loadAll('viewState') !== this.states[1]} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy}/>
-              <Results toImage={this.state.toImage} { ...this.state.voteResults} />
+              <VoteForm 
+                firstSubmission={false} 
+                chamber={bill.chamber} 
+                callback={this.submitVote} 
+                copy={ballotCopy}
+                debounce={true}
+              />
+              <Results toImage={false} { ...this.voteResults} />
               <Footer />
             </div>
           </div>
@@ -377,13 +383,13 @@ class Ballot extends React.Component {
 
     //results print view
     if (this.state.activeState === this.states[3]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
             <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
             <div className={'ballot__wrapper'}>
               <div id={'delete-results'}>
-                <Results toImage={this.state.toImage} { ...this.state.voteResults} />
+                <Results toImage={true} { ...this.voteResults} />
               </div>
             </div>
           </div>

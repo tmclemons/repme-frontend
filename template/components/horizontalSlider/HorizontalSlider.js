@@ -17,7 +17,7 @@ class Horizontal extends React.Component {
     console.log('Change event started')
   };
 
-  handleChange = value => {
+  handleChange = (value) => {
     this.setState({
       value: value,
       changed: true

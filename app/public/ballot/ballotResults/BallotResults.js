@@ -48,8 +48,8 @@ class BallotResults extends React.Component {
     let voteRanges = [];
     let splitRange = data.value.split('-'); 
     let vote = data.comparableValue;
-    if ((Number(splitRange[0]) - .001) < vote ) {
-      if (Number(`${splitRange[1]}.001`) > vote) {
+    if ( Number(splitRange[0]) <= vote ) {
+      if (Number(splitRange[1]) >= vote) {
         return true;
       }
     } else {
@@ -103,7 +103,7 @@ class BallotResults extends React.Component {
     }
     
     sortBuffer.sort(function (a, b) {
-      return a.minOrder - b.minOrder;
+      return b.minOrder - a.minOrder;
     });
 
     sortBuffer.forEach((buffer) => {
@@ -242,10 +242,8 @@ class BallotResults extends React.Component {
   }
   
   componentDidMount() {
-    console.log('mounted')
     if (this.props.toImage) {
       setTimeout(() => {
-        console.log('did it run')
         this.convertResultsToPng();
       }, 1000);
     }

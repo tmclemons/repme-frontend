@@ -16,11 +16,13 @@
   - DONE: validation modal, for zip and email to remind to enter / challenge
     # DONE: modal for slider submission
     # DONE: modal pop up with option for data entry  with go back(return to entry) or "no thanks" continue(submit) for either/or/and email and zipcode
+    DONE: slider doesnt reach 100
+    DONE: slider and chart data reversed
 
 
   Results:
-  - TODO: Show revote on results page 100% of time, show on homepage based on cookie logic.
-  - TODO: ballots results and ballot vote only
+  - DONE: Show revote on results page 100% of time, show on homepage based on cookie logic.
+  - DONE: ballots results and ballot vote only
 
 
   Widget:
