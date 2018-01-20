@@ -5,8 +5,6 @@ import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../../template/components/mainFooter/MainFooter';
 import Results from '../ballotResults/BallotResults';
-import Frame from 'react-frame-component';
-import NewWindow from 'react-popout';
 import axios from 'axios';
 import Constants from '../../../../template/components/utilities/constants';
 import { instanceOf } from 'prop-types';
@@ -37,9 +35,11 @@ class Ballot extends React.Component {
     super(props)
     this.states = ['vote', 'results', 'revote', 'print', 'widget'];
     this.voteResults = {};
+    this.legislators = [];
     this.bannerProps = 10;
     this.voteValue = 50;
     this.sliderDebounce = false;
+    this.ipAddress = `54.201.100.159`;
     this.state = {
       org: props.match.params.org,
       isWidget: false,
@@ -49,21 +49,9 @@ class Ballot extends React.Component {
       defaultValue: 50,
       step: 5,
       submitCount: 0,
+      exportView: false
     }
   }
-  
-   getS4 = ()=> {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-
-  getGuid = () => {
-    return `${this.getS4() + this.getS4() + '-' + this.getS4() + '-' + this.getS4() + '-' +
-    this.getS4() + '-' + this.getS4() + this.getS4() + this.getS4()}`;
-}
-
-
 
   locationCheckForWidget = () => {
     let regex = new RegExp('([^=&?]+)=([^&]+)');
@@ -76,51 +64,34 @@ class Ballot extends React.Component {
     let billIdCheck = urlProps ? urlProps.split('-') : '';
     let apiUrl = urlProps && ( urlProps !== this.states[3] ) && ( urlProps !== this.states[4] ) ? `/${urlProps}` : '';
     let apiCheckForImage = urlProps === this.states[3];
-    let activeState = apiCheckForImage ? this.states[3] : this.states[0];
-    activeState = this.locationCheckForWidget() ? this.states[4] : activeState;
     
     return {
       url: billIdCheck.length > 1 ? `/bill/${urlProps}` : `/profile${apiUrl}`,
-      activeState: activeState,
-      isWidget: this.locationCheckForWidget()
     }
   }
 
+  // TODO: change to receive state and guid props
   updateCookie = () => {
     // set cookie props
-    const changePage = (props, state, results) => {
-      if(props === true) {
-        // set cookie to active state
-        cookie.save('fromWidget', true, {
-          path: '/',
-          maxAge: 1000,
-        });
-        cookie.save('viewState', state, {
-          path: '/',
-          maxAge: 1000,
-        });
-        if(results) {
-          cookie.save('voteResults', results, {
-            path: '/',
-            maxAge: 1000,
-          });
-        }
-      }
-      
-      if(props === false) {
-        cookie.save('viewState', state, {
-          path: '/',
-          maxAge: 1000,
-        });
-
-        cookie.remove('fromWidget');
-      }
-
-      if (results === false) {
-        cookie.remove('voteResults');
+    const set = (name, data, props) => {
+      if (name && data) {
+        props = props && typeof props === 'object' ? props : null
+        cookie.save(name, data, props)
       }
     }
-    
+
+    const get = (name) => {
+      if (name) {
+        cookie.load(name);
+      }
+    }
+
+    const remove = (name) => {
+      if(name){
+        cookie.remove(name)
+      }
+    }
+
     const setUserFlow = (userFlow, bool) => {
       bool = typeof bool === 'boolean' ? bool : true;
       cookie.remove(userFlow);
@@ -136,7 +107,9 @@ class Ballot extends React.Component {
       return cookieResult;
     }
     return {
-      changePage: changePage,
+      set: set,
+      get: get,
+      remove: remove,
       setUserFlow: setUserFlow,
       getUserFlow: getUserFlow
     }
@@ -152,11 +125,25 @@ class Ballot extends React.Component {
     this.updateCookie().setUserFlow('sliderPristine', false);
   }
 
+  loadingSpinnerToggle = (show) => {
+    let spinner = document.getElementById('loading-spinner');
+    let wrapper = document.getElementById('app-wrapper');
+
+    if (spinner && show === 'hide') {
+      spinner.style.display = 'none';
+      wrapper.style.display = 'inherit';
+    } else {
+      spinner.style.display = 'flex';
+      wrapper.style.display = 'none';
+    } 
+  }
+
   submitDataToApi = (voteData) => {
     let params = this.state;
+    let cookieFlow = this.updateCookie();
     
     let data = {
-      // "guid": this.getGuid(),
+      "guid": cookieFlow.get('guid') ? cookieFlow.get('guid') : '',
       "vote": this.voteValue,
       "email": voteData['userEmail'] || '',
       "zip_code": voteData['zipCode'] || '',
@@ -165,27 +152,30 @@ class Ballot extends React.Component {
       "bill_id": this.voteResults.bill['id'] || null,
     }
 
-    axios.post(`http://54.187.193.156/api/vote`, data)
+    if (this.props.match.params.org && this.props.match.params.zip_code) {
+      data.guid = 0;
+      data.zip_code = this.props.match.params.zip_code;
+    }
+
+    axios.post(`http://${this.ipAddress}/api/vote`, data)
       .then(res => {
         this.voteResults = res.data.results;
+        if (res.data.legislators) {
+          this.legislators = res.data.legislators;
+        }
         this.setState({
           // here is where state will be maintained or lost after vote submission
           activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
         })
-        // for guid results logic
-        // if (this.state.isWidget) {
-        //   this.updateCookie().changePage(this.state.isWidget, res.data.results.state, this.voteResults);
-        // } else {
-        //   this.updateCookie().changePage(this.state.isWidget, res.data.results.state, this.voteResults);
-        // }
+        this.loadingSpinnerToggle('hide');
       })
       .then(() => {
         //old logic
         this.updateCookie().setUserFlow('firstTimeVote', false)
         if (this.state.isWidget) {
-          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.voteResults);
+          this.updateCookie().set(this.state.isWidget, this.states[1], this.voteResults);
         } else {
-          this.updateCookie().changePage(this.state.isWidget, this.states[1], this.voteResults);
+          this.updateCookie().set(this.state.isWidget, this.states[1], this.voteResults);
         }
       })
       .then(() => {
@@ -198,10 +188,38 @@ class Ballot extends React.Component {
       });
   }
 
+  receiveDataFromApi = (slug) => {
+    let cookieFlow = this.updateCookie();
+    slug = slug ? slug : this.state.org;
+    axios.post(`http://${this.ipAddress}/api${this.urlCheck(slug).url}`,
+      (cookieFlow.get('guid') ? cookieFlow.get('guid') : { guid: '' }))
+      .then(res => {
+        this.voteResults = res.data.results;
+        this.setState({
+          activeState: res.data.page_state || this.states[0],
+          isWidget: this.locationCheckForWidget(),
+          submitCount: 0
+        })
+        this.loadingSpinnerToggle('hide');
+      })
+      .then(() => {
+        if (this.state.activeState === this.states[1]) {
+          cookieFlow.setUserFlow('firstTimeVote', false);
+          cookieFlow.setUserFlow('secondTimeAttempt', false);
+        } else {
+          cookieFlow.setUserFlow('firstTimeVote', true);
+          cookieFlow.setUserFlow('secondTimeAttempt', false);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   submitVote = (voteData) => {
     //TODO: add guid logic
-
-    if (this.state.isWidget) {
+    
+    if (this.locationCheckForWidget()) {
       window.open('/', '_blank');
     } else {
       if ( this.updateCookie().getUserFlow('sliderPristine') ) {
@@ -218,7 +236,8 @@ class Ballot extends React.Component {
         return null;
       } else {
         if (!this.updateCookie().getUserFlow('firstTimeVote') && !this.updateCookie().getUserFlow('secondTimeAttempt')) {
-          if ((cookie.load('viewState') === this.states[1]) || voteData['userIsSure']) {
+          if ((this.state.activeState === this.states[1]) || voteData['userIsSure']) {
+            this.loadingSpinnerToggle('show');
             this.submitDataToApi(voteData)
           }
         }
@@ -227,80 +246,33 @@ class Ballot extends React.Component {
 
   }
 
-  /// TODO: clean this data logic up
-  showSampleReVoteView = () => {
-    axios.post(`http://54.187.193.156/api${this.urlCheck(this.state.org).url}`)
-      .then(res => {
-        this.voteResults = res.data.results;
-        this.setState({
-          activeState: this.states[2],
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
-
   // LIFE CYCLE HOOKS
   componentWillReceiveProps(nextProps) {
     let urlProps = nextProps.match.params.org;
     this.updateCookie().setUserFlow('firstTimeVote', true);
     this.updateCookie().setUserFlow('secondTimeAttempt', false);
     this.voteResults = 50;
-    axios.post(`http://54.187.193.156/api${this.urlCheck(urlProps).url}`)
-      .then(res => {
-        this.voteResults = res.data.results;
-        this.setState({
-          activeState: this.urlCheck(urlProps).activeState,
-          isWidget: this.urlCheck(urlProps).isWidget,
-          submitCount: 0
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    this.receiveDataFromApi(urlProps);
   }
 
   componentDidMount() {
-    this.updateCookie().setUserFlow('sliderPristine', true);
-    let cookieCheck = !this.locationCheckForWidget() && (cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true");
-    let cookieResultsCheck = cookie.load('voteResults') ? cookie.load('voteResults') : null;
-   
-    axios.post(`http://54.187.193.156/api${this.urlCheck(this.state.org).url}`)
-      .then(res => {
-        this.voteResults = cookieResultsCheck ? cookieResultsCheck : res.data.results;
-        this.setState({
-          activeState: cookieCheck ? this.states[1] : this.urlCheck(this.state.org).activeState,
-          isWidget: this.urlCheck(this.state.org).isWidget
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    if (cookie.load('voteResults') ) {
-      this.updateCookie().changePage(false, this.urlCheck(this.state.org).activeState, false);
-      this.updateCookie().setUserFlow('firstTimeVote', false);
-      this.updateCookie().setUserFlow('secondTimeAttempt', false);
-    } else {
-      this.updateCookie().setUserFlow('firstTimeVote', true);
-      this.updateCookie().setUserFlow('secondTimeAttempt', false);
-      this.updateCookie().changePage(false, this.urlCheck(this.state.org).activeState)
-    }
+    let cookieFlow = this.updateCookie();
+    cookieFlow.setUserFlow('sliderPristine', true);
+    cookieFlow.setUserFlow('firstTimeVote', true);
+    cookieFlow.setUserFlow('secondTimeAttempt', false);
+    this.receiveDataFromApi();
   }
-
+    
   //TODO: ASAP: GET IT DONE: create better error handling for view changes
   render() {
-
     //vote view
     let { bill } = this.voteResults;
     let { submitCount } = this.state;
-
-    if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
+    if (this.state.activeState === this.states[0]) {
       if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
+            <SampleHeader { ...{ callback: this.receiveDataFromApi}} />
             <div className={`ballot__wrapper ${this.state.isWidget ? 'widget-view' : ''}`}>
               <Header org={this.voteResults.org}/>
               <Banner
@@ -339,7 +311,7 @@ class Ballot extends React.Component {
       if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return(
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
+            <SampleHeader { ...{ callback: this.receiveDataFromApi}} />
             <div className={'ballot__wrapper'}>
               <Header org={this.voteResults.org} />
               <Banner
@@ -375,7 +347,7 @@ class Ballot extends React.Component {
       if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
+            <SampleHeader { ...{ callback: this.receiveDataFromApi }} />
             <div className={'ballot__wrapper'}>
               <Header org={this.voteResults.org} />
               <Banner
@@ -406,14 +378,19 @@ class Ballot extends React.Component {
     }
 
     //results print view
-    if (this.state.activeState === this.states[3]) {
+    if (this.state.activeState === this.states[1] && this.props.match.params.org && this.props.match.params.zip_code) {
       if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
+            <SampleHeader { ...{ callback: this.receiveDataFromApi }} />
             <div className={'ballot__wrapper'}>
               <div id={'delete-results'}>
-                <Results toImage={true} { ...this.voteResults} />
+                <Results toImage={true} showDemographics={true} { ...this.voteResults} />
+                {this.legislators.map((legislator, index) => {
+                  return(
+                    <Results id={Object.keys(legislator)[0]} key={index} toImage={true} showDemographics={false} { ...this.legislator.data} />
+                  )
+                })}
               </div>
             </div>
           </div>

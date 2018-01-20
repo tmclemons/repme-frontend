@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router'
+import { Route, Switch } from 'react-router'
 import AsyncComponent from 
   '../template/components/utilities/AsyncComponent';
 
@@ -26,9 +26,12 @@ class Routing extends React.Component {
   //TODO:setup redirect for when user hits reload
   render() {
     return (
-      <div>
-        <Route exact path='/' component={Ballot} />
-        <Route path='/:org' component={Ballot} />
+      <div id='app-wrapper' style={{display: 'inherit'}}>
+        <Switch>
+          <Route exact path='/' component={Ballot} />
+          <Route exact path='/:org?' component={Ballot} />
+          <Route exact path='/export/:org/:zipcode' component={Ballot} />
+        </Switch>
       </div>
     )
   }

@@ -250,8 +250,7 @@ class BallotResults extends React.Component {
   }
 
   getStateDemographic = () => {
-    let isZipCode = this.props.zip_code && this.props.zip_code.length > 0; //this.props.zip_code
-    if(isZipCode) {
+    if (this.props.showDemographics) {
       return(
         <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics} />
       )
@@ -283,11 +282,6 @@ class BallotResults extends React.Component {
             <ChartLabelComponent { ...this.getFormattedData().textLabels}/>
             <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
           </div>
-        </div>
-        <div className={'ballot__results--barchart'}>
-          <ChartTitleBarComponent {...{superTitle: 'votes', title: 'United State Results'}}/>
-          <ChartLabelComponent { ...this.getFormattedData('usa').textLabels}/>
-          <BarChartComponent {  ...this.getSampleDistrictResultsArray('usa')}/>
         </div>
       </div>
     )
