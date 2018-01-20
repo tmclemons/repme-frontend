@@ -386,10 +386,11 @@ class Ballot extends React.Component {
             <div className={'ballot__wrapper'}>
               <div id={'delete-results'}>
                 <Results toImage={true} showDemographics={true} { ...this.voteResults} />
-                {this.legislators.map((legislator, index) => {
-                  return(
-                    <Results id={Object.keys(legislator)[0]} key={index} toImage={true} showDemographics={false} { ...this.legislator.data} />
-                  )
+                {
+                  this.legislators.map((legislator, index) => {
+                    return(
+                      <Results id={Object.keys(legislator)[0]} key={index} toImage={true} showDemographics={false} { ...this.legislator.data} />
+                    )
                 })}
               </div>
             </div>
