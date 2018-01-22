@@ -1,17 +1,9 @@
 import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import FontIcon from 'material-ui/FontIcon';
-import ActionHome from 'material-ui/svg-icons/action/home';
-import IconButton from 'material-ui/IconButton';
-import Scss from './mainFooter.scss';
 import RepMeLogoFooter from '../../../template/components/utilities/logoComponentFooter';
+import Scss from './mainFooter.scss';
 
-
-const recentsIcon = <ActionHome />;
-const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
-const nearbyIcon = <IconLocationOn />;
 
 class MainFooter extends React.Component {
   constructor(props) {
@@ -52,8 +44,6 @@ class MainFooter extends React.Component {
     }
   }
 
-  
-
   render() {
     const styles = {
       iconButtonStyle: {
@@ -73,6 +63,10 @@ class MainFooter extends React.Component {
         justifyContent: 'center',
         paddingTop: '20px',
         paddingBottom: '60px'
+      },
+      footerLogo: {
+        maxWidth: '60px',
+        minWidth: '450px'
       }
     }
     
@@ -81,10 +75,7 @@ class MainFooter extends React.Component {
         <footer>
           <div className={'footer-logo'}>
             <div>
-              <div style={{
-                  maxWidth: '60px',
-                  minWidth: '450px'
-                }}
+              <div style={styles.footerLogo}
               >
                 <RepMeLogoFooter />
               </div>

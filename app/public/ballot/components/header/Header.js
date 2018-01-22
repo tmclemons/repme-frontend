@@ -12,6 +12,32 @@ class Header extends React.Component {
   }
 
   render() {
+    let styles={
+      appBar: {
+        minHeight: '100px',
+        backgroundColor: '#f5f5f5',
+        paddingLeft: '80px',
+        paddingRight: '80px',
+      },
+      appBarTitle: {
+        color: 'black',
+        whiteSpace: 'normal',
+        textOverflow: 'initial',
+        maxWidth: '200px',
+        lineHeight: '30px',
+        fontSize: '20px',
+        marginTop: '20px',
+      },
+      appBarIconLeft: {
+        display: 'inherit',
+        maxWidth: '80px',
+        minWidth: '300px',
+      },
+      appBarIconRight: {
+        maxHeight: '100px',
+        marginRight: '0'
+      }
+    }
     return(
       <div>
         <MuiThemeProvider>
@@ -21,34 +47,10 @@ class Header extends React.Component {
             iconElementRight={
               <img style={{maxHeight: '100%'}} src={this.props.org.image || ''} alt={`${this.props.org.name} Logo`}/>
             }
-            style={
-              {
-                minHeight: '100px',
-                backgroundColor: '#f5f5f5',
-                paddingLeft: '80px',
-                paddingRight: '80px',
-              }
-            }
-            titleStyle={
-              {
-                color: 'black',
-                whiteSpace: 'normal',
-                textOverflow: 'initial',
-                maxWidth: '200px',
-                lineHeight: '30px',
-                fontSize: '20px',
-                marginTop: '20px',
-              }
-            }
-            iconStyleLeft={{
-              display: 'inherit',
-              maxWidth: '80px',
-              minWidth: '300px',
-            }}
-            iconStyleRight={{
-              maxHeight: '100px',
-              marginRight: '0'
-            }}
+            style={styles.appBar}
+            titleStyle={styles.appBarTitle}
+            iconStyleLeft={styles.appBarIconLeft}
+            iconStyleRight={styles.appBarIconRight}
           />
         </MuiThemeProvider>
       </div>

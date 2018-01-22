@@ -23,6 +23,7 @@ class Banner extends React.Component {
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
+      bannerProps: props.bannerProps
     }
   }
 
@@ -41,6 +42,10 @@ class Banner extends React.Component {
       })
     }
   }
+  
+  shouldComponentUpdate(nextProps) {
+    return(this.props.bannerProps !== nextProps.bannerProps);
+  }
 
   getFormattedData = () => {
     let dataLabels = [
@@ -58,30 +63,36 @@ class Banner extends React.Component {
 
   render() {
     let overflowCheck = false;
+    let firstTimeUseClassCheck = 
+      (this.props.firstTimeUse || this.props.secondAttempt) ? 
+      'overlay first-time-use' : 'slider__color--stop-' + 
+      this.props.bannerProps;
+    let styles = {
+      cardMedia: {
+        maxHeight: '500px',
+        minHeight: '500px',
+        overflow: 'hidden',
+        backgroundImage: `url(${this.props.backgroundImg.url})`,
+        backgroundSize: 'cover'
+      },
+      starIcon: grey50
+    }
     return (
       <div>
         <MuiThemeProvider>
           <Card>
             <CardMedia
-              mediaStyle={
-                {
-                  maxHeight: '500px',
-                  minHeight: '500px',
-                  overflow: 'hidden',
-                  backgroundImage: `url(${this.props.backgroundImg.url})`,
-                  backgroundSize: 'cover'
-                }
-              }
+              mediaStyle={styles.cardMedia}
               overlay={
                 <div
                   className={classNames(
-                    `${(this.props.firstTimeUse || this.props.secondAttempt ) ? 'overlay first-time-use' : 'slider__color--stop-' + this.props.bannerProps}`
+                    `${firstTimeUseClassCheck}`
                   )}
                 >
                 <div className={'overlay-content'}>
                   <div className={'main'}>
                     <div className={'icon'}>
-                      <StarIcon color={ grey50 }/>
+                      <StarIcon color={ styleMedia.starIcon }/>
                     </div>
                     <span className={'bill-number'}>{this.state.ballotNumber}</span>
                       {/* TODO: come back and fix this for text-overflow */}

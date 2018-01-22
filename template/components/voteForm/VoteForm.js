@@ -88,7 +88,9 @@ class VoteForm extends React.Component {
       hotBillSubscribe: this.state.hotBillSubscribe,
       userIsSure: ( param.userIsSure ? param.userIsSure : false )
     }
+    //hack to rerender
     this.props.callback(dataSet);
+    this.forceUpdate();
   }
   
   componentWillReceiveProps(nextProps) {
@@ -101,7 +103,13 @@ class VoteForm extends React.Component {
     }
   }
 
-  componentDidMount() {}
+  shouldComponentUpdate(nextProps) {
+    return ( this.props.userEmail !== nextProps.userEmail || 
+             this.props.zipCode !== nextProps.zipCode ||
+             this.props.opt_in !== nextProps.opt_in ||
+             this.props.opt_in_two !== nextProps.opt_in_two
+            )
+  }
 
   handleClose = () => {
     this.setState({ 

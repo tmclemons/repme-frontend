@@ -16,27 +16,22 @@ import Constants from '../../../../template/components/utilities/constants';
 const { colorStops } = Constants;  
 
 import domtoimage from 'dom-to-image';
-import Scss from './ballotResults.scss';
-  
+import Scss from './results.scss';
+
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
     console.log(props)
     this.state = {
-      toImage: true, //this.props.toImage || false,
-      yourState: 'IL',
-      backgroundImg: {
-        url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
-      },
       repDemographics: {
-        state: 'illinois',
-        districtCity: 'chicago'
+        state: this.props.user.state || 'illinois',
+        districtCity: this.props.user.city || 'chicago',
+        stateCode: this.props.state_code || 'IL',
       }
     }
   }
 
   getColorStops = () => {
-
     let colorBuffer = [];
     colorStops.forEach((stop) => {
       colorBuffer.push(stop.hex)
@@ -231,7 +226,7 @@ class BallotResults extends React.Component {
     let node = document.getElementById('your-results');
     let deleteResults = document.getElementById('delete-results');
     domtoimage.toPng(node).then(function (dataUrl) {
-      //maybe a time issue because the chart hasnt drawn yet
+      //needs to refactor, after data loads...
       var img = new Image();
       img.src = dataUrl;
       img.className="results-image"
@@ -252,13 +247,24 @@ class BallotResults extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    return (this.props.bill.data !== nextProps.bill.data);
+  }
   getStateDemographic = () => {
     if (this.props.showDemographics) {
       return(
-        <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics} />
+        <StateDemographic { ...this.state.repDemographics} />
       )
     }
     return null;
+  }
+
+  styles = {
+    print: {
+      display: `${this.props.toImage ? 'block' : 'none'}`,
+      height: `${this.props.toImage ? '100px' : '0'}`,
+      background: 'white'
+    }
   }
 
   render() {
@@ -274,14 +280,10 @@ class BallotResults extends React.Component {
     return (
       <div> 
         <div className={'ballot__results--barchart'}>
-          <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
+          <ChartTitleBarComponent {...{superTitle: null, title: this.props.resultsTitle}}/>
           {this.getStateDemographic()}
           <div id={'your-results'}>
-            <div style={{
-              display: `${this.state.toImage ? 'block' : 'none'}`,
-              height: `${this.state.toImage ? '100px' : '0'}`,
-              background: 'white'
-            }}/>
+            <div style={this.styles}/>
             <ChartLabelComponent { ...this.getFormattedData().textLabels}/>
             <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
           </div>

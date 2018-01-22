@@ -10,9 +10,6 @@ const Ballot = AsyncComponent(
   class Routing extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        approvedOrgs: ['aarp', 'repme']
-      }
     }
 
   render() {
@@ -22,7 +19,7 @@ const Ballot = AsyncComponent(
           <Route exact path='/' component={Ballot}/>
           <Route exact path='/:org?' component={Ballot}/>
           <Route exact path='/export/:org/:zipcode' component={Ballot} />
-          {/* <Route component={Ballot} /> */}
+          <Route component={Ballot} />
         </Switch>
       </div>
     )
