@@ -195,6 +195,13 @@ class Ballot extends React.Component {
       (cookieFlow.get('guid') ? cookieFlow.get('guid') : { guid: '' }))
       .then(res => {
         this.voteResults = res.data.results;
+        if(this.voteResults.legislators) {
+          Object.keys(this.voteResults.legislators).map((key) => {
+            let obj = {};
+            obj[key] = this.voteResults.legislators[key].data;
+            this.legislators.push(obj);
+        })
+      }
         this.setState({
           activeState: res.data.page_state || this.states[0],
           isWidget: this.locationCheckForWidget(),
@@ -217,7 +224,6 @@ class Ballot extends React.Component {
   }
 
   submitVote = (voteData) => {
-    //TODO: add guid logic
     
     if (this.locationCheckForWidget()) {
       window.open('/', '_blank');
@@ -245,7 +251,6 @@ class Ballot extends React.Component {
     }
 
   }
-
   // LIFE CYCLE HOOKS
   componentWillReceiveProps(nextProps) {
     let urlProps = nextProps.match.params.org;
@@ -268,7 +273,9 @@ class Ballot extends React.Component {
     //vote view
     let { bill } = this.voteResults;
     let { submitCount } = this.state;
-    if (this.state.activeState === this.states[0]) {
+    let exportCheck = this.props.match.params.org && this.props.match.params.zipcode
+
+    if (this.state.activeState === this.states[0] && !exportCheck) {
       if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
@@ -378,20 +385,23 @@ class Ballot extends React.Component {
     }
 
     //results print view
-    if (this.state.activeState === this.states[1] && this.props.match.params.org && this.props.match.params.zip_code) {
-      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
+    if (this.state.activeState === this.states[0] && exportCheck) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object && this.legislators.length) {
         return (
-          <div>
+          <div style={{backgroundColor: 'rgb(255, 255, 255)'}}>
             <SampleHeader { ...{ callback: this.receiveDataFromApi }} />
-            <div className={'ballot__wrapper'}>
+            <div className={'ballot__wrapper'} >
               <div id={'delete-results'}>
-                <Results toImage={true} showDemographics={true} { ...this.voteResults} />
-                {
-                  this.legislators.map((legislator, index) => {
-                    return(
-                      <Results id={Object.keys(legislator)[0]} key={index} toImage={true} showDemographics={false} { ...this.legislator.data} />
-                    )
-                })}
+                <div id={'your-results'}>
+                  <Results toImage={true} showDemographics={true} { ...this.voteResults} />
+                  {
+                    this.legislators.map((legislator, index) => {
+                      let legislatorID = Object.keys(legislator)[0];
+                      return(
+                        <Results legislatorsID={legislatorID} id={index} key={index} toImage={true} showDemographics={false} { ...{bill: {data: legislator[legislatorID]}}} />
+                      )
+                    })}
+                  </div>
               </div>
             </div>
           </div>

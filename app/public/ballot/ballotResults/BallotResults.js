@@ -21,6 +21,7 @@ import Scss from './ballotResults.scss';
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
       toImage: true, //this.props.toImage || false,
       yourState: 'IL',
@@ -235,7 +236,9 @@ class BallotResults extends React.Component {
       img.src = dataUrl;
       img.className="results-image"
       document.body.appendChild(img);
-      deleteResults.outerHTML = "";
+      if (deleteResults.parentNode) {
+        deleteResults.outerHTML = "";
+      }
     }).catch(function (error) {
       console.error('oops, something went wrong!', error);
     });

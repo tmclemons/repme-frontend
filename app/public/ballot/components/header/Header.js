@@ -19,7 +19,7 @@ class Header extends React.Component {
             className={'header rep-me-logo'}
             iconElementLeft={<RepMeLogo />}
             iconElementRight={
-              <img style={{width: '100%'}} src={this.props.org.image || ''} alt={`${this.props.org.name} Logo`}/>
+              <img style={{maxHeight: '100%'}} src={this.props.org.image || ''} alt={`${this.props.org.name} Logo`}/>
             }
             style={
               {
@@ -47,7 +47,6 @@ class Header extends React.Component {
             }}
             iconStyleRight={{
               maxHeight: '100px',
-              maxWidth: '500px',
               marginRight: '0'
             }}
           />
