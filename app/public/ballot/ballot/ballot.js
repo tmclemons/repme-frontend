@@ -167,7 +167,6 @@ class Ballot extends React.Component {
   }
 
   submitVote = (voteData) => {
-    console.log('submitVote', voteData)
     if (this.locationCheckForWidget()) {
       window.open('/', '_blank');
     } else {
@@ -197,7 +196,6 @@ class Ballot extends React.Component {
 
   // LIFE CYCLE HOOKS
   componentWillReceiveProps(nextProps) {
-    console.log('changing')
     let urlProps = nextProps.match.params.org;
     updateCookie.setUserFlow('firstTimeVote', true);
     updateCookie.setUserFlow('secondTimeAttempt', false);
@@ -280,7 +278,7 @@ class Ballot extends React.Component {
                 copy={ballotCopy} 
                 debounce={true}
               />
-              <Results toImage={false} { ...this.voteResults}/>
+              <Results resultsTitle={'Current Constituent Results'} toImage={false} { ...this.voteResults}/>
               <Footer />
             </div>
           </div>

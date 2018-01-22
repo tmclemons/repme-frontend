@@ -41,6 +41,7 @@ class Banner extends React.Component {
         ballotClosingDate: this.props.ballotInfo.closing_date,
       })
     }
+    this.forceUpdate();
   }
   
   shouldComponentUpdate(nextProps) {
