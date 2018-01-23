@@ -41,6 +41,9 @@ $maxLines: 3;
     max-width: 500px;
     margin: 5px 0;
     opacity: .2;
+    &.hide {
+      display: none;
+    }
   }
   .subtitle{
     max-width: 500px;

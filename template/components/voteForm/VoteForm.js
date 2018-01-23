@@ -103,14 +103,6 @@ class VoteForm extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    return ( this.props.userEmail !== nextProps.userEmail || 
-             this.props.zipCode !== nextProps.zipCode ||
-             this.props.opt_in !== nextProps.opt_in ||
-             this.props.opt_in_two !== nextProps.opt_in_two
-            )
-  }
-
   handleClose = () => {
     this.setState({ 
       modalOpen: false

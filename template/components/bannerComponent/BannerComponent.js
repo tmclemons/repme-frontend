@@ -106,7 +106,7 @@ class Banner extends React.Component {
                         />
                     </span>
                   </div>
-                  <div className={'divider'}></div>
+                    <div className={`divider ${this.state.ballotContent ? 'hide' : ''}`}></div>
                   <div className={'subtitle'} 
                     dangerouslySetInnerHTML={{ __html: this.state.ballotContent || null }}>
                   </div>
