@@ -16,6 +16,7 @@ import Constants from '../../../../template/components/utilities/constants';
 const { colorStops } = Constants;  
 
 import domtoimage from 'dom-to-image';
+import fileSaver from 'file-saver';
 import Scss from './results.scss';
 
 class BallotResults extends React.Component {
@@ -226,7 +227,7 @@ class BallotResults extends React.Component {
     let node = document.getElementById('your-results');
     domtoimage.toPng(node).then(function (dataUrl) {
       if(dataUrl){
-        document.write(dataUrl)
+        fileSaver.saveAs(dataUrl, 'results.png')
       }
     }).catch(function (error) {
       console.error('oops, something went wrong!', error);
