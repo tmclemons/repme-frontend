@@ -251,7 +251,7 @@ class BallotResults extends React.Component {
     return (this.props.bill.data !== nextProps.bill.data);
   }
   getStateDemographic = () => {
-    if (this.props.showDemographics) {
+    if (this.props.showDemographics && !this.props.toImage) {
       return(
         <StateDemographic { ...this.state.repDemographics} />
       )
