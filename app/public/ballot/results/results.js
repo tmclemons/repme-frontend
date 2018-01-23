@@ -24,9 +24,9 @@ class BallotResults extends React.Component {
 
     this.state = {
       repDemographics: {
-        state: this.props.user.state || 'illinois',
-        districtCity: this.props.user.city || 'chicago',
-        stateCode: this.props.state_code || 'IL',
+        state: this.props.user && this.props.user.state ? this.props.user.state : 'illinois',
+        districtCity: this.props.user && this.props.user.city ? this.props.user.city : 'chicago',
+        stateCode: this.props.state_code ? this.props.state_code : 'IL',
       }
     }
   }
