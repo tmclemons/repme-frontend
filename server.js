@@ -45,7 +45,7 @@ app.set('view engine', 'pug');
 // }
 // app.get('*', (req, res) => { renderHTML(req, res) });
 
-app.get('/testpage', (req, res) => {
+app.get('/vote/testpage', (req, res) => {
   res.send(base64) 
 })
 
