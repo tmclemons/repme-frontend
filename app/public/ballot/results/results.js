@@ -21,7 +21,7 @@ import Scss from './results.scss';
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
+
     this.state = {
       repDemographics: {
         state: this.props.user.state || 'illinois',

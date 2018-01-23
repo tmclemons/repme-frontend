@@ -3,7 +3,6 @@ import UiTemplateLayout from
   '../../../template/uiTemplateLayoutComponent/UiTemplateLayoutComponent';
 //static data for building ui
 import SampleData from '../../../static/bills-sample';
-import getData from '../../../template/components/utilities/apiCallComponent'
 import axios from 'axios';
 
 class Bills extends React.Component {
