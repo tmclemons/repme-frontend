@@ -4,50 +4,37 @@ import VoteForm from '../../../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
 import Banner from '../../../../template/components/bannerComponent/BannerComponent'
 import Footer from '../../../../template/components/mainFooter/MainFooter';
-import Results from '../ballotResults/BallotResults';
-import Frame from 'react-frame-component';
-import NewWindow from 'react-popout';
+import Results from '../results/results';
 import axios from 'axios';
 import Constants from '../../../../template/components/utilities/constants';
-import { instanceOf } from 'prop-types';
 import cookie from 'react-cookies';
-
+import updateCookie from '../../../../template/components/utilities/cookieComponent';
+import Scss from './ballot.scss';
 
 const { ballotCopy } = Constants;  
-
-import Scss from './ballot.scss';
-const SampleHeader = (props) => {
-  return (
-    <div>
-      <div style={{ background: 'black', display: 'flex' }}>
-        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/">Home </Link>
-        <div style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} onClick={props.callback}>Resubmit</div>
-        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/repme">Rep-Me Demo </Link>
-        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/aarp">AARP Demo </Link>
-        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/print">Print View Demo </Link>
-        <Link style={{ margin: '0 20px', color: 'Blue', textDecoration: 'underline' }} to="/?widget=true">Widget Demo </Link>
-      </div>
-    </div>
-  )
-}
 
 class Ballot extends React.Component {
 
   constructor(props) {
     super(props)
-    this.states = ['vote', 'results', 'revote', 'print', 'widget'],
+    this.states = ['vote', 'results', 'revote', 'print', 'widget'];
+    this.voteResults = {};
+    this.legislators = [];
+    this.voteValue = 50;
+    this.sliderDebounce = false;
+    this.ipAddress = `54.201.100.159`;
+    this.sampleBG = 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg';
     this.state = {
+      bannerProps: 10,
       org: props.match.params.org,
-      voteResults: {},
       isWidget: false,
-      toImage: false,
       activeState: this.states[0],
       firstTimeUse: true,
+      secondTimeAttempt: false,
       defaultValue: 50,
-      voteValue: 50,
-      bannerProps: 0,
       step: 5,
       submitCount: 0,
+      exportView: false
     }
   }
 
@@ -59,59 +46,85 @@ class Ballot extends React.Component {
   }
 
   urlCheck = (urlProps) => {
-    let apiUrl = urlProps && urlProps !== this.states[3] && urlProps !== this.states[4] ? `/${urlProps}` : '';
+    let billIdCheck = urlProps ? urlProps.split('-') : '';
+    let apiUrl = urlProps && ( urlProps !== this.states[3] ) && ( urlProps !== this.states[4] ) ? `/${urlProps}` : '';
     let apiCheckForImage = urlProps === this.states[3];
-    let activeState = apiCheckForImage ? this.states[3] : this.states[0];
-    activeState = this.locationCheckForWidget() ? this.states[4] : this.states[0];
+    
     return {
-      url: apiUrl,
-      toImage: apiCheckForImage,
-      activeState: activeState,
-      isWidget: this.locationCheckForWidget()
+      url: billIdCheck.length > 1 ? `/bill/${urlProps}` : `/profile${apiUrl}`,
     }
   }
 
-setCookie = (props, state, results) => {
-  if(props === true) {
-    // set cookie to active state
-    cookie.save('fromWidget', true, {
-      path: '/',
-      maxAge: 1000,
-    });
-    cookie.save('viewState', state, {
-      path: '/',
-      maxAge: 1000,
-    });
-    if(results) {
-      cookie.save('voteResults', results, {
-        path: '/',
-        maxAge: 1000,
-      });
-    }
-  }
-  
-  if(props === false) {
-    cookie.save('viewState', state, {
-      path: '/',
-      maxAge: 1000,
-    });
-    // set cookie to active state
-    cookie.remove('fromWidget');
-  }
-  if(results === false) {
-    cookie.remove('voteResults');
-  }
-}
 
-  componentWillReceiveProps(nextProps) {
-    let urlProps = nextProps.match.params.org;
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(urlProps).url}`)
+  // capture slider data
+  onValueChange = (data, inUse) => {
+    let bannerProps = (data / (this.state.step)) || this.state.bannerProps
+    this.voteValue = (100 - data);
+    this.sliderDebounce = (inUse ? inUse : false);
+    updateCookie.setUserFlow('firstTimeVote', false)
+    updateCookie.setUserFlow('secondTimeAttempt', false);
+    updateCookie.setUserFlow('sliderPristine', false);
+    this.setState({
+      bannerProps: bannerProps
+    });
+  }
+
+  loadingSpinnerToggle = (show) => {
+    let spinner = document.getElementById('loading-spinner');
+    let wrapper = document.getElementById('app-wrapper');
+
+    if (spinner && show === 'hide') {
+      spinner.style.display = 'none';
+      wrapper.style.display = 'inherit';
+    } else {
+      spinner.style.display = 'flex';
+      wrapper.style.display = 'none';
+    } 
+  }
+
+  submitDataToApi = (voteData) => {
+    let params = this.state;
+    
+    let data = {
+      "guid": updateCookie.get('guid') ? updateCookie.get('guid') : '',
+      "vote": this.voteValue,
+      "email": voteData['userEmail'] || '',
+      "zip_code": voteData['zipCode'] || '',
+      "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
+      "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
+      "bill_id": this.voteResults.bill['id'] || null,
+    }
+
+    if (this.props.match.params.org && this.props.match.params.zip_code) {
+      data.guid = 0;
+      data.zip_code = this.props.match.params.zip_code;
+    }
+
+    axios.post(`http://${this.ipAddress}/api/vote`, data)
       .then(res => {
+        this.voteResults = res.data.results;
+        if (res.data.legislators) {
+          this.legislators = res.data.legislators;
+        }
         this.setState({
-          params: Object.assign(this.state.voteResults, res.data.results),
-          activeState: this.urlCheck(urlProps).activeState,
-          toImage: this.urlCheck(urlProps).toImage,
-          isWidget: this.urlCheck(urlProps).isWidget,
+          activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
+        })
+        this.loadingSpinnerToggle('hide');
+      })
+      .then(() => {
+
+        updateCookie.setUserFlow('firstTimeVote', false)
+
+        if (this.state.isWidget) {
+          updateCookie.set(this.state.isWidget, this.states[1], this.voteResults);
+        } else {
+          updateCookie.set(this.state.isWidget, this.states[1], this.voteResults);
+        }
+
+      })
+      .then(() => {
+        this.setState({
+          firstTimeUse: true
         })
       })
       .catch(function (error) {
@@ -119,121 +132,116 @@ setCookie = (props, state, results) => {
       });
   }
 
-  // capture slider data
-  onValueChange = (data) => {
-    this.setState({
-      bannerProps: (data / (this.state.step)) || 0,
-      voteValue: (100 - data),
-      firstTimeUse: false,
-    })
+  receiveDataFromApi = (slug) => {
+    slug = slug ? slug : this.state.org;
+    axios.post(`http://${this.ipAddress}/api${this.urlCheck(slug).url}`,
+      (updateCookie.get('guid') ? updateCookie.get('guid') : { guid: '' }))
+      .then(res => {
+        this.voteResults = res.data.results;
+        if(this.voteResults.legislators) {
+          Object.keys(this.voteResults.legislators).map((key) => {
+            let obj = {};
+            obj[key] = this.voteResults.legislators[key].data;
+            this.legislators.push(obj);
+        })
+      }
+        this.setState({
+          activeState: res.data.page_state || this.states[0],
+          isWidget: this.locationCheckForWidget(),
+          submitCount: 0
+        })
+        this.loadingSpinnerToggle('hide');
+      })
+      .then(() => {
+        if (this.state.activeState === this.states[1]) {
+          updateCookie.setUserFlow('firstTimeVote', false);
+          updateCookie.setUserFlow('secondTimeAttempt', false);
+        } else {
+          updateCookie.setUserFlow('firstTimeVote', true);
+          updateCookie.setUserFlow('secondTimeAttempt', false);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   submitVote = (voteData) => {
-    //hook api post call here
-    //DONE: preset data object to zero before data input
-    //DONE: Setup ASYNC promises
-    this.state.submitCount++
-    this.setState({
-      firstTimeUse: this.state.submitCount > 0 ? false : true
-    })
-    let params = this.state;
-    if(params.firstTimeUse && params.voteValue === 50) {
+    if (this.locationCheckForWidget()) {
+      window.open('/', '_blank');
     } else {
-      let data = {
-        "vote": params.voteValue || null,
-        "email": voteData['userEmail'] || '',
-        "zip_code": voteData['zipCode'] || '',
-        "opt_in": voteData['hotBillSubscribe'] ? 1 : 0 || 0,
-        "opt_in_two": voteData['otherLegislationSubscribe'] ? 1 : 0 || 0,
-        "bill_id": params.voteResults.bill['id'] || null,
+      if ( updateCookie.getUserFlow('sliderPristine') ) {
+        this.state.submitCount++;
+        updateCookie.setUserFlow('firstTimeVote', (this.state.submitCount > 0 ? false : true));
+        updateCookie.setUserFlow('secondTimeAttempt', (this.state.submitCount === 1 ? true : false));
       }
-
-      axios.post(`http://54.187.193.156/api/vote`, data)
-        .then(res => {
-          this.setState({
-            // here is where state will be maintained or lost after vote submission
-            activeState: this.locationCheckForWidget() ? this.states[4] : this.states[1],
-            voteResults: res.data.results
-          })
-        })
-        .then(() => {
-          if(this.state.isWidget) {
-            this.setCookie(this.state.isWidget, this.states[1], this.state.voteResults);
+      this.sliderDebounce = false;
+      this.setState({
+        firstTimeUse: updateCookie.getUserFlow('firstTimeVote')
+      });
+      
+      if ((updateCookie.getUserFlow('firstTimeVote') && this.state.submitCount > 1 )  && this.voteValue === 50) {
+        return null;
+      } else {
+        if (!updateCookie.getUserFlow('firstTimeVote') && !updateCookie.getUserFlow('secondTimeAttempt')) {
+          if ((this.state.activeState === this.states[1]) || voteData['userIsSure']) {
+            this.loadingSpinnerToggle('show');
+            this.submitDataToApi(voteData)
           }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-        if(this.state.isWidget) {
-          window.open('/', '_blank');
-          //set state to results view
-          //set results to cookie
-          // on component mount if state is from widget the loaded cookied view
-          // after load delete cookies from view
         }
+      }
     }
+
+  }
+
+  // LIFE CYCLE HOOKS
+  componentWillReceiveProps(nextProps) {
+    let urlProps = nextProps.match.params.org;
+    updateCookie.setUserFlow('firstTimeVote', true);
+    updateCookie.setUserFlow('secondTimeAttempt', false);
+    this.voteResults = 50;
+    this.receiveDataFromApi(urlProps);
   }
 
   componentDidMount() {
-    let cookieCheck = !this.locationCheckForWidget() && (cookie.load('viewState') === this.states[1] && cookie.load('fromWidget') === "true");
-    let cookieResultsCheck = cookie.load('voteResults') ? cookie.load('voteResults') : null;
-
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
-      .then(res => {
-        this.setState({
-          voteResults: cookieResultsCheck ? cookieResultsCheck : res.data.results,
-          activeState: cookieCheck ? this.states[1] : this.urlCheck(this.state.org).activeState,
-          toImage: this.urlCheck(this.state.org).toImage,
-          isWidget: this.urlCheck(this.state.org).isWidget
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    if (cookie.load('voteResults') ) {
-      this.setCookie(false, this.urlCheck(this.state.org).activeState, false);
-    } else {
-      this.setCookie(false, this.urlCheck(this.state.org).activeState)
-    }
+    updateCookie.setUserFlow('sliderPristine', true);
+    updateCookie.setUserFlow('firstTimeVote', true);
+    updateCookie.setUserFlow('secondTimeAttempt', false);
+    this.receiveDataFromApi();
   }
-  /// TODO: clean this data logic up
-  showSampleReVoteView = () => {
-    axios.post(`http://54.187.193.156/api/profile${this.urlCheck(this.state.org).url}`)
-      .then(res => {
-        this.setState({
-          activeState: this.states[2],
-          voteResults: res.data.results
-        })
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
-  //TODO: ASAP: GET IT DONE: create better error handling for view changes
-
+    
   render() {
-    //vote view\
-    let { bill } = this.state.voteResults;
-    if (this.state.activeState === this.states[0] || this.state.activeState === this.states[4]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+    //vote view
+    let { bill } = this.voteResults;
+    let { submitCount } = this.state;
+    let exportCheck = this.props.match.params.org && this.props.match.params.zipcode
+
+    if (this.state.activeState === this.states[0] && !exportCheck) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <div className={`ballot__wrapper ${this.state.isWidget ? 'widget-view' : ''}`}>
-              <Header org={this.state.voteResults.org}/>
+              <Header org={this.voteResults.org}/>
               <Banner
-                ballotInfo={this.state.voteResults.bill}
-                backgroundImg={{url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'}}
+                ballotInfo={this.voteResults.bill}
+                backgroundImg={{url: this.sampleBG}}
                 callback={this.submitVote}
-                firstTimeUse={this.state.firstTimeUse}
-                secondVoteAttempt={this.state.submitCount > 0 ? true : false}
+                firstTimeUse={updateCookie.getUserFlow('firstTimeVote')}
+                secondAttempt={updateCookie.getUserFlow('secondTimeAttempt')}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
               />
-              <VoteForm firstSubmission={true} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy}/>
+              <VoteForm 
+                firstSubmission={true} 
+                chamber={bill.chamber} 
+                callback={this.submitVote} 
+                firstTimeUse={updateCookie.getUserFlow('firstTimeVote')}
+                secondAttempt={updateCookie.getUserFlow('secondTimeAttempt')}
+                copy={ballotCopy}
+                debounce={this.sliderDebounce}
+              />
               <Footer />
             </div>
           </div>
@@ -244,25 +252,33 @@ setCookie = (props, state, results) => {
         )
       }
     } 
+
     //results view
     if (this.state.activeState === this.states[1]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return(
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView}} />
             <div className={'ballot__wrapper'}>
-              <Header org={this.state.voteResults.org} />
+              <Header org={this.voteResults.org} />
               <Banner
-                ballotInfo={this.state.voteResults.bill}
-                backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
+                ballotInfo={this.voteResults.bill}
+                backgroundImg={{ url: this.sampleBG }}
                 callback={this.submitVote}
-                firstTimeUse={this.state.firstTimeUse}
+                firstTimeUse={false}
+                secondAttempt={false}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
-                showSlider={false}
+                showSlider={true}
               />
-              <Results toImage={this.state.toImage} { ...this.state.voteResults}/>
+              <VoteForm 
+                firstSubmission={false} 
+                chamber={bill.chamber} 
+                callback={this.submitVote} 
+                copy={ballotCopy} 
+                debounce={true}
+              />
+              <Results resultsTitle={'Current Constituent Results'} toImage={false} { ...this.voteResults}/>
               <Footer />
             </div>
           </div>
@@ -274,25 +290,29 @@ setCookie = (props, state, results) => {
 
     //results resubmit view
     if (this.state.activeState === this.states[2]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object) {
         return (
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
             <div className={'ballot__wrapper'}>
-              <Header org={this.state.voteResults.org} />
+              <Header org={this.voteResults.org} />
               <Banner
-                ballotInfo={this.state.voteResults.bill}
-                backgroundImg={{ url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg' }}
+                ballotInfo={this.voteResults.bill}
+                backgroundImg={{ url: this.sampleBG }}
                 callback={this.submitVote}
-                firstTimeUse={this.state.firstTimeUse}
-                submitCount={this.state.submitCount}
+                firstTimeUse={updateCookie.getUserFlow('firstTimeVote')}
                 defaultValue={this.state.defaultValue}
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
               />
-              <VoteForm firstSubmission={false} chamber={bill.chamber} callback={this.submitVote} copy={ballotCopy}/>
-              <Results toImage={this.state.toImage} { ...this.state.voteResults} />
+              <VoteForm 
+                firstSubmission={false} 
+                chamber={bill.chamber} 
+                callback={this.submitVote} 
+                copy={ballotCopy}
+                debounce={true}
+              />
+              <Results toImage={false} { ...this.voteResults} />
               <Footer />
             </div>
           </div>
@@ -301,15 +321,37 @@ setCookie = (props, state, results) => {
         return (<div className={'ballot__wrapper'} />)
       }
     }
+
     //results print view
-    if (this.state.activeState === this.states[3]) {
-      if (Object.keys(this.state.voteResults).length > 0 && this.state.voteResults.constructor === Object) {
+    if (this.state.activeState === this.states[0] && exportCheck) {
+      if (Object.keys(this.voteResults).length > 0 && this.voteResults.constructor === Object && this.legislators.length) {
         return (
           <div>
-            <SampleHeader { ...{ callback: this.showSampleReVoteView }} />
-            <div className={'ballot__wrapper'}>
+            <div className={'ballot__wrapper'} >
               <div id={'delete-results'}>
-                <Results toImage={this.state.toImage} { ...this.state.voteResults} />
+                <div id={'your-results'}>
+                  <Results 
+                    resultsTitle={'Country Results'}
+                    toImage={true} 
+                    showDemographics={true} 
+                    { ...this.voteResults} 
+                  />
+                  {
+                    this.legislators.map((legislator, index) => {
+                      let legislatorID = Object.keys(legislator)[0];
+                      return(
+                        <Results 
+                          resultsTitle={'Current Constituent Results'}
+                          legislatorsID={legislatorID} 
+                          id={index} 
+                          key={index} 
+                          toImage={true} 
+                          showDemographics={false} 
+                          { ...{bill: {data: legislator[legislatorID]}}} 
+                          />
+                      )
+                    })}
+                  </div>
               </div>
             </div>
           </div>

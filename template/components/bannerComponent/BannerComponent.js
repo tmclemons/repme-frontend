@@ -23,7 +23,7 @@ class Banner extends React.Component {
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
-      firstTimeUse: this.props.firstTimeUse,
+      bannerProps: props.bannerProps
     }
   }
 
@@ -41,10 +41,11 @@ class Banner extends React.Component {
         ballotClosingDate: this.props.ballotInfo.closing_date,
       })
     }
+    this.forceUpdate();
   }
-
-  toggleFirstTimeUser = () => {
-    this.setState({firstTimeUse: false});
+  
+  shouldComponentUpdate(nextProps) {
+    return(this.props.bannerProps !== nextProps.bannerProps);
   }
 
   getFormattedData = () => {
@@ -63,30 +64,36 @@ class Banner extends React.Component {
 
   render() {
     let overflowCheck = false;
+    let firstTimeUseClassCheck = 
+      (this.props.firstTimeUse || this.props.secondAttempt) ? 
+      'overlay first-time-use' : 'slider__color--stop-' + 
+      this.props.bannerProps;
+    let styles = {
+      cardMedia: {
+        maxHeight: '500px',
+        minHeight: '500px',
+        overflow: 'hidden',
+        backgroundImage: `url(${this.props.backgroundImg.url})`,
+        backgroundSize: 'cover'
+      },
+      starIcon: grey50
+    }
     return (
       <div>
         <MuiThemeProvider>
           <Card>
             <CardMedia
-              mediaStyle={
-                {
-                  maxHeight: '500px',
-                  minHeight: '500px',
-                  overflow: 'hidden',
-                  backgroundImage: `url(${this.props.backgroundImg.url})`,
-                  backgroundSize: 'cover'
-                }
-              }
+              mediaStyle={styles.cardMedia}
               overlay={
                 <div
                   className={classNames(
-                    `${this.state.firstTimeUse ? 'overlay first-time-use' : 'slider__color--stop-' + this.props.bannerProps}`
+                    `${firstTimeUseClassCheck}`
                   )}
                 >
                 <div className={'overlay-content'}>
                   <div className={'main'}>
                     <div className={'icon'}>
-                      <StarIcon color={ grey50 }/>
+                      <StarIcon color={ styleMedia.starIcon }/>
                     </div>
                     <span className={'bill-number'}>{this.state.ballotNumber}</span>
                       {/* TODO: come back and fix this for text-overflow */}
@@ -122,13 +129,8 @@ class Banner extends React.Component {
                   max={this.state.max}
                   defaultValue={this.state.defaultValue}
                   callback={this.props.callback}
-                  toggleFirstTimeUser={
-                    {
-                      callback: this.toggleFirstTimeUser,
-                      firstTimeUse: this.state.firstTimeUse,
-                    }
-                  }
-                  secondAttempt={this.props.secondVoteAttempt}
+                  firstTimeUse= {this.props.firstTimeUse}
+                  secondAttempt={this.props.secondAttempt}
                   labels={ this.getFormattedData().dataLabels }
                 />  
                 </div>: null

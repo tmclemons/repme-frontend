@@ -17,15 +17,14 @@ class Horizontal extends React.Component {
     console.log('Change event started')
   };
 
-  handleChange = value => {
+  handleChange = (value) => {
     this.setState({
       value: value,
       changed: true
     })
-    this.props.callback(value)
-    this.props.toggleFirstTimeUser.callback()
+    this.props.callback(value, true)
   };
-
+  
   handleChangeComplete = () => {
     console.log('Change event completed')
   };
@@ -41,7 +40,7 @@ class Horizontal extends React.Component {
           onChangeStart={this.handleChangeStart}
           onChange={this.handleChange}
           onChangeComplete={this.handleChangeComplete}
-          firstTimeUse={this.props.toggleFirstTimeUser.firstTimeUse}
+          firstTimeUse={this.props.firstTimeUse}
           secondAttempt={this.props.secondAttempt}
           changed={this.state.changed}
           labels={this.props.labels}

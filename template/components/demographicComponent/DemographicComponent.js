@@ -9,6 +9,16 @@ class StateDemographic extends React.Component {
 
   render() {
     const Component = this.props.component;
+    const styles = {
+      stateImg: {
+        backgroundImage: `url('${(`/images/${this.props.stateCode}.svg`)}')`,
+        width: '200px',
+        height: '200px',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center'
+      }
+    }
     return (
       <div>
         <div className="demo_data">
@@ -23,14 +33,7 @@ class StateDemographic extends React.Component {
             </div>
           </div>
           <div 
-            style={{
-              backgroundImage:`url('${(`/images/${this.props.stateCode || 'IL'}.svg`)}')`,
-              width: '200px',
-              height: '200px',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'contain',
-              backgroundPosition: 'center'
-            }}
+            style={styles.stateImg}
             className="demo_data--icon">
           </div>
         </div>

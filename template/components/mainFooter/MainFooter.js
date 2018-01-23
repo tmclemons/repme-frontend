@@ -1,17 +1,9 @@
 import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import FontIcon from 'material-ui/FontIcon';
-import ActionHome from 'material-ui/svg-icons/action/home';
-import IconButton from 'material-ui/IconButton';
-import Scss from './mainFooter.scss';
 import RepMeLogoFooter from '../../../template/components/utilities/logoComponentFooter';
+import Scss from './mainFooter.scss';
 
-
-const recentsIcon = <ActionHome />;
-const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
-const nearbyIcon = <IconLocationOn />;
 
 class MainFooter extends React.Component {
   constructor(props) {
@@ -20,23 +12,29 @@ class MainFooter extends React.Component {
       nav: [
         {
           name: 'facebook',
-          path: 'ion-social-facebook-outline'
+          path: 'ion-social-facebook',
+          callback: () => {
+            window.open('https://www.facebook.com/representmeplease', '_blank')
+          }
         },
         {
           name: 'twitter',
-          path: 'ion-social-twitter-outline'
+          path: 'ion-social-twitter'
         },
         {
           name: 'linkedin',
-          path: 'ion-social-linkedin-outline'
+          path: 'ion-social-linkedin'
         },
         {
           name: 'google',
-          path: 'ion-social-googleplus-outline'
+          path: 'ion-social-googleplus'
         },
         {
-          name: 'youtube',
-          path: 'ion-social-youtube-outline'
+          name: 'email',
+          path: 'ion-ios-email',
+          callback: () => {
+            window.open('mailto:mike@represent-me.com?subject="Subscribe to Represent Me"')
+          }
         },
         {
           name: 'instagram',
@@ -45,8 +43,6 @@ class MainFooter extends React.Component {
       ]
     }
   }
-
-  
 
   render() {
     const styles = {
@@ -67,6 +63,10 @@ class MainFooter extends React.Component {
         justifyContent: 'center',
         paddingTop: '20px',
         paddingBottom: '60px'
+      },
+      footerLogo: {
+        maxWidth: '60px',
+        minWidth: '450px'
       }
     }
     
@@ -75,10 +75,7 @@ class MainFooter extends React.Component {
         <footer>
           <div className={'footer-logo'}>
             <div>
-              <div style={{
-                  maxWidth: '60px',
-                  minWidth: '450px'
-                }}
+              <div style={styles.footerLogo}
               >
                 <RepMeLogoFooter />
               </div>
@@ -100,7 +97,7 @@ class MainFooter extends React.Component {
                       className={`social-nav--icon ${navItem.path}`}
                     ></i>
                   }
-                  onClick={() => this.select(index)}
+                  onClick={() => {navItem.callback ? navItem.callback() : this.select(index)}}
                 />
               )
             })

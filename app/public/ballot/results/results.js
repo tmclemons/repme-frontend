@@ -16,73 +16,22 @@ import Constants from '../../../../template/components/utilities/constants';
 const { colorStops } = Constants;  
 
 import domtoimage from 'dom-to-image';
-import Scss from './ballotResults.scss';
-  
+import Scss from './results.scss';
+
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
-      toImage: true,
-      yourState: 'IL',
-      backgroundImg: {
-        url: 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg'
-      },
-      viewCopy: {
-        headerTagLine: `by the people 2.0`,
-        formNotice: `**We will not use any of your information for any 3rd
-          Part. Nor will we send you emails unless you opt-in to receive 
-          them**`,
-        emailInput: `To receive results including final Senate Floor Votes`,
-        zipCodeInput: `This will allow us to include your private ballot in
-         the constituency that we will provide your Senators`,
-        subscribeToHotBill: `To receive other Hot 
-          Congressional Bill Ballots and track results`,
-        subscribeToOtherLegislationInfo: `to receive information 
-          from other Legislators and Bills and Ballot results`,
-        subscribeToHotBillTitle: `Opt-In`,
-        subscribeToOtherLegislationInfoTitle: `Legislator Opt-In`,
-        preSubmitInfo: `This is your private Ballot for 
-          (Your Ballot No. H.R. ${'hconres1-115'}-${'191963'})`,
-        sliderHint: `Slide to Cast`,
-        submissionCTA: `Submit my VOTE`
-      },
       repDemographics: {
-        state: 'illinois',
-        districtCity: 'chicago',
-        maleVotes: 345,
-        femaleVotes: 279,
-      },
-      repVotes: [
-        {
-          firstName: 'Mark',
-          lastName: 'Kirk',
-          position: 'senator',
-          profileImg: 'https://i.pinimg.com/736x/a5/56/b8/a556b885cbb54b6495ae2083c0846642--mark-kirk-running-for-president.jpg',
-          party: 'republican',
-          district: 10,
-          votingParity: 1,
-          voted: true,
-          state: 'illinois',
-          body: 'house of representatives'
-        },
-        {
-          firstName: 'Richard',
-          lastName: 'Durbin',
-          position: 'senator',
-          profileImg: 'https://nrf.com/sites/default/files/styles/dynamic_body_side_caption_480x300/public/Images/Who%20We%20Are/Dick-Durbin_wide-1000px.jpg?itok=W0wJtyrM&c=5cab1ece9d195e79bf7351eec4880e36',
-          party: 'democratic',
-          district: 20,
-          votingParity: .5,
-          voted: false,
-          state: 'illinois',
-          body: 'house of representatives'
-        }
-      ]
+        state: this.props.user.state || 'illinois',
+        districtCity: this.props.user.city || 'chicago',
+        stateCode: this.props.state_code || 'IL',
+      }
     }
   }
 
   getColorStops = () => {
-
     let colorBuffer = [];
     colorStops.forEach((stop) => {
       colorBuffer.push(stop.hex)
@@ -93,10 +42,10 @@ class BallotResults extends React.Component {
 
   setVoteIconPosition(data) {
     let voteRanges = [];
-    let splitRange = data.xPos.split('-'); 
+    let splitRange = data.value.split('-'); 
     let vote = data.comparableValue;
-    if ((Number(splitRange[0]) - .001) < vote ) {
-      if (Number(`${splitRange[1]}.001`) > vote) {
+    if ( Number(splitRange[0]) <= vote ) {
+      if (Number(splitRange[1]) >= vote) {
         return true;
       }
     } else {
@@ -150,7 +99,7 @@ class BallotResults extends React.Component {
     }
     
     sortBuffer.sort(function (a, b) {
-      return a.minOrder - b.minOrder;
+      return b.minOrder - a.minOrder;
     });
 
     sortBuffer.forEach((buffer) => {
@@ -201,34 +150,15 @@ class BallotResults extends React.Component {
           rotation: 0,
           color: '#FFFFFF',
           align: 'left',
-          // format: '{point.y:1f}', // no decimal
-          y: -30, // 10 pixels down from the top
-          //this.series.xAxis.labelAlign
-            useHTML: true,
-            formatter: function() {
-              let positionTest = setVoteIconPosition({
-                xPos: this.x,
-                yPos: this.y,
-                comparableValue: voteResult
-              });
-              let pointWidth = Math.round(this.point.pointWidth);
-              let pointHeight = pointWidth * 2.7;
-              let labelPos = 5;
-              if (positionTest & !resultTypeCheck) {
-                let results = 
-                '<div>'+
-                  `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
-                  `<div style=" left: ${-labelPos}px; position: absolute; width: ${pointWidth}px; height:${pointWidth * 2.7}px; top: ${-this.point.shapeArgs.height - pointHeight + (pointWidth * .667)}px; background-image:url('/images/yourVoteIcon.png'); background-size:cover; background-repeat: no-repeat">`+
-                  '</div>' +
-                '</div>';
-                return this.point.y < 1 ? null : results;
-              } else {
-                let results = 
-                '<div>'+
-                  `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
-                '</div>';
-                return this.point.y <1 ? null : results;
-              }
+          y: -30, 
+          useHTML: true,
+          formatter: function() {
+            let pointWidth = Math.round(this.point.pointWidth);
+            let results = 
+              '<div>'+
+                `<div style='width:${pointWidth}px;text-align: center;position: absolute;left: -5px;color:${this.point.y<3?'black':'white'}'>${this.point.y}</div>` +
+              '</div>';
+              return this.point.y < 1 ? null : results;
             },
           style: {
             fontSize: '16px',
@@ -260,7 +190,31 @@ class BallotResults extends React.Component {
         gridLineWidth: 0,
         opposite: true,
         labels: {
-          enabled: false
+          enabled: true,
+          useHTML: true,
+          autoRotation: [0],
+          align: 'left',
+          formatter: function(){
+            let positionTest = setVoteIconPosition({
+              value: this.value,
+              comparableValue: voteResult
+            });
+            let results;
+            if (positionTest) {
+              let barData = this.chart.series[0].data[this.pos];
+              if (barData) {
+                let pointWidth = Math.floor(barData.pointWidth);
+                let positionLeft = -(pointWidth / 2);
+                let pointHeight = pointWidth * 2.7;
+                let positionTop = (-1 * pointHeight ) + 20;
+                results = `<div style=" left: ${positionLeft}px; position: absolute; width: ${pointWidth}px; height:${pointHeight}px; top: ${positionTop}px; background-image:url('/images/yourVoteIcon.png'); background-size:cover; background-repeat: no-repeat">` +
+                  '</div>';
+              }
+            } else {
+              results = null;
+            }
+            return results;
+          }
         },
         categories: getFormattedData.dataLabels
       }
@@ -268,33 +222,48 @@ class BallotResults extends React.Component {
     return results;
   }
 
-  submitVote(voteData) {
-    //hook api post call here
-    console.log(voteData)
-  }
-
   convertResultsToPng(){
     let node = document.getElementById('your-results');
     let deleteResults = document.getElementById('delete-results');
     domtoimage.toPng(node).then(function (dataUrl) {
-      //maybe a time issue because the chart hasnt drawn yet
+      //needs to refactor, after data loads...
       var img = new Image();
       img.src = dataUrl;
       img.className="results-image"
       document.body.appendChild(img);
-      deleteResults.outerHTML = "";
+      if (deleteResults.parentNode) {
+        deleteResults.outerHTML = "";
+      }
     }).catch(function (error) {
       console.error('oops, something went wrong!', error);
     });
   }
   
   componentDidMount() {
-    console.log('mounted')
     if (this.props.toImage) {
       setTimeout(() => {
-        console.log('did it run')
         this.convertResultsToPng();
       }, 1000);
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (this.props.bill.data !== nextProps.bill.data);
+  }
+  getStateDemographic = () => {
+    if (this.props.showDemographics) {
+      return(
+        <StateDemographic { ...this.state.repDemographics} />
+      )
+    }
+    return null;
+  }
+
+  styles = {
+    print: {
+      display: `${this.props.toImage ? 'block' : 'none'}`,
+      height: `${this.props.toImage ? '100px' : '0'}`,
+      background: 'white'
     }
   }
 
@@ -311,22 +280,13 @@ class BallotResults extends React.Component {
     return (
       <div> 
         <div className={'ballot__results--barchart'}>
-          <ChartTitleBarComponent {...{superTitle: null, title: 'Current Constituent Results'}}/>
-          <StateDemographic stateCode={this.props.state_code} { ...this.state.repDemographics}/>
+          <ChartTitleBarComponent {...{superTitle: null, title: this.props.resultsTitle}}/>
+          {this.getStateDemographic()}
           <div id={'your-results'}>
-            <div style={{
-              display: `${this.state.toImage ? 'block' : 'none'}`,
-              height: `${this.state.toImage ? '100px' : '0'}`,
-              background: 'white'
-            }}/>
+            <div style={this.styles}/>
             <ChartLabelComponent { ...this.getFormattedData().textLabels}/>
             <BarChartComponent {  ...this.getSampleDistrictResultsArray()}/>
           </div>
-        </div>
-        <div className={'ballot__results--barchart'}>
-          <ChartTitleBarComponent {...{superTitle: 'votes', title: 'United State Results'}}/>
-          <ChartLabelComponent { ...this.getFormattedData('usa').textLabels}/>
-          <BarChartComponent {  ...this.getSampleDistrictResultsArray('usa')}/>
         </div>
       </div>
     )

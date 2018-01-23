@@ -1,6 +1,51 @@
-### TODO:
+### TODO: 1/17/18
+  Bill page
+  - DONE: setup page similar to vote page with bill number
+    # DONE: /api/bill/<bill_id>
+  Votes:
+  - DONE: remove tool tip from vote afters slider is touched
+  - DONE: put my vote on all charts, 
+  - DONE: move the position of the tooltip up so the point of the arrow lands on bottom line of the grey box.
+  - DONE: checkbox css to match repme blue
+  - DONE: get what ever social media links are available
+    # DONE: set up to email callback / icon
+  - DONE: slider
+    # DONE: blue tool tip goes away entirely
+    # DONE: make slider hint a little larger and more apparent(red)
+    # DONE: continue showing slider error tooltip, maybe not as big though
+  - DONE: validation modal, for zip and email to remind to enter / challenge
+    # DONE: modal for slider submission
+    # DONE: modal pop up with option for data entry  with go back(return to entry) or "no thanks" continue(submit) for either/or/and email and zipcode
+    DONE: slider doesnt reach 100
+    DONE: slider and chart data reversed
 
-#Create RepMe Front End UI
+
+  Results:
+  - DONE: Show revote on results page 100% of time, show on homepage based on cookie logic.
+  - DONE: ballots results and ballot vote only
+
+
+  Widget:
+  - DONE: validation error go to vote page with option to input email and zipcode
+
+  Email:
+  - DONE: setup smaller candidate card and flex inline row so they are side by side and carry over
+  - DONE: setup roll call vote results
+
+  xxDiscussions:
+  - TODO: cookies
+  - TODO: Bill closed logic
+
+
+
+  xxFuture TODOS:
+  - TODO: Hook up api logic to cookies via guid
+  - TODO: match css further to do design
+  - TODO: bill page
+    # TODO: /api/bill/<bill_id>
+    # TODO: /vote/bill/<bill_id>
+
+# DONE: Create RepMe Front End UI
 -- DONE: Header
 -- DONE: Custom Slider that passes vote data and color style data
 -- DONE: Customize slider icon
@@ -11,17 +56,15 @@
 -- DONE: form submission button
 -- DONE: Footer component with social media buttons
 -- DONE: Social Media buttons
--- TODO: Setup cookies for  vote --> submit --> resubmit
--- TODO: Refactor dummy data so api data will get passed through better, also check api routing logic
+-- DONE: Setup cookies for  vote --> submit --> resubmit
 -- DONE: update font assets, implement states assets
 -- DONE: setup dummy api based on routes
--- TODO: change checkbox colors
--- TODO: remove unneeded dependencies (????canvg and dom-to-image, need to be reviewed)
 
 -- DONE: make sure to update routing and submission forms for recasting, check invision
--- TODO: GET--DONE: -- ASAP Xsubmit, Xresubmit, results, Xslider, results email
--- TODO: GET--DONE: Need to verify congress/ senate results in element, if not made create - RESULT OF ROLL
 -- DONE: Create README
+-- DONE: Refactor dummy data so api data will get passed through better, also check api routing logic
+-- TODO: GET--DONE: Need to verify congress/ senate results in element, if not made create - RESULT OF ROLL
+-- TODO: GET--DONE: -- ASAP Xsubmit, Xresubmit, results, Xslider, results email
 
 
 -- TODO: refactor styling to a core configuration flow i.e pass one config for all colors
