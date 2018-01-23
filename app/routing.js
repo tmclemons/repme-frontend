@@ -16,9 +16,9 @@ const Ballot = AsyncComponent(
     return (
       <div id='app-wrapper' style={{display: 'inherit'}}>
         <Switch>
-          <Route exact path='/' component={Ballot}/>
-          <Route exact path='/:org?' component={Ballot}/>
-          <Route exact path='/export/:org/:zipcode' component={Ballot} />
+          <Route exact path='/vote/' component={Ballot}/>
+          <Route exact path='/vote/:org?' component={Ballot}/>
+          <Route exact path='/vote/export/:org/:zipcode' component={Ballot} />
           <Route component={Ballot} />
         </Switch>
       </div>

@@ -5,9 +5,9 @@ var config = {
   entry: path.resolve(__dirname, 'index.js'),
 
   output: {
-    path: __dirname + '/public',
-    filename: 'bundle.js',
-    publicPath: '/'
+    path: __dirname + '/home/ubuntu/repme-front/public',
+    filename: './bundle.js',
+    publicPath: '/vote/'
   },
 
   plugins: [],
