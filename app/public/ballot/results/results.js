@@ -224,15 +224,9 @@ class BallotResults extends React.Component {
 
   convertResultsToPng(){
     let node = document.getElementById('your-results');
-    let deleteResults = document.getElementById('delete-results');
     domtoimage.toPng(node).then(function (dataUrl) {
-      //needs to refactor, after data loads...
-      var img = new Image();
-      img.src = dataUrl;
-      img.className="results-image"
-      document.body.appendChild(img);
-      if (deleteResults.parentNode) {
-        deleteResults.outerHTML = "";
+      if(dataUrl){
+        document.write(dataUrl)
       }
     }).catch(function (error) {
       console.error('oops, something went wrong!', error);
