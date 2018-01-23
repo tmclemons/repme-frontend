@@ -4,6 +4,7 @@
   "description": "Front end gui for repme site",
   "main": "index.js",
   "scripts": {
+    "start": "node server.bundle.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "webpack --config webpack.config.js",
     "build:server": "webpack --config webpack.server.config.js",
@@ -25,6 +26,8 @@
     "axios": "^0.17.1",
     "chart.js": "^2.7.1",
     "classnames": "^2.2.5",
+    "compression": "^1.7.1",
+    "cookie-parser": "^1.4.3",
     "dom-to-image": "^2.6.0",
     "file-saver": "^1.3.3",
     "highcharts": "^6.0.4",

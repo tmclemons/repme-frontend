@@ -1,57 +1,55 @@
 import express from 'express'
 import path from 'path'
-import React from 'react'
-import { match, RouterContext } from 'react-router'
-import { renderToString } from 'react-dom/server'
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+
+import React from 'react';
+import { StaticRouter } from 'react-router';
+import { renderToString } from 'react-dom/server';
+
 import routes from './app/routing'
 
-
-const app = express()
 const port = process.env.PORT || 3000
+let app = express()
 
-// serve static assets normally
-// app.use(express.static(__dirname + '/public'))
+app.use(compression());
+app.use(cookieParser());
+app.use(express.static(path.join(process.cwd(), 'public')));
+app.set('views', path.join(process.cwd(), 'views'));
+app.set('view engine', 'pug');
 
-app.get('*', function (req, res) {
-  match(
-    {routes, location: req.url},
-    (error, redirectLocation, renderProps) => {
-      if (error) {
-        res.status(500).send(error.message)
-      } else if (redirectLocation) {
-        res.redirect(302, redirectLocation.pathname
-        + redirectLocation.search)
-      } else if (renderProps) {
-        const appHtml = renderToString(
-           <RouterContext {...renderProps} />
-         )
-        res.send(
-          renderPage(appHtml)
-        )
-      } else {
-        res.status(404)
-          .send('Not Found')
-      }
-    }
-  )
-  res.send(path.resolve(path.join(__dirname, './public'), 'index.html'))
+// function renderHTML(req, res) {
+
+//   match(routes, req, (error, redirectLocation, renderProps) => {
+//     console.log(renderProps)
+//     if (error) {
+//       if (error.message === 'Not found') {
+//         res.status(404).send(error.message);
+//       } else {
+//         res.status(500).send(error.message);
+//       }
+//     } else if (redirectLocation) {
+//       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+//     } else {
+//         const html = renderToString(
+//           <StaticRouter location={req.url} context={renderProps}>
+//             <App />
+//           </StaticRouter>
+//         );
+//         res.send(
+//           renderPage(html)
+//         )
+//     }
+//   });
+// }
+// app.get('*', (req, res) => { renderHTML(req, res) });
+
+app.get('/testpage', (req, res) => {
+  res.send({
+    msg: "here is the test"
+  }) 
 })
 
-
-function renderPage(appHtml, appTitle) {
-  return `
-  <!DOCTYPE html public="storage">
-  <html>
-  <head>
-      <meta charset="utf-8">
-      <title>AppMetrix</title>
-  <body>
-      <div id="app">${appHtml}</div>
-      <script src="/bundle.js"></script>
-  </body>
-  </html>
-    `
-}
-
-app.listen(port)
-console.log("server started on port " + port)
+app.listen(port, () => {
+  console.log("server started on port " + port)
+})
