@@ -1,0 +1,17 @@
+extends ./layout.pug
+
+block dependencies
+  link(rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css")
+  link(href="https://fonts.googleapis.com/css?family=Lato|Playfair+Display:400,700,700i" rel="stylesheet")
+
+block header
+  != app_stylesheets
+
+block content
+  div#app-container!= content
+
+block scripts
+  script(src="http://54.201.100.159/vote/bundle.js")
+
+block stylesheets
+
