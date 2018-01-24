@@ -25,14 +25,14 @@ class Ballot extends React.Component {
     this.ipAddress = `54.201.100.159`;
     this.sampleBG = 'https://static.pexels.com/photos/109919/pexels-photo-109919.jpeg';
     this.state = {
-      bannerProps: 10,
+      bannerProps: 50,
       org: props.match.params.org,
       isWidget: false,
       activeState: this.states[0],
       firstTimeUse: true,
       secondTimeAttempt: false,
       defaultValue: 50,
-      step: 5,
+      step: 1,
       submitCount: 0,
       exportView: false
     }
@@ -232,6 +232,7 @@ class Ballot extends React.Component {
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
+                step={this.state.step}
               />
               <VoteForm 
                 firstSubmission={true} 
@@ -270,6 +271,7 @@ class Ballot extends React.Component {
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
+                step={this.state.step}
               />
               <VoteForm 
                 firstSubmission={false} 
@@ -304,6 +306,7 @@ class Ballot extends React.Component {
                 bannerProps={this.state.bannerProps}
                 callback={this.onValueChange}
                 showSlider={true}
+                step={this.state.step}
               />
               <VoteForm 
                 firstSubmission={false} 

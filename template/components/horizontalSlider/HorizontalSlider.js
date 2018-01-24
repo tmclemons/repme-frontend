@@ -6,9 +6,10 @@ class Horizontal extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      value: this.props.defaultValue,
+      value: props.defaultValue,
       changed: false,
       isValid: false,
+      step: props.step || 5,
       validationCount: 0
     }
   }
@@ -44,6 +45,7 @@ class Horizontal extends React.Component {
           secondAttempt={this.props.secondAttempt}
           changed={this.state.changed}
           labels={this.props.labels}
+          step={this.state.step}
         />
       </div>
     )

@@ -23,7 +23,8 @@ class Banner extends React.Component {
       ballotTitle: null,
       ballotContent: null,
       ballotClosingDate: null,
-      bannerProps: props.bannerProps
+      bannerProps: props.bannerProps,
+      step: props.step
     }
   }
 
@@ -48,6 +49,10 @@ class Banner extends React.Component {
     return(this.props.bannerProps !== nextProps.bannerProps);
   }
 
+  stepColorStops(props) {
+    return Math.round(props / 5);
+  }
+
   getFormattedData = () => {
     let dataLabels = [
       'Strongly Disagree',
@@ -67,7 +72,7 @@ class Banner extends React.Component {
     let firstTimeUseClassCheck = 
       (this.props.firstTimeUse || this.props.secondAttempt) ? 
       'overlay first-time-use' : 'slider__color--stop-' + 
-      this.props.bannerProps;
+      this.stepColorStops(this.props.bannerProps);
     let styles = {
       cardMedia: {
         maxHeight: '500px',
@@ -106,7 +111,7 @@ class Banner extends React.Component {
                         />
                     </span>
                   </div>
-                    <div className={`divider ${this.state.ballotContent ? 'hide' : ''}`}></div>
+                    <div className={`divider ${!this.state.ballotContent ? 'hide' : ''}`}></div>
                   <div className={'subtitle'} 
                     dangerouslySetInnerHTML={{ __html: this.state.ballotContent || null }}>
                   </div>
@@ -132,6 +137,7 @@ class Banner extends React.Component {
                   firstTimeUse= {this.props.firstTimeUse}
                   secondAttempt={this.props.secondAttempt}
                   labels={ this.getFormattedData().dataLabels }
+                  step={this.state.step}
                 />  
                 </div>: null
             }

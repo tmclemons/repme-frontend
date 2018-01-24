@@ -64,8 +64,8 @@ class CustomSlider extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
+      step: props.step,
       active: false,
       limit: 0,
       grab: 0,
