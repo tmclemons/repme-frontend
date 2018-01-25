@@ -22,7 +22,6 @@ import Scss from './results.scss';
 class BallotResults extends React.Component {
   constructor(props) {
     super(props)
-
     this.state = {
       repDemographics: {
         state: this.props.user && this.props.user.state ? this.props.user.state : 'illinois',
@@ -134,7 +133,16 @@ class BallotResults extends React.Component {
       title: 'none',
       chart: {
         type: 'column',
-        spacing: [0,35,0,35]
+        spacing: [0,35,0,35],
+        events: {
+            load: () => {
+              if (this.props.toImage) {
+                setTimeout(() => {
+                  this.convertResultsToPng();
+                }, 1);
+              }
+            }
+        }
       },
       plotOptions: {
         series: {
@@ -223,24 +231,27 @@ class BallotResults extends React.Component {
     return results;
   }
 
-  convertResultsToPng(){
+  convertResultsToPng = () => {
     let node = document.getElementById('your-results');
-    domtoimage.toPng(node).then(function (dataUrl) {
-      if(dataUrl){
-        fileSaver.saveAs(dataUrl, 'results.png')
+    let deleteResults = document.getElementById('repme-app');
+    domtoimage.toPng(node).then((dataUrl) => {
+      if (dataUrl){
+        var img = new Image();
+        img.src = dataUrl;
+        img.className = "results-image";
+        if (dataUrl.includes("image/png;base64")) {
+          document.body.appendChild(img);
+        }
+        if (deleteResults.parentNode) {
+          deleteResults.outerHTML = ""
+        }
       }
     }).catch(function (error) {
       console.error('oops, something went wrong!', error);
     });
   }
   
-  componentDidMount() {
-    if (this.props.toImage) {
-      setTimeout(() => {
-        this.convertResultsToPng();
-      }, 1000);
-    }
-  }
+  componentDidMount() {}
 
   shouldComponentUpdate(nextProps) {
     return (this.props.bill.data !== nextProps.bill.data);
