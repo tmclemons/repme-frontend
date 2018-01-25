@@ -10,6 +10,7 @@ const Ballot = AsyncComponent(
   class Routing extends React.Component {
     constructor(props) {
       super(props);
+      console.log(props)
     }
 
   render() {

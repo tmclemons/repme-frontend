@@ -34,12 +34,14 @@ const CircularProgressExampleSimple = () => (
 );
 
 //routes
-render(
-  <div>
-    <CircularProgressExampleSimple />
-    <BrowserRouter history={browserHistory}>
-      <Routing />
-    </BrowserRouter>
-  </div>,
-  document.getElementById('repme-app')
-)
+if (typeof window !== "undefined") {
+  render(
+    <div>
+      <CircularProgressExampleSimple />
+      <BrowserRouter history={browserHistory}>
+        <Routing />
+      </BrowserRouter>
+    </div>,
+    document.getElementById('repme-app')
+  )
+}

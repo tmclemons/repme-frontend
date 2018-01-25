@@ -139,6 +139,7 @@ class BallotResults extends React.Component {
               if (this.props.toImage) {
                 setTimeout(() => {
                   this.convertResultsToPng();
+                  console.log(window.callPhantom, "isPhantom")
                 }, 1);
               }
             }
