@@ -40,19 +40,18 @@ class Header extends React.Component {
     }
     return(
       <div>
-        <MuiThemeProvider>
-          <AppBar
-            className={'header rep-me-logo'}
-            iconElementLeft={<RepMeLogo />}
-            iconElementRight={
-              <img style={{maxHeight: '100%'}} src={this.props.org.image || ''} alt={`${this.props.org.name} Logo`}/>
-            }
-            style={styles.appBar}
-            titleStyle={styles.appBarTitle}
-            iconStyleLeft={styles.appBarIconLeft}
-            iconStyleRight={styles.appBarIconRight}
-          />
-        </MuiThemeProvider>
+        <AppBar
+          className={'header rep-me-logo'}
+          iconElementLeft={<div><RepMeLogo style={{pointerEvents: 'none'}} /></div>}
+          onLeftIconButtonClick={(evt) => { console.log('click'); window.location=`${this.props.path}`}}
+          iconElementRight={
+            <img style={{maxHeight: '100%'}} src={this.props.org.image || ''} alt={`${this.props.org.name} Logo`}/>
+          }
+          style={styles.appBar}
+          titleStyle={styles.appBarTitle}
+          iconStyleLeft={styles.appBarIconLeft}
+          iconStyleRight={styles.appBarIconRight}
+        />
       </div>
     )
   }

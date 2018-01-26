@@ -221,7 +221,7 @@ class Ballot extends React.Component {
         return (
           <div>
             <div className={`ballot__wrapper ${this.state.isWidget ? 'widget-view' : ''}`}>
-              <Header org={this.voteResults.org}/>
+              <Header org={this.voteResults.org} path={this.props.match.url} />
               <Banner
                 ballotInfo={this.voteResults.bill}
                 backgroundImg={{url: this.sampleBG}}
@@ -260,7 +260,7 @@ class Ballot extends React.Component {
         return(
           <div>
             <div className={'ballot__wrapper'}>
-              <Header org={this.voteResults.org} />
+              <Header org={this.voteResults.org} path={this.props.match.url}/>
               <Banner
                 ballotInfo={this.voteResults.bill}
                 backgroundImg={{ url: this.sampleBG }}
@@ -296,7 +296,7 @@ class Ballot extends React.Component {
         return (
           <div>
             <div className={'ballot__wrapper'}>
-              <Header org={this.voteResults.org} />
+              <Header org={this.voteResults.org} path={this.props.match.url} />
               <Banner
                 ballotInfo={this.voteResults.bill}
                 backgroundImg={{ url: this.sampleBG }}

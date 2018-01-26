@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 var config = {
-  entry: path.resolve(__dirname, 'index.js'),
+  entry: path.resolve(__dirname, './app/app.js'),
 
   output: {
     path: __dirname + '/public',

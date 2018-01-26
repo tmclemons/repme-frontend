@@ -8,7 +8,9 @@ import React from 'react';
 import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
 
-import Component from './app/routing'
+import { matchRoutes, renderRoutes } from 'react-router-config';
+
+import routes from './app/routes';
 
 const port = process.env.PORT || 3000
 let app = express()
@@ -18,6 +20,19 @@ app.use(cookieParser());
 app.use(express.static(path.join(process.cwd(), 'public')));
 app.set('views', path.join(process.cwd(), 'views'));
 app.set('view engine', 'pug');
+
+function renderHTML(req, res) {
+  const route = matchRoutes(routes, req.url);
+    let context = {};
+    const html = renderToString(
+      <StaticRouter location={req.url} context={context}>
+        {renderRoutes(routes)}
+      </StaticRouter>
+    );
+    res.render('index', {
+      content: html
+    })
+}
 
 // function renderHTML(req, res) {
 //   match({ routes, location: req.url}, (error, redirectLocation, renderProps) => {
@@ -38,21 +53,22 @@ app.set('view engine', 'pug');
 //   });
 // }
 
-function renderHTML(req, res) {
-  let context = {};
-  const html = renderToString(
-    <StaticRouter
-      location={req.url}
-      context={context}
-    >
-      <Component />
-    </StaticRouter>
-  );
-  console.log(context, "router ran")
-  res.render('index', {
-      content: html
-  });
-}
+
+// function renderHTML(req, res) {
+//   let context = {};
+//   const html = renderToString(
+//     <StaticRouter
+//       location={req.url}
+//       context={context}
+//     >
+//       <Component />
+//     </StaticRouter>
+//   );
+//   console.log(context, "router ran")
+//   res.render('index', {
+//       content: html
+//   });
+// }
 
 function decodeBase64Image(dataString) {
   var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
@@ -67,10 +83,10 @@ function decodeBase64Image(dataString) {
   return response;
 }
 
+app.get('*', (req, res) => { renderHTML(req, res) });
 
-app.get('/', (req, res) => { renderHTML(req, res) });
-app.get('/:org', (req, res) => { renderHTML(req, res) });
-app.get('/export/:org/:zipcode', (req, res) => { renderHTML(req, res) });
+// app.get('/:org', (req, res) => { renderHTML(req, res) });
+// app.get('/export/:org/:zipcode', (req, res) => { renderHTML(req, res) });
 console.log("server is running")
 app.get('/vote/testpage', (req, res) => {
   fs.writeFileSync(`${__dirname}/testimage.png`, decodeBase64Image(base64).data, function (err) { console.warn(err, "err")});
