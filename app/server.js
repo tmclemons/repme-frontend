@@ -16,10 +16,18 @@ import AppWrapper from './app'
 import webshot from 'node-webshot';
 import GetMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AWS from 'aws-sdk';
+AWS.config.loadFromPath('pathToJsonFile');
 
 
-
-
+let s3 = new AWS.S3(
+  { params: { 
+      bucket: process.env.AWS_BUCKET, 
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID, 
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, 
+      region: process.env.AWS_DEFAULT_REGION
+  }, }
+);
 let app = express()
 
 app.use(compression());
@@ -60,6 +68,28 @@ function decodeBase64Image(dataString) {
   return response;
 }
 
+app.param('export', function (req, res, next, value) {
+  console.log('CALLED ONLY ONCE with', value);
+  next();
+});
+
+app.use('/:export/:org/:zip', (req, res, next) => {
+  console.log('pre smile for the camera')
+  
+  let options = {
+    takeShotOnCallback: true,
+    renderDelay: 1000
+  }
+
+  var renderStream = webshot(`http://www.represent-me.com/export/${req.params.org}/${req.params.zip}`,
+   'results.png', options, (err) => {
+    console.log('smile for the camera')
+  });
+
+  console.log(renderStream)
+  renderHTML(req, res);
+});
+
 app.use('/vote', (req, res, next) => {
   console.log('Did this run');
   renderHTML(req, res);
@@ -69,9 +99,6 @@ app.use('/vote/:org', (req, res, next) => {
   renderHTML(req, res);
 });
 
-app.use('/export/:org/:zip/test', (req, res, next) => {
-  renderHTML(req, res);
-});
 
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
