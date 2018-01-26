@@ -4,6 +4,6 @@
     "dynamic-import-webpack",
     "transform-class-properties",
     "css-modules-transform",
-    "@researchgate/babel-plugin-transform-scss-import-to-string"
+    "import-noop"
   ]
 }

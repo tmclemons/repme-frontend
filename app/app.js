@@ -50,10 +50,10 @@ const AppRouter = () => {
     </MuiThemeProvider>
   )
 }
-
+console.log("render started")
 if (typeof window !== "undefined") {
   render(
     <AppRouter />,
-    document.querySelector('#repme-app')
+    document.getElementById('repme-app')
   )
 }

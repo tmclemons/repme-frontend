@@ -9,9 +9,11 @@ const routes = [
         component: Ballot
       },
       { path: '/:org?',
+        exact: true,
         component: Ballot
       },
       { path: '/export/:org/:zipcode',
+        exact: true,
         component: Ballot
       }
     ]

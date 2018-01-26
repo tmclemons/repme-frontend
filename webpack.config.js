@@ -1,48 +1,53 @@
-const webpack = require('webpack');
-const path = require('path');
+var path = require('path');
+const context = path.resolve(process.cwd(), 'app');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractSass = new ExtractTextPlugin({
+  filename: "[name].css",
+  disable: process.env.NODE_ENV === "development"
+});
 
-var config = {
-  entry: path.resolve(__dirname, './app/app.js'),
+
+module.exports = {
+  entry: context + '/app.js',
 
   output: {
-    path: __dirname + '/public',
-    filename: './bundle.js',
-    publicPath: '/'
+    filename: '[name].js',
+    path: path.join(process.cwd(), 'public/javascripts/')
   },
 
-  plugins: [],
-  devServer: {
-    // proxy: {
-    //   '/api/profile': {
-    //     target: 'http://54.187.193.156/api/profile',
-    //   }
-    // },
-    inline: true,
-    port: 3000
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
+
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          plugins: [
-            'transform-class-properties'
-          ],
-          presets: ['react', 'es2015']
-        }
+        test: /\.jsx?$/,
+        use: 'babel-loader'
       },
       {
         test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        use: extractSass.extract({
+          use: [{
+            loader: "css-loader"
+          }, {
+            loader: "sass-loader"
+          }],
+          // use style-loader in development
+          fallback: "style-loader"
+        })
+      },
+      {
+        include: path.resolve(__dirname, './app'),
+        loader: 'babel-loader',
+        query: {
+          plugins: []
+        },
+        test: /\.js$/
       }
     ]
   },
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  }
+  plugins: [
+    extractSass
+  ]
 };
-
-module.exports = config;
-

@@ -1,6 +1,5 @@
 import React from 'react';
 import CreateChart from '../utilities/ChartsWrapperComponent';
-import Scss from './barChartComponent.scss';
 
 
 class BarChart extends React.Component {

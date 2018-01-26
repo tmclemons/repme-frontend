@@ -1,5 +1,4 @@
 import React from "react";
-import Scss from "./sideComponentCard.scss";
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 

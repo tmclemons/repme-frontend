@@ -1,5 +1,4 @@
 import React from "react";
-import Scss from "./sideComponentNav.scss";
 import { List } from 'material-ui/List';
 import AsyncNavLink from '../asyncNavLink/AsyncNavLink'
 

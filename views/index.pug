@@ -5,13 +5,13 @@ block dependencies
   link(href="https://fonts.googleapis.com/css?family=Lato|Playfair+Display:400,700,700i" rel="stylesheet")
 
 block header
-  != app_stylesheets
+  link(rel="stylesheet", href="/javascripts/main.css")
 
 block content
   div#repme-app!= content
 
 block scripts
-  != app_scripts
+  script(type='text/javascript', src='/javascripts/main.js')
 
 block stylesheets
 

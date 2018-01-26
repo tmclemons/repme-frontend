@@ -5,7 +5,7 @@ class AppRoot extends React.Component {
   render() {
     return (
       <div>
-        {this.props.children}
+        {renderRoutes(this.props.route.routes)}
       </div>
     )
   }

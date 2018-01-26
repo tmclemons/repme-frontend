@@ -11,7 +11,6 @@ import routeProps from '../routes';
 const router = express.Router();
 
 function renderHTML(req, res) {
-  // const route = matchRoutes(routes, req.url);
     let context = {};
     const html = renderToString(
       <StaticRouter location={req.url} context={context}>
@@ -27,7 +26,7 @@ function renderHTML(req, res) {
 router.get('*', (err, req, res, next) => {
   console.log('hello world');
   console.log(err);
-  // renderHTML(req, res);
+  renderHTML(req, res);
   next()
 });
 
