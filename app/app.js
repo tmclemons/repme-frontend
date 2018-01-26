@@ -2,11 +2,10 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import BrowserRouter from 'react-router-dom/BrowserRouter';
+import { BrowserRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import GetMuiTheme from 'material-ui/styles/getMuiTheme';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import routes from './routes';
@@ -36,20 +35,27 @@ const CircularProgressExampleSimple = () => (
 );
 
 
+const AppWrapper = () => {
+  return (
+    <div>
+      <CircularProgressExampleSimple />
+      <div id='app-wrapper' style={{ display: 'inherit' }}>
+          {renderRoutes(routes)}
+      </div>
+    </div>
+  )
+}
+
 const AppRouter = () => {
   return (
     <MuiThemeProvider>
-      <div>
-        <CircularProgressExampleSimple />
-        <div id='app-wrapper' style={{ display: 'inherit' }}>
-          <BrowserRouter>
-            {renderRoutes(routes)}
-          </BrowserRouter>
-        </div>
-      </div>
+      <BrowserRouter>
+        <AppWrapper />
+      </BrowserRouter>
     </MuiThemeProvider>
   )
 }
+
 console.log("render started")
 if (typeof window !== "undefined") {
   render(
@@ -57,3 +63,5 @@ if (typeof window !== "undefined") {
     document.getElementById('repme-app')
   )
 }
+
+export default AppWrapper;

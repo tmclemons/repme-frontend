@@ -4,11 +4,11 @@ import Ballot from './public/ballot/ballot'
 const routes = [
   { component: AppRoot,
     routes: [
-      { path: '/',
+      { path: '/vote',
         exact: true,
         component: Ballot
       },
-      { path: '/:org?',
+      { path: '/vote/:org?',
         exact: true,
         component: Ballot
       },
