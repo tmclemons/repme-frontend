@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import VoteForm from '../../../../template/components/voteForm/VoteForm';
+import VoteForm from '../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
-import Banner from '../../../../template/components/bannerComponent/BannerComponent'
-import Footer from '../../../../template/components/mainFooter/MainFooter';
+import Banner from '../../template/components/bannerComponent/BannerComponent'
+import Footer from '../../template/components/mainFooter/MainFooter';
 import Results from '../results/results';
 import axios from 'axios';
-import Constants from '../../../../template/components/utilities/constants';
+import Constants from '../../template/components/utilities/constants';
 import cookie from 'react-cookies';
-import updateCookie from '../../../../template/components/utilities/cookieComponent';
+import updateCookie from '../../template/components/utilities/cookieComponent';
 import Scss from './ballot.scss';
 
 const { ballotCopy } = Constants;  

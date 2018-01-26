@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'path'
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import fs from 'fs';
 
 import React from 'react';
@@ -9,35 +10,80 @@ import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
 
 import { matchRoutes, renderRoutes } from 'react-router-config';
+import routes from './server-routes/server-routes';
 
-import routes from './app/routes';
-
-const port = process.env.PORT || 3000
 let app = express()
-let router = express.Router()
 
 app.use(compression());
 app.use(cookieParser());
-app.use(express.static(path.join(process.cwd(), 'public')));
 app.set('views', path.join(process.cwd(), 'views'));
 app.set('view engine', 'pug');
+app.use(express.static(path.join(process.cwd(), 'css')));
 
-function renderHTML(req, res) {
-  console.log(res, req.url, routes)
-  const route = matchRoutes(routes, req.url);
-  console.log('routes Matched')
-    let context = {};
-    const html = renderToString(
-      <StaticRouter location={req.url} context={context}>
-        {renderRoutes(routes)}
-      </StaticRouter>
-    );
-    console.log(context)
-    res.render('index', {
-      content: html
-    })
+
+function decodeBase64Image(dataString) {
+  var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+    response = {};
+
+  if (matches.length !== 3) {
+    return new Error('Invalid input string');
+  }
+
+  response.type = matches[1];
+  response.data = new Buffer(matches[2], 'base64');
+  return response;
 }
 
+app.use(routes);
+
+// app.use('/vote', (req, res, next) => {
+//   console.log(routes)
+//   console.log('THIS IS A TEST')
+//   res.send('THIS IS A TEST')
+// });
+// app.use('/aarp', routes);
+// app.use('/repme', routes);
+app.use('/test/test', (req, res, next) => {
+  console.log('THIS IS A TEST')
+  res.send('THIS IS A TEST')
+});
+
+
+app.use(function (req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('index', {
+    message: err.message,
+    error: err
+  });
+});
+
+// app.use('/:org', routes);
+
+// app.use('/', (err, req, res, next) => {
+//   res.send('hello world');
+//   // console.log(err);
+//   // console.log('Time:', Date.now())
+//   // renderHTML(req, res);
+//   // next()
+// });
+
+// app.get('/:org', (err, req, res, next) => {
+//   console.log(req.params.org),
+//   console.log('req.params.org'),
+//   renderHTML(req, res)
+// });
+
+// app.use(function (req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 // function renderHTML(req, res) {
 //   match({ routes, location: req.url}, (error, redirectLocation, renderProps) => {
 //     if (error) {
@@ -74,21 +120,6 @@ function renderHTML(req, res) {
 //   });
 // }
 
-function decodeBase64Image(dataString) {
-  var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-    response = {};
-
-  if (matches.length !== 3) {
-    return new Error('Invalid input string');
-  }
-
-  response.type = matches[1];
-  response.data = new Buffer(matches[2], 'base64');
-  return response;
-}
-
-app.get('/', (req, res) => { renderHTML(req, res) });
-app.get('/:org', (req, res) => { renderHTML(req, res) });
 // router.get('/:org', (req, res) => { renderHTML(req, res) });
 // router.get('/', (req, res) => { renderHTML(req, res) });
 // router.get('/', (req, res) => { renderHTML(req, res) });
@@ -100,8 +131,4 @@ console.log("server is running")
 //   fs.writeFileSync(`${__dirname}/testimage.png`, decodeBase64Image(base64).data, function (err) { console.warn(err, "err")});
 // })
 
-app.listen(port, () => {
-  console.log("server started on port " + port)
-})
-
-module.exports = router;
+module.exports = app;

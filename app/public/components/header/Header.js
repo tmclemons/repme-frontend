@@ -2,7 +2,7 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import GetMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
-import RepMeLogo from '../../../../../template/components/utilities/logoComponent';
+import RepMeLogo from '../../../template/components/utilities/logoComponent';
 import classNames from 'classnames';
 import Scss from './header.scss';
 

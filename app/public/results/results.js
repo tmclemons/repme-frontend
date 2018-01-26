@@ -1,18 +1,18 @@
 import React from 'react'
-import VoteForm from '../../../../template/components/voteForm/VoteForm';
+import VoteForm from '../../template/components/voteForm/VoteForm';
 import Header from './../components/header/Header';
-import Banner from '../../../../template/components/bannerComponent/BannerComponent'
-import Footer from '../../../../template/components/mainFooter/MainFooter';
+import Banner from '../../template/components/bannerComponent/BannerComponent'
+import Footer from '../../template/components/mainFooter/MainFooter';
 import BarChart from 
-  '../../../../template/components/barChartComponent/BarChartComponent';
+  '../../template/components/barChartComponent/BarChartComponent';
 import ChartJS from 'chart.js';
 import BarChartComponent from 
-  '../../../../template/components/highCharts/barChartComponent/BarChartComponent';
-import ChartLabelComponent from '../../../../template/components/chartLabelComponent/ChartLabelComponent';
-import StateDemographic from '../../../../template/components/demographicComponent/DemographicComponent';
-import RepresentativeCard from '../../../../template/components/representativeCardComponent/RepresentativeCardComponent';
-import ChartTitleBarComponent from '../../../../template/components/titleBarComponent/TitleBarComponent';
-import Constants from '../../../../template/components/utilities/constants';
+  '../../template/components/highCharts/barChartComponent/BarChartComponent';
+import ChartLabelComponent from '../../template/components/chartLabelComponent/ChartLabelComponent';
+import StateDemographic from '../../template/components/demographicComponent/DemographicComponent';
+import RepresentativeCard from '../../template/components/representativeCardComponent/RepresentativeCardComponent';
+import ChartTitleBarComponent from '../../template/components/titleBarComponent/TitleBarComponent';
+import Constants from '../../template/components/utilities/constants';
 const { colorStops } = Constants;  
 
 import domtoimage from 'dom-to-image';

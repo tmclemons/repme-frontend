@@ -1,57 +1,23 @@
-var fs = require('fs');
 var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'server.js'),
+  entry: './app/app.js',
+
   output: {
-    filename: 'server.bundle.js',
+    filename: 'app.js',
+    path: path.join('public/javascripts/')
   },
-  target: 'node',
-  externals: fs.readdirSync(path.resolve(__dirname, './node_modules')).concat([
-    'react-dom/server'
-  ]).reduce(function (ext, mod) {
-    ext[mod] = 'commonjs ' + mod
-    return ext
-  }, {}),
-  node: {
-    __filename: false,
-    __dirname: false
+
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
+
   module: {
-    rules: [{
-      test: /\.js?$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader',
-      query: {
-        plugins: [
-          'transform-class-properties'
-        ],
-        presets: ['react', 'es2015']
+    rules: [
+      {
+        test: /\.jsx?$/,
+        use: 'babel-loader'
       }
-    }, {
-      test: /\.scss$/,
-      use: ExtractTextPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true
-              }
-            }
-          ],
-          fallback: 'style-loader'
-        })
-    }]
-  },
-  plugins: [
-    new ExtractTextPlugin({
-      filename: "css/[name].css",
-      disable: false,
-      allChunks: true
-    })
-  ]
-}
+    ]
+  }
+};
