@@ -14,6 +14,7 @@ import routes from './app/routes';
 
 const port = process.env.PORT || 3000
 let app = express()
+let router = express.Router()
 
 app.use(compression());
 app.use(cookieParser());
@@ -22,13 +23,16 @@ app.set('views', path.join(process.cwd(), 'views'));
 app.set('view engine', 'pug');
 
 function renderHTML(req, res) {
+  console.log(res, req.url, routes)
   const route = matchRoutes(routes, req.url);
+  console.log('routes Matched')
     let context = {};
     const html = renderToString(
       <StaticRouter location={req.url} context={context}>
         {renderRoutes(routes)}
       </StaticRouter>
     );
+    console.log(context)
     res.render('index', {
       content: html
     })
@@ -83,15 +87,21 @@ function decodeBase64Image(dataString) {
   return response;
 }
 
-app.get('*', (req, res) => { renderHTML(req, res) });
+app.get('/', (req, res) => { renderHTML(req, res) });
+app.get('/:org', (req, res) => { renderHTML(req, res) });
+// router.get('/:org', (req, res) => { renderHTML(req, res) });
+// router.get('/', (req, res) => { renderHTML(req, res) });
+// router.get('/', (req, res) => { renderHTML(req, res) });
 
-// app.get('/:org', (req, res) => { renderHTML(req, res) });
-// app.get('/export/:org/:zipcode', (req, res) => { renderHTML(req, res) });
+// router.get('/:org', (req, res) => { renderHTML(req, res) });
+// router.get('/export/:org/:zipcode', (req, res) => { renderHTML(req, res) });
 console.log("server is running")
-app.get('/vote/testpage', (req, res) => {
-  fs.writeFileSync(`${__dirname}/testimage.png`, decodeBase64Image(base64).data, function (err) { console.warn(err, "err")});
-})
+// router.get('/vote/testpage', (req, res) => {
+//   fs.writeFileSync(`${__dirname}/testimage.png`, decodeBase64Image(base64).data, function (err) { console.warn(err, "err")});
+// })
 
 app.listen(port, () => {
   console.log("server started on port " + port)
 })
+
+module.exports = router;

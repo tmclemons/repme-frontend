@@ -19,7 +19,7 @@ module.exports = {
     __dirname: false
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js?$/,
       exclude: /node_modules/,
       loader: 'babel-loader',
@@ -31,7 +31,27 @@ module.exports = {
       }
     }, {
       test: /\.scss$/,
-      loaders: ['style-loader', 'css-loader', 'sass-loader']
+      use: ExtractTextPlugin.extract({
+          use: [
+            {
+              loader: 'css-loader',
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
+          ],
+          fallback: 'style-loader'
+        })
     }]
-  }
+  },
+  plugins: [
+    new ExtractTextPlugin({
+      filename: "css/[name].css",
+      disable: false,
+      allChunks: true
+    })
+  ]
 }
